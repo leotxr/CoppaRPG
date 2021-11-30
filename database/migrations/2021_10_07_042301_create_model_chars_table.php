@@ -19,7 +19,6 @@ class CreateModelCharsTable extends Migration
             $table->string('name');
             $table->integer('breed_id')->unsigned();
             $table->integer('class_id')->unsigned();
-            $table->integer('weapon_id')->unsigned();
             $table->integer('armor_id')->unsigned();
             $table->integer('level');
             $table->string('trend')->nullable();
@@ -63,6 +62,8 @@ class CreateModelCharsTable extends Migration
             $table->integer('surprise_ca')->nullable();
             $table->integer('xp')->nullable();
             $table->string('bag')->nullable();   
+          
+
             
 
             $table->foreign('user_id')->references('id')
@@ -72,10 +73,6 @@ class CreateModelCharsTable extends Migration
             
             $table->foreign('armor_id')->references('id')
             ->on('armor')
-            ->onUpdate('cascade');
-            
-            $table->foreign('weapon_id')->references('id')
-            ->on('weapon')
             ->onUpdate('cascade');
         
             $table->foreign('breed_id')->references('id')

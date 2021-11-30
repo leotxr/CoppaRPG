@@ -5,25 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Weapon extends Model
+class Expertise extends Model
 {
     protected $table='weapon';
     protected $fillable=['name',
-    'desc',
-    'damage',
-    'size', 
-    'total_bba', 
-    'decisive', 
-    'reach', 
-    'weight', 
-    'type',
-    'special',
-    'value' 
+    'value',
+    'keyhab',
+    'habmod', 
+    'gratuation',
+    'other'
 ];
     use HasFactory;
 
     public function relChars()
     {
-        return $this->belongsToMany(ModelChar::class);
+        return $this->hasMany(ModelChar::class);
     }
 }

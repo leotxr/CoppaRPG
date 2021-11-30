@@ -31,6 +31,7 @@ class CharController extends Controller
         $this->objArmor = new Armor();
         $this->objBreed = new Breed();
         $this->objClass = new ModelClass();
+        $this->objClass = new Expertise();
         $this->middleware('auth');
     }
 
@@ -62,7 +63,8 @@ class CharController extends Controller
         $classes = ModelClass::all();
         $weapons = Weapon::all();
         $armors = Armor::all();
-        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors'));
+        $expertises = Expertise::all();
+        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors','expertises'));
     }
 
     /**
@@ -156,7 +158,8 @@ class CharController extends Controller
         $classes = ModelClass::all();
         $weapons = Weapon::all();
         $armors=Armor::all();
-        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors'));
+        $expertises = Expertise::all();
+        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'expertises'));
     }
 
     /**
@@ -171,9 +174,9 @@ class CharController extends Controller
         ModelChar::where(['id' => $id])->update([
             'name' => $request->name,
             'age' => $request->age,
-            'user_id' => $request->user_id,
             'breed_id' => $request->breed_id,
             'class_id' => $request->class_id,
+            'user_id' => $request->user_id,
             'weapon_id' => $request->weapon_id,
             'armor_id' => $request->armor_id,
             'level' => $request->level,
@@ -198,8 +201,20 @@ class CharController extends Controller
             'initiative' => $request->initiative,
             'bba' => $request->bba,
             'for' => $request->for,
+            'basefor' => $request->basefor,
+            'habfor' => $request->habfor,
+            'magicfor' => $request->magicfor,
+            'otherfor' => $request->otherfor,
             'ref' => $request->ref,
+            'baseref' => $request->baseref,
+            'habref' => $request->habref,
+            'magicref' => $request->magicref,
+            'otherref' => $request->otherref,
             'will' => $request->will,
+            'baswill' => $request->basewill,
+            'habwill' => $request->habwill,
+            'magicwill' => $request->magicwill,
+            'otherwill' => $request->otherwill,
             'natural_armor' => $request->natural_armor,
             'touch_ca' => $request->touch_ca,
             'surprise_ca' => $request->surprise_ca,

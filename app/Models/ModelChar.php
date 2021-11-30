@@ -8,56 +8,57 @@ use Illuminate\Support\Facades\Auth;
 
 class ModelChar extends Model
 {
-    protected $table='char';
-    protected $fillable=['name',
-    'age', 
-    'user_id', 
-    'breed_id', 
-    'class_id',
-    'weapon_id',
-    'armor_id',
-    'level',
-    'trend',
-    'religion',
-    'weight',
-    'height',
-    'str',
-    'dex',
-    'con',
-    'int',
-    'wiz',
-    'cha',
-    'modstr',
-    'moddex',
-    'modcon',
-    'modint',
-    'modwiz',
-    'modcha',
-    'pv',
-    'ca',
-    'initiative',
-    'bba',
-    'for',
-    'basefor',
-    'habfor',
-    'magicfor',
-    'otherfor',
-    'ref',
-    'baseref',
-    'habref',
-    'magicref',
-    'otherref',
-    'will',
-    'basewill',
-    'habwill',
-    'magicwill',
-    'otherwill',
-    'natural_armor',
-    'touch_ca',
-    'surprise_ca',
-    'xp',
-    'bag'
-];
+    protected $table = 'char';
+    protected $fillable = [
+        'name',
+        'age',
+        'user_id',
+        'breed_id',
+        'class_id',
+        'weapon_id',
+        'armor_id',
+        'level',
+        'trend',
+        'religion',
+        'weight',
+        'height',
+        'str',
+        'dex',
+        'con',
+        'int',
+        'wiz',
+        'cha',
+        'modstr',
+        'moddex',
+        'modcon',
+        'modint',
+        'modwiz',
+        'modcha',
+        'pv',
+        'ca',
+        'initiative',
+        'bba',
+        'for',
+        'basefor',
+        'habfor',
+        'magicfor',
+        'otherfor',
+        'ref',
+        'baseref',
+        'habref',
+        'magicref',
+        'otherref',
+        'will',
+        'basewill',
+        'habwill',
+        'magicwill',
+        'otherwill',
+        'natural_armor',
+        'touch_ca',
+        'surprise_ca',
+        'xp',
+        'bag'
+    ];
     use HasFactory;
 
 
@@ -65,7 +66,7 @@ class ModelChar extends Model
     public function relUsers()
     {
 
-    return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     /*
@@ -75,10 +76,10 @@ class ModelChar extends Model
         ->where('user_id', '=', $user_id);
     }
     */
-    
+
     public function relWeapons()
     {
-        return $this->hasOne('App\Models\Weapon', 'id', 'weapon_id');
+        return $this->belongsToMany(Weapon::class);
     }
 
     public function relArmors()
@@ -96,14 +97,15 @@ class ModelChar extends Model
         return $this->hasOne('App\Models\ModelClass', 'id', 'class_id');
     }
 
+    public function relCHars()
+    {
+        return $this->hasMany(Expertise::class);
+    }
 
-        /**
+
+    /**
      * @param  \App\Models\ModelChar  $query
      * @param  int                                    $id
      * @return \App\Models\ModelChar
      */
-    
-
-    
-
 }
