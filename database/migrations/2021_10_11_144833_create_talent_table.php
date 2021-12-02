@@ -13,7 +13,7 @@ class CreateTalentTable extends Migration
      */
     public function up()
     {
-        Schema::create('talent', function (Blueprint $table) {
+        Schema::create('talents', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateTalentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('talent');
+        Schema::dropIfExists('talents');
     }
 }

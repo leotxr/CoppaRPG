@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserWeaponsTable extends Migration
+class CreateClassesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateUserWeaponsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user__weapons', function (Blueprint $table) {
-            $table->id();
+        Schema::create('classes', function (Blueprint $table) {
+            $table->increments('id')->unique();
+            $table->string('name');
+            $table->string('desc');
             $table->timestamps();
-        });
+    });
     }
 
     /**
@@ -26,6 +28,6 @@ class CreateUserWeaponsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user__weapons');
+        Schema::dropIfExists('classe');
     }
 }

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ModelClass extends Model
+class Classes extends Model
 {
-    protected $table='classe';
+    protected $table='classes';
     protected $fillable=['name','desc'];
     use HasFactory;
 
     public function relChars()
     {
-        return $this->hasMany(ModelChar::class, 'class_id');
+        return $this->hasMany(Char::class, 'class_id');
     }
 }

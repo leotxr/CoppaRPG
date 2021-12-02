@@ -49,6 +49,6 @@ class User extends Authenticatable
 
      public function relChars()
     {
-        return $this->hasMany('App\Models\ModelChar', 'user_id');
+        return $this->hasMany('App\Models\Char', 'user_id');
     }
 }

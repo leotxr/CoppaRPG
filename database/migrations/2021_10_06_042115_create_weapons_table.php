@@ -13,8 +13,8 @@ class CreateWeaponsTable extends Migration
      */
     public function up()
     {
-        Schema::create('weapon', function (Blueprint $table) {
-            $table->increments('id')->unique();
+        Schema::create('weapons', function (Blueprint $table) {
+            $table->bigIncrements('id')->unique();
             $table->string('name')->nullable();
             $table->string('desc')->nullable();
             $table->string('damage')->nullable();
@@ -36,6 +36,6 @@ class CreateWeaponsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weapon');
+        Schema::dropIfExists('weapons');
     }
 }

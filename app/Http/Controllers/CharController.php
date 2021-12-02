@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Armor;
 use Illuminate\Http\Request;
-use App\Models\ModelChar;
+use App\Models\Char;
 use App\Models\User;
 use App\Models\Expertise;
 use App\Models\Breed;
-use App\Models\ModelClass;
+use App\Models\Char_weapon;
+use App\Models\Classes;
 use App\Models\Weapon;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,11 +27,11 @@ class CharController extends Controller
     public function __construct()
     {
         $this->objUser = new User();
-        $this->objChar = new ModelChar();
+        $this->objChar = new Char();
         $this->objWeapon = new Weapon();
         $this->objArmor = new Armor();
         $this->objBreed = new Breed();
-        $this->objClass = new ModelClass();
+        $this->objClass = new Classes();
         $this->objClass = new Expertise();
         $this->middleware('auth');
     }
@@ -45,9 +46,9 @@ class CharController extends Controller
 
     public function index()
     {
-        //$char = ModelChar::byUser(Auth::id())->get();
+        //$char = Char::byUser(Auth::id())->get();
         $user = auth()->user();
-        $char = ModelChar::all();
+        $char = Char::all();
         return view('vertodos', compact('char', 'user'));
     }
 
@@ -58,13 +59,17 @@ class CharController extends Controller
      */
     public function create()
     {
+
+
+
         $users = User::find(Auth::user());
         $breeds = Breed::all();
-        $classes = ModelClass::all();
+        $classes = Classes::all();
         $weapons = Weapon::all();
         $armors = Armor::all();
         $expertises = Expertise::all();
-        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors','expertises'));
+
+        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'expertises'));
     }
 
     /**
@@ -75,13 +80,15 @@ class CharController extends Controller
      */
     public function store(Request $request)
     {
-        $cad = ModelChar::create([
+        
+        $cad = Char::create([
+            //bd                html
+            
             'name' => $request->name,
             'age' => $request->age,
             'breed_id' => $request->breed_id,
             'class_id' => $request->class_id,
             'user_id' => $request->user_id,
-            'weapon_id' => $request->weapon_id,
             'armor_id' => $request->armor_id,
             'level' => $request->level,
             'trend' => $request->trend,
@@ -115,7 +122,7 @@ class CharController extends Controller
             'magicref' => $request->magicref,
             'otherref' => $request->otherref,
             'will' => $request->will,
-            'baswill' => $request->basewill,
+            'basewill' => $request->basewill,
             'habwill' => $request->habwill,
             'magicwill' => $request->magicwill,
             'otherwill' => $request->otherwill,
@@ -125,8 +132,11 @@ class CharController extends Controller
             'xp' => $request->xp,
             'bag' => $request->bag
 
-            //'weapon_id'=>$request->weapon_id
         ]);
+
+        $cad->weapons()->attach([
+            'weapon_id' => $request->weapon_id]);
+
         if ($cad) {
             return redirect('chars');
         }
@@ -140,7 +150,7 @@ class CharController extends Controller
      */
     public function show($id)
     {
-        $char = ModelChar::find($id);
+        $char = Char::find($id);
         return view('show', compact('char'));
     }
 
@@ -152,12 +162,12 @@ class CharController extends Controller
      */
     public function edit($id)
     {
-        $char = ModelChar::find($id);
+        $char = Char::find($id);
         $users = User::all();
         $breeds = Breed::all();
-        $classes = ModelClass::all();
+        $classes = Classes::all();
         $weapons = Weapon::all();
-        $armors=Armor::all();
+        $armors = Armor::all();
         $expertises = Expertise::all();
         return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'expertises'));
     }
@@ -171,13 +181,12 @@ class CharController extends Controller
      */
     public function update(Request $request, $id)
     {
-        ModelChar::where(['id' => $id])->update([
+        $edit = Char::where(['id'=> $id])->update([
             'name' => $request->name,
             'age' => $request->age,
             'breed_id' => $request->breed_id,
             'class_id' => $request->class_id,
             'user_id' => $request->user_id,
-            'weapon_id' => $request->weapon_id,
             'armor_id' => $request->armor_id,
             'level' => $request->level,
             'trend' => $request->trend,
@@ -211,7 +220,7 @@ class CharController extends Controller
             'magicref' => $request->magicref,
             'otherref' => $request->otherref,
             'will' => $request->will,
-            'baswill' => $request->basewill,
+            'basewill' => $request->basewill,
             'habwill' => $request->habwill,
             'magicwill' => $request->magicwill,
             'otherwill' => $request->otherwill,
@@ -221,15 +230,39 @@ class CharController extends Controller
             'xp' => $request->xp,
             'bag' => $request->bag
 
+            
+
 
         ]);
+        $edit->weapons()->attach([
+            'weapon_id' => $request->weapon_id]);
+       if ($edit)
         return redirect('chars');
     }
 
     public function destroy($id)
     {
-        $char = ModelChar::find($id);
-        $char->delete();
-        return redirect('/chars');
+        $char = Char::findOrFail($id);
+        $char->delete($id);
+        return redirect('chars');
+    }
+
+    public function insert(Request $request)
+    {
+        
+        $dataForm = [1,2,3
+           
+        ];
+            
+        
+        $char = Char::find(2);
+        echo "<b>" . $char->name . ":</br> </br>";
+
+        $char->weapons()->sync($dataForm);
+
+        $weapons = $char->weapons;
+        foreach ($weapons as $weapon) {
+            echo " " . $weapon->name;
+        }
     }
 }

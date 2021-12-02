@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expertise extends Model
 {
-    protected $table='weapon';
+    protected $table='weapons';
     protected $fillable=['name',
     'value',
     'keyhab',
@@ -19,6 +19,6 @@ class Expertise extends Model
 
     public function relChars()
     {
-        return $this->hasMany(ModelChar::class);
+        return $this->hasMany(Char::class);
     }
 }

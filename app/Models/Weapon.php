@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Weapon extends Model
 {
-    protected $table='weapon';
+    protected $table='weapons';
     protected $fillable=['name',
     'desc',
     'damage',
@@ -22,8 +22,8 @@ class Weapon extends Model
 ];
     use HasFactory;
 
-    public function relChars()
+    public function chars()
     {
-        return $this->belongsToMany(ModelChar::class);
+        return $this->belongsToMany(Char::class, 'char_weapons');
     }
 }

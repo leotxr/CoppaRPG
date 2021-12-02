@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class ModelChar extends Model
+class Char extends Model
 {
-    protected $table = 'char';
+    protected $table = 'chars';
     protected $fillable = [
         'name',
         'age',
@@ -77,9 +77,9 @@ class ModelChar extends Model
     }
     */
 
-    public function relWeapons()
+    public function weapons()
     {
-        return $this->belongsToMany(Weapon::class);
+        return $this->belongsToMany(Weapon::class, 'char_weapons');
     }
 
     public function relArmors()
@@ -94,18 +94,14 @@ class ModelChar extends Model
 
     public function relClasses()
     {
-        return $this->hasOne('App\Models\ModelClass', 'id', 'class_id');
+        return $this->hasOne('App\Models\Classes', 'id', 'class_id');
     }
 
-    public function relCHars()
-    {
-        return $this->hasMany(Expertise::class);
-    }
 
 
     /**
-     * @param  \App\Models\ModelChar  $query
+     * @param  \App\Models\Char  $query
      * @param  int                                    $id
-     * @return \App\Models\ModelChar
+     * @return \App\Models\Char
      */
 }

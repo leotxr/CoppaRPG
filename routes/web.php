@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CharController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\WeaponController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Route::GET('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::resource('chars', CharController::class);
+
+Route::get('teste', [CharController::class, 'insert']);
 
 
 

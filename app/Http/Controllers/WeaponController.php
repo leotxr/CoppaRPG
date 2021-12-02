@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\Char;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Weapon;
+use App\Models\User;
+
+
+
 use Illuminate\Http\Request;
 
 class WeaponController extends Controller
@@ -81,4 +89,16 @@ class WeaponController extends Controller
     {
         //
     }
+
+    public function mostrarChars()
+    {
+        $weapon = Weapon::find(1);
+        echo 'Arma ' . $weapon->name . 'pertence a <br>';
+
+        foreach($weapon->chars as $char)
+        {
+            echo $char->name;
+        }
+    }
+
 }

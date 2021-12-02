@@ -13,7 +13,7 @@ class CreateArmorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('armor', function (Blueprint $table) {
+        Schema::create('armors', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->string('name')->nullable();
             $table->string('desc')->nullable();

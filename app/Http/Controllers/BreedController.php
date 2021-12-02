@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ModelChar;
+use App\Models\Char;
 use App\Models\User;
 use App\Models\Weapon;
 use App\Models\Breed;
-use App\Models\ModelClass;
+use App\Models\Classes;
 use Illuminate\Support\Facades\Auth;
 
 class BreedController extends Controller
@@ -21,7 +21,7 @@ class BreedController extends Controller
     {
 
         $this->objBreed=new Breed();
-        $this->objClass=new ModelClass();
+        $this->objClass=new Classes();
         
     }
     /**
@@ -32,7 +32,7 @@ class BreedController extends Controller
     public function index()
     {
         $breed=Breed::all();
-        $class=ModelClass::all();
+        $class=Classes::all();
         return view('forge', compact('breed', 'class'));
     }
 

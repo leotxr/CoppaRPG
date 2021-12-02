@@ -52,8 +52,13 @@
                             <div class="mt-5 md:mt-0 md:col-span-2">
 
 
-                                <form name="formCad" id="formCad" method="post" action="{{url('chars')}}">
-
+                                
+                                        @if (isset ($char))
+                                        <form name="formEdit" id="formEdit" method="post" action="{{url('chars/$char->id')}}">
+                                            @method('PUT');
+                                        @else
+                                        <form name="formCad" id="formCad" method="post" action="{{url('chars')}}">
+                                        @endif
                                     @csrf
                                     <div class="shadow overflow-hidden sm:rounded-md">
                                         <div class="px-4 py-5 bg-white sm:p-6">
@@ -399,7 +404,7 @@
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="for" class="block text-sm font-bold text-red-700">Fortitude</label>
-                                                    <input type="number" value="{{$char->for ?? ''}}" name="for" id="for" autocomplete="for" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-red-300 rounded-md">
+                                                    <input type="number" value="{{$char->for ?? ''}}" name="for" id="for" autocomplete="for" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-red-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
@@ -611,7 +616,7 @@
                                                         <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </td>
                                                 </tr>
-                                                
+
                                                 <tr>
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <div class="flex items-center">
@@ -1481,7 +1486,7 @@
                                                 </tr>
 
 
-                                                                                                <tr>
+                                                <tr>
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <div class="flex items-center">
                                                             <div class="ml-4">
@@ -1512,13 +1517,13 @@
                                                     </td>
                                                 </tr>
 
-                                                
-                                                
+
+
 
                                             </tbody>
                                         </table>
 
-                                        
+
                                         <div class="mt-8 p-4">
                                             <div class="flex p-2 mt-4">
                                                 <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
@@ -1535,7 +1540,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -1611,177 +1616,181 @@
                                         <div class="px-4 py-5 bg-white sm:p-6">
                                             <div class="grid grid-cols-6 gap-6">
                                                 <div class="col-span-6 sm:col-span-3">
-                                                    <label for="weapon_id" class="block text-sm font-medium text-gray-700">Arma</label>
+                                                    <label for="weapons" class="block text-sm font-medium text-gray-700">Armas</label>
                                                     <select id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                        <option value="{{'Selecione'}}">{{'Selecione'}}</option>
+                                                        <option>Selecione</option>
                                                         @foreach($weapons as $weapon)
                                                         <option value="{{$weapon->id}}">{{$weapon->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-
-
-
                                             </div>
                                         </div>
-
                                     </div>
-                                    <!--Tabela de armas -->
-                                    <div class="flex flex-col">
-                                        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                                                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                                                    <table class="min-w-full divide-y divide-gray-200">
-                                                        <thead class="bg-gray-50">
-                                                            <tr>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                    Name
-                                                                </th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                    Dano
-                                                                </th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                    Bonus base
-                                                                </th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                    Valor
-                                                                </th>
-                                                                <th scope="col" class="relative px-6 py-3">
-                                                                    <span class="sr-only">Ações</span>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody class="bg-white divide-y divide-gray-200">
-                                                            @foreach (auth()->user()->relChars as $chars)
-                                                            @php
-                                                            $weapon=$chars->find($chars->id)->relWeapons;
-
-                                                            @endphp
-                                                            <tr>
-                                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                                    <div class="flex items-center">
-                                                                        <div class="ml-4">
-                                                                            <div class="text-sm font-medium text-gray-900">
-                                                                                {{$weapon->name}}
+                                    <label class="block text-sm font-medium text-gray-700">Suas Armas</label>
+                                    <label>
+                                        <!--Tabela com as armas-->
+                                        <div class="flex flex-col">
+                                            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                                                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                                                        @if (isset($char))
+                                                        <table class="min-w-full divide-y divide-gray-200">
+                                                            <thead class="bg-gray-50">
+                                                                <tr>
+                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                        Nome
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                        Dano
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                        Decisivo
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                        Bonus
+                                                                    </th>
+                                                                    <th scope="col" class="relative px-6 py-3">
+                                                                        <span class="sr-only">Ver mais</span>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                                @foreach($char->weapons as $weapon)
+                                                                <tr>
+                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                        <div class="flex items-center">
+                                                                            <div class="ml-4">
+                                                                                <div class="text-sm font-medium text-gray-900">
+                                                                                    {{$weapon->name}}
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                                    <div class="text-sm text-gray-500">
-                                                                        {{$weapon->damage}}
-                                                                    </div>
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                                    <div class="text-sm text-gray-500">
-                                                                        {{$weapon->value}}
-                                                                    </div>
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                                    </td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                        <div class="text-sm text-gray-500">
+                                                                            {{$weapon->damage}}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                        <div class="text-sm text-gray-500">
+                                                                            {{$weapon->decisive}}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                                        {{$weapon->total_bba}}
+                                                                    </td>
+                                                                    <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                        @else
+                                                        <label>Voce ainda nao tem armas, selecione uma no campo acima...</label>
+                                                        @endif
 
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                    <a class="text-indigo-600 hover:text-indigo-900">Mais</a>
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
-
-                                                        </tbody>
-                                                    </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- fim da tabela -->
 
                                 </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="py-12" id="escudo">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
+    <div class="py-12" id="escudo">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
 
-                        <div class="mt-10 sm:mt-0">
-                            <div class="md:grid md:grid-cols-3 md:gap-6">
-                                <div class="md:col-span-1">
-                                    <div class="px-4 sm:px-0">
-                                        <h3 class="text-lg font-medium leading-6 text-gray-900">Escudo</h3>
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            Escudo do personagem
-                                        </p>
-                                    </div>
+                    <div class="mt-10 sm:mt-0">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                                <div class="px-4 sm:px-0">
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Escudo</h3>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        Escudo do personagem
+                                    </p>
                                 </div>
-                                <div class="mt-5 md:mt-0 md:col-span-2">
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
 
-                                    <div class="shadow overflow-hidden sm:rounded-md">
-                                        <div class="px-4 py-5 bg-white sm:p-6">
-                                            <div class="grid grid-cols-6 gap-6">
-                                                <div class="col-span-6 sm:col-span-3">
-                                                    <label for="weapon_id" class="block text-sm font-medium text-gray-700">Arma</label>
+                                <div class="shadow overflow-hidden sm:rounded-md">
+                                    <div class="px-4 py-5 bg-white sm:p-6">
+                                        <div class="grid grid-cols-6 gap-6">
+                                            <div class="col-span-6 sm:col-span-3">
 
-                                                </div>
+
+
+
 
 
                                             </div>
-                                        </div>
 
+
+                                        </div>
                                     </div>
 
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="py-12" id="mochila">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
+    <div class="py-12" id="mochila">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
 
-                        <div class="mt-10 sm:mt-0">
-                            <div class="md:grid md:grid-cols-3 md:gap-6">
-                                <div class="md:col-span-1">
-                                    <div class="px-4 sm:px-0">
-                                        <h3 class="text-lg font-medium leading-6 text-gray-900">Mochila</h3>
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            Mochila do personagem
-                                        </p>
-                                    </div>
+                    <div class="mt-10 sm:mt-0">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                                <div class="px-4 sm:px-0">
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Mochila</h3>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        Mochila do personagem
+                                    </p>
                                 </div>
-                                <div class="mt-5 md:mt-0 md:col-span-2">
-
-                                    <div class="shadow overflow-hidden sm:rounded-md">
-                                        <div class="px-4 py-5 bg-white sm:p-6">
-                                            <div class="grid grid-cols-6 gap-6">
-                                                <textarea value="{{$char->bag ?? ''}} widht=" 100%" cols="20" rows="5" class="resize border rounded-md" style="background-image: url(' http://i.stack.imgur.com/yWNH7.png'); font-size:18px;"></textarea>
-
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="flex-auto flex flex-row-reverse">
-                                        <input type="submit" cursor="pointer" value="Salvar" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
-
-                                        </input>
-                                    </div>
-
-                                </div>
-                                </form>
                             </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+
+                                <div class="shadow overflow-hidden sm:rounded-md">
+                                    <div class="px-4 py-5 bg-white sm:p-6">
+                                        <div class="grid grid-cols-6 gap-6">
+                                            <textarea value="{{$char->bag ?? ''}} widht=" 100%" cols="20" rows="5" class="resize border rounded-md" style="background-image: url(' http://i.stack.imgur.com/yWNH7.png'); font-size:18px;"></textarea>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="flex-auto flex flex-row-reverse">
+                                    <input type="submit" cursor="pointer" value="Salvar" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+
+                                    </input>
+                                </div>
+
+                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 

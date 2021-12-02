@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModelCharsTable extends Migration
+class CreateCharsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateModelCharsTable extends Migration
      */
     public function up()
     {
-        Schema::create('char', function (Blueprint $table) {
-            $table->increments('id')->unique();
+        Schema::create('chars', function (Blueprint $table) {
+            $table->bigIncrements('id')->unique();
             $table->integer('user_id')->unsigned();
             $table->string('name');
             $table->integer('breed_id')->unsigned();
@@ -72,15 +72,15 @@ class CreateModelCharsTable extends Migration
             ->onUpdate('cascade');
             
             $table->foreign('armor_id')->references('id')
-            ->on('armor')
+            ->on('armors')
             ->onUpdate('cascade');
         
             $table->foreign('breed_id')->references('id')
-            ->on('breed')
+            ->on('breeds')
             ->onUpdate('cascade');
 
             $table->foreign('class_id')->references('id')
-            ->on('classe')
+            ->on('classes')
             ->onUpdate('cascade');
                         
             $table->timestamps();
@@ -94,6 +94,6 @@ class CreateModelCharsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('char');
+        Schema::dropIfExists('chars');
     }
 }

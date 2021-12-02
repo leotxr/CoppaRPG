@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModelClassesTable extends Migration
+class CreateCharWeaponsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateModelClassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('classe', function (Blueprint $table) {
-            $table->increments('id')->unique();
-            $table->string('name');
-            $table->string('desc');
+        Schema::create('char_weapons', function (Blueprint $table) {
+            $table->foreignId('char_id')->constrained();
+            $table->foreignId('weapon_id')->constrained();
             $table->timestamps();
-    });
+        });
     }
 
     /**
@@ -28,6 +27,6 @@ class CreateModelClassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('classe');
+        Schema::dropIfExists('char_weapons');
     }
 }
