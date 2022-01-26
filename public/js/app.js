@@ -95,6 +95,38 @@ function mostrarDivEquipamentos() {
 
 }
 
+//mostrar modal armas
+function mostrarModalArmas() {
+  var modal = document.getElementById("modal_weapons");
+  if (modal.style.display === "none") {
+      modal.style.display = "block";
+  }else if (modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+
+}
+
+//mostrar modal com todas as armas
+function mostrarModalTodasArmas() {
+  var modal = document.getElementById("modal_AllWeapons");
+  if (modal.style.display === "none") {
+      modal.style.display = "block";
+  }else if (modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+
+}
+
+function mostrarModalTodasArmaduras() {
+  var modal = document.getElementById("modal_AllArmors");
+  if (modal.style.display === "none") {
+      modal.style.display = "block";
+  }else if (modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+
+}
+
 
 function somaPericia(){
   var modhability = document.getElementById('modhability').value;
@@ -153,6 +185,40 @@ function calcularResistenciaWil(){
 
   document.getElementById('will').value = totalwill;
 }
+
+//Deletar personagem da tabela
+(function(win,doc){
+  'use strict';
+
+  //Delete
+  function confirmDel(event)
+  {
+      event.preventDefault();
+      //console.log(event.target.parentNode.href);
+      let token=doc.getElementsByName("_token")[0].value;
+      if(confirm("Deseja mesmo apagar este personagem?")){
+         let ajax=new XMLHttpRequest();
+         ajax.open("DELETE",event.target.parentNode.href);
+         ajax.setRequestHeader('X-CSRF-TOKEN',token);
+         ajax.onreadystatechange=function(){
+             if(ajax.readyState === 4 && ajax.status === 200){
+                 win.location.href="chars";
+             }
+         };
+         ajax.send();
+      }else{
+          return false;
+      }
+  }
+  if(doc.querySelector('.del_char')){
+      let btn=doc.querySelectorAll('.del_char');
+      for(let i=0; i < btn.length; i++){
+          btn[i].addEventListener('click',confirmDel,false);
+      }
+  }
+})(window,document);
+
+
 
 
 
