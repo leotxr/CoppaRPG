@@ -88,7 +88,7 @@ class CharController extends Controller
             'age' => $request->age,
             'breed_id' => $request->breed_id,
             'class_id' => $request->class_id,
-            'user_id' => $request->user_id,
+            'user_id' => auth()->user()->id,
             'armor_id' => $request->armor_id,
             'level' => $request->level,
             'trend' => $request->trend,
@@ -234,6 +234,7 @@ class CharController extends Controller
 
 
         ]);
+        $edit = Char::find($id);
         $edit->weapons()->attach([
             'weapon_id' => $request->weapon_id]);
        if ($edit)
@@ -242,9 +243,8 @@ class CharController extends Controller
 
     public function destroy($id)
     {
-        $char = Char::findOrFail($id);
-        $char->delete($id);
-        return redirect('chars');
+        $del=$this->objChar->destroy($id);
+        return($del)?"sim":"não";
     }
 
     public function insert(Request $request)
@@ -265,4 +265,5 @@ class CharController extends Controller
             echo " " . $weapon->name;
         }
     }
+    
 }
