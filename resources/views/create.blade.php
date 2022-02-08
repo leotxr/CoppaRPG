@@ -1,6 +1,12 @@
 <head>
     <script src="../../public/js/evento.js"></script>
 </head>
+<!--solicita uma confirmacao para o usuario sair da pagina-->
+<script>
+window.onbeforeunload = function(){
+  return 'Tem certeza que deseja sair da pagina? Todas as mudanças serão descartadas.';
+};
+</script>
 <x-app-layout>
 
 
@@ -203,7 +209,7 @@
                                                 </br>
                                                 <div class="col-span-2 sm:col-span-2">
                                                     <label for="modstr" class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                    <input type="number" value="{{$char->modstr ?? ''}}" id="modstr" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->modstr ?? ''}}" id="modstr" name="modstr" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
                                                 </br>
 
@@ -417,22 +423,22 @@
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="basefor" class="block text-sm font-medium text-red-700">Base</label>
-                                                    <input type="number" value="{{$char->basefor ?? ''}}" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->basefor ?? ''}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="habfor" class="block text-sm font-medium text-red-700">Habilidade</label>
-                                                    <input type="number" value="{{$char->habfor ?? ''}}" id="habfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->habfor ?? ''}}" name="habfor" id="habfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="magicfor" class="block text-sm font-medium text-red-700">Magico</label>
-                                                    <input type="number" value="{{$char->magicfor ?? ''}}" id="magicfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->magicfor ?? ''}}" name="magicfor" id="magicfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="otherfor" class="block text-sm font-medium text-red-700">Outro</label>
-                                                    <input type="number" value="{{$char->otherfor ?? ''}}" id="otherfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                    <input type="number" value="{{$char->otherfor ?? ''}}" name="otherfor" id="otherfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                 </div>
                                                 </br>
 
@@ -444,22 +450,22 @@
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="baseref" class="block text-sm font-medium text-gray-700">Base</label>
-                                                    <input type="number" value="{{$char->baseref ?? ''}}" id="baseref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->baseref ?? ''}}" name="baseref" id="baseref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="habref" class="block text-sm font-medium text-gray-700">Habilidade</label>
-                                                    <input type="number" value="{{$char->habref ?? ''}}" id="habref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->habref ?? ''}}" name="habref" id="habref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="magicref" class="block text-sm font-medium text-gray-700">Magico</label>
-                                                    <input type="number" value="{{$char->magicref ?? ''}}" id="magicref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->magicref ?? ''}}" name="magicref" id="magicref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="otherref" class="block text-sm font-medium text-gray-700">Outro</label>
-                                                    <input type="number" value="{{$char->otherref ?? ''}}" id="otherref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->otherref ?? ''}}" name="otherref" id="otherref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
                                                 </br>
 
@@ -470,22 +476,22 @@
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="basewill" class="block text-sm font-medium text-blue-700">Base</label>
-                                                    <input type="number" value="{{$char->basewill ?? ''}}" id="basewill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                    <input type="number" value="{{$char->basewill ?? ''}}" name="basewill" id="basewill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="habwill" class="block text-sm font-medium text-blue-700">Habilidade</label>
-                                                    <input type="number" value="{{$char->habwill ?? ''}}" id="habwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->habwill ?? ''}}" name="habwill" id="habwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="magicwill" class="block text-sm font-medium text-blue-700">Magico</label>
-                                                    <input type="number" value="{{$char->magicwill ?? ''}}" id="magicwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->magicwill ?? ''}}" name="magicwill" id="magicwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
 
                                                 <div class="col-span-2 sm:col-span-1">
                                                     <label for="otherwill" class="block text-sm font-medium text-blue-700">Outro</label>
-                                                    <input type="number" value="{{$char->otherwill ?? ''}}" id="otherwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                    <input type="number" value="{{$char->otherwill ?? ''}}" name="otherwill" id="otherwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                 </div>
                                                 </br>
 
@@ -2154,7 +2160,7 @@
                                     <div class="shadow overflow-hidden sm:rounded-md">
                                         <div class="px-4 py-5 bg-white sm:p-6">
                                             <div class="grid grid-cols-6 gap-6">
-                                                <textarea value="{{$char->bag ?? ''}} widht=" 100%"" cols="20" rows="5" class="resize border rounded-md" style="background-image: url(' http://i.stack.imgur.com/yWNH7.png'); font-size:18px;"></textarea>
+                                                <textarea value="{{$char->bag ?? ''}} widht="100%" cols="20" rows="5" class="resize border rounded-md" style="background-image: url(' http://i.stack.imgur.com/yWNH7.png'); font-size:18px;"></textarea>
 
 
                                             </div>
