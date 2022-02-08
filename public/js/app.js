@@ -1,3 +1,5 @@
+
+
 //realiza o calculo dos valores 
 function getMod(valor) {
 
