@@ -59,9 +59,6 @@ class CharController extends Controller
      */
     public function create()
     {
-
-
-
         $users = User::find(Auth::user());
         $breeds = Breed::all();
         $classes = Classes::all();
@@ -92,6 +89,10 @@ class CharController extends Controller
             'armor_id' => $request->armor_id,
             'level' => $request->level,
             'trend' => $request->trend,
+            'sex' => $request->sex,
+            'eyes' => $request->eyes,
+            'size' => $request->size,
+            'hair' => $request->hair,
             'religion' => $request->religion,
             'weight' => $request->weight,
             'height' => $request->height,
@@ -108,6 +109,13 @@ class CharController extends Controller
             'modwiz' => $request->modwiz,
             'modcha' => $request->modcha,
             'pv' => $request->pv,
+            'actpv' => $request->actpv,
+            'dv' => $request->dv,
+            'desloc' => $request->desloc,
+            'modarmor' => $request->modarmor,
+            'modshield' => $request->modshield,
+            'modotherca' => $request->modotherca,
+            'modsize' => $request->modsize,
             'ca' => $request->ca,
             'initiative' => $request->initiative,
             'bba' => $request->bba,
@@ -190,6 +198,10 @@ class CharController extends Controller
             'armor_id' => $request->armor_id,
             'level' => $request->level,
             'trend' => $request->trend,
+            'sex' => $request->sex,
+            'eyes' => $request->eyes,
+            'size' => $request->size,
+            'hair' => $request->hair,
             'religion' => $request->religion,
             'weight' => $request->weight,
             'height' => $request->height,
@@ -206,6 +218,13 @@ class CharController extends Controller
             'modwiz' => $request->modwiz,
             'modcha' => $request->modcha,
             'pv' => $request->pv,
+            'actpv' => $request->actpv,
+            'dv' => $request->dv,
+            'desloc' => $request->desloc,
+            'modarmor' => $request->modarmor,
+            'modshield' => $request->modshield,
+            'modotherca' => $request->modotherca,
+            'modsize' => $request->modsize,
             'ca' => $request->ca,
             'initiative' => $request->initiative,
             'bba' => $request->bba,
