@@ -1,5 +1,6 @@
 
 
+
 //realiza o calculo dos valores 
 function getMod(valor) {
 
@@ -7,10 +8,8 @@ function getMod(valor) {
       return '';
   } else if (valor == 10 || valor == 11) {
       return '0';
-  } else if (valor > 9) {
+  } else if (valor > 10 || valor < 10) {
       return Math.floor((valor - 10) / 2);
-  } else if (valor < 10) {
-      return Math.ceil((valor - 10) / 2);
   }
 
 }
@@ -23,13 +22,16 @@ function calcularCusto() {
   var wiz = document.formCad.wiz.value;
   var cha = document.formCad.cha.value;
 
-  //mostra o calculo no label
+  //mostra o calculo nos inputs de modificadores
   document.getElementById('modstr').value = getMod(str);
   document.getElementById('moddex').value = getMod(dex);
+  document.getElementById('habref').value = getMod(dex);
   document.getElementById('moddex2').value = getMod(dex);
   document.getElementById('modcon').value = getMod(con);
+  document.getElementById('habfor').value = getMod(con);
   document.getElementById('modint').value = getMod(int);
   document.getElementById('modwiz').value = getMod(wiz);
+  document.getElementById('habwill').value = getMod(wiz);
   document.getElementById('modcha').value = getMod(cha);
 }
 //valida se o valor esta correto, senao ele deixa o campo em branco e apresenta uma mensagem
@@ -60,10 +62,14 @@ function mostrarDivInfo() {
   var info = document.getElementById("info");
   var pericias = document.getElementById("pericias");
   var equipamentos = document.getElementById("equipamentos");
+  var talentos = document.getElementById("talentos");
+  var magias = document.getElementById("magias");
   if (info.style.display === "none") {
       info.style.display = "block";
       pericias.style.display = "none";
       equipamentos.style.display = "none";
+      talentos.style.display = "none";
+      magias.style.display = "none";
 
   }
 
@@ -74,10 +80,14 @@ function mostrarDivPericias() {
   var info = document.getElementById("info");
   var pericias = document.getElementById("pericias");
   var equipamentos = document.getElementById("equipamentos");
+  var talentos = document.getElementById("talentos");
+  var magias = document.getElementById("magias");
   if (pericias.style.display === "none") {
       info.style.display = "none";
       pericias.style.display = "block";
       equipamentos.style.display = "none";
+      talentos.style.display = "none";
+      magias.style.display = "none";
 
   }
 
@@ -88,11 +98,63 @@ function mostrarDivEquipamentos() {
   var info = document.getElementById("info");
   var pericias = document.getElementById("pericias");
   var equipamentos = document.getElementById("equipamentos");
+  var talentos = document.getElementById("talentos");
+  var magias = document.getElementById("magias");
   if (equipamentos.style.display === "none") {
       info.style.display = "none";
       pericias.style.display = "none";
       equipamentos.style.display = "block";
+      talentos.style.display = "none";
+      magias.style.display = "none";
+      
 
+  }
+
+}
+
+//esconde a div talentos e mostra a anterior
+function mostrarDivTalentos() {
+  var info = document.getElementById("info");
+  var pericias = document.getElementById("pericias");
+  var equipamentos = document.getElementById("equipamentos");
+  var talentos = document.getElementById("talentos");
+  var magias = document.getElementById("magias");
+  if (talentos.style.display === "none") {
+      info.style.display = "none";
+      pericias.style.display = "none";
+      talentos.style.display = "block";
+      equipamentos.style.display = "none";
+      magias.style.display = "none";
+
+  }
+
+}
+
+//esconde a div magias e mostra a anterior
+function mostrarDivMagias() {
+  var info = document.getElementById("info");
+  var pericias = document.getElementById("pericias");
+  var equipamentos = document.getElementById("equipamentos");
+  var talentos = document.getElementById("talentos");
+  var magias = document.getElementById("magias");
+  var step = document.getElementById("step");
+  if (magias.style.display === "none") {
+      info.style.display = "none";
+      pericias.style.display = "none";
+      magias.style.display = "block";
+      equipamentos.style.display = "none";
+      step.style.width = "100%";
+
+
+  }
+
+}
+
+//mostrar informacao da arma selecionada
+function mostrarArmaSelect() {
+  var dl = document.getElementById("dl_weapons");
+  if (dl.style.display === "none") {
+      dl.style.display = "block";
   }
 
 }
@@ -157,6 +219,7 @@ function calcularResistenciaFor(){
   var habfor = document.getElementById('habfor').value;
   var magicfor = document.getElementById('magicfor').value;
   var otherfor = document.getElementById('otherfor').value;
+  
 
     var totalfor = parseInt(basefor) + parseInt(habfor) + parseInt(magicfor) + parseInt(otherfor);
   
@@ -176,7 +239,7 @@ function calcularResistenciaRef(){
   document.getElementById('ref').value = totalref;
 }
 
-function calcularResistenciaWil(){
+function calcularResistenciaWill(){
   var basewill = document.getElementById('basewill').value;
   var habwill = document.getElementById('habwill').value;
   var magicwill = document.getElementById('magicwill').value;
@@ -188,9 +251,34 @@ function calcularResistenciaWil(){
   document.getElementById('will').value = totalwill;
 }
 
+function calcAttrClasses(){
+  if ((document.getElementById('breed_id').value = 'Guerreiro') || (document.getElementById('breed_id').value = 'Paladino')){
+    if (document.getElementById('level').value == '1'){
+      document.getElementById('basefor').value = '2';
+    }else if (document.getElementById('level').value == '2'){
+      document.getElementById('basefor').value = '3';
+    }else if (document.getElementById('level').value == '3'){
+      document.getElementById('baseref').value = '1';
+      document.getElementById('basewill').value = '1';
+    }else if (document.getElementById('level').value == '4'){
+      document.getElementById('basefor').value = '4';
+    }else if (document.getElementById('level').value == '6'){
+      document.getElementById('basefor').value = '5';
+      document.getElementById('baseref').value = '2';
+      document.getElementById('basewill').value = '2';
+    }else if (document.getElementById('level').value == '8'){
+      document.getElementById('basefor').value = '6';
+    }else if (document.getElementById('level').value == '9'){
+      document.getElementById('baseref').value = '3';
+      document.getElementById('basewill').value = '3';
+    }
+  } 
+}
+
 //Deletar personagem da tabela
 (function(win,doc){
   'use strict';
+  
 
   //Delete
   function confirmDel(event)
@@ -221,7 +309,12 @@ function calcularResistenciaWil(){
 })(window,document);
 
 
+function TxtOnHead() {
+  var namehead = document.getElementById('name').value;
 
+  document.getElementById('nameHead').value = namehead;
+  
+};
 
 
 /******/ (() => { // webpackBootstrap

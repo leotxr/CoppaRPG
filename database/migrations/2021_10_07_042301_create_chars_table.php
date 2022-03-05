@@ -24,6 +24,10 @@ class CreateCharsTable extends Migration
             $table->string('trend')->nullable();
             $table->string('religion')->nullable();
             $table->integer('age')->nullable();
+            $table->string('sex')->nullable();
+            $table->string('eyes')->nullable();
+            $table->string('hair')->nullable();
+            $table->string('size')->nullable();
             $table->integer('weight')->nullable();
             $table->integer('height')->nullable();
             $table->integer('str')->nullable();
@@ -39,8 +43,15 @@ class CreateCharsTable extends Migration
             $table->integer('modwiz')->nullable();
             $table->integer('modcha')->nullable();
             $table->integer('pv')->nullable();
+            $table->integer('actpv')->nullable();
+            $table->string('dv')->nullable();
             $table->integer('ca')->nullable();
+            $table->integer('modarmor')->nullable();
+            $table->integer('desloc')->nullable();
+            $table->integer('modshield')->nullable();
+            $table->integer('modotherca')->nullable();
             $table->integer('initiative')->nullable();
+            $table->integer('modsize')->nullable();
             $table->integer('bba')->nullable();
             $table->integer('for')->nullable();
             $table->integer('basefor')->nullable();
