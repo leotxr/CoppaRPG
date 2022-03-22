@@ -23,11 +23,6 @@
                     </x-nav-link>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href=" url('/items') " :active="request()->routeIs('items')">
-                        {{ __('Oficina') }}
-                    </x-nav-link>
-                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -85,9 +80,6 @@
                 {{ __('Personagens') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Oficina') }}
-            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

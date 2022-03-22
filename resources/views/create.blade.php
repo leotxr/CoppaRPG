@@ -3,43 +3,69 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="./TW-ELEMENTS-PATH/dist/js/index.min.js"></script>
 </head>
-<!--solicita uma confirmacao para o usuario sair da pagina-->
-<script>
-    window.onbeforeunload = function() {
-        return 'Tem certeza que deseja sair da pagina? Todas as mudanças serão descartadas.';
-    };
-</script>
+
 <x-app-layout>
 
     @if (isset ($char))
     <form name="formEdit" id="formEdit" method="post" action="/chars/{{$char->id}}">
-        @method('PUT');
+        @method('PUT')
         @else
         <form name="formCad" id="formCad" method="post" action="{{url('chars')}}">
             @endif
             @csrf
 
 
+            <!-- Modal confirmacao de criacao -->
+            <div id="confirmcreate" style="display: none;" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                    <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+
+                                    <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </div>
+                                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Seu personagem foi Criado!</h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-500">Certifique-se de que todas as informações estão corretas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm">Finalizar</button>
+                            <button type="button" onclick=openconfirmcreate() class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Fim-->
+
             <!--HEADER COM NOME DA PAGINA -->
             <x-slot name="header" style="position: absolute;">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    
+
                     <div class="lg:flex lg:items-center lg:justify-between">
                         <div class="flex-1 min-w-0">
                             <input id="nameHead" value="{{$char->name ?? ''}}" class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate" readonly></input>
                             <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-                                <div class="mt-2 flex items-center text-sm text-gray-500" >
-                                    <!-- Heroicon name: solid/briefcase -->
-                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
-                                        <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                    <!-- Heroicon name: solid/beaker -->
+                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                     {{$char->relClasses->name ?? ''}}
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                                    <!-- Heroicon name: solid/location-marker -->
-                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                    <!-- Heroicon name: solid/finger-print -->
+                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
                                     </svg>
                                     {{$char->relBreeds->name ?? ''}}
                                 </div>
@@ -49,14 +75,14 @@
                                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
                                     </svg>
-                                    
+
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <!-- Heroicon name: solid/calendar -->
-                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
-                                    Closing on January 9, 2020
+
                                 </div>
                             </div>
                         </div>
@@ -67,7 +93,7 @@
                                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                     </svg>
-                                    Edit
+                                    Editar
                                 </button>
                             </span>
 
@@ -77,42 +103,43 @@
                                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
                                     </svg>
-                                    View
+                                    Ver
                                 </button>
                             </span>
 
                             <span class="sm:ml-3">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button type="submit" id="btn_save" onclick=openconfirmcreate() class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <!-- Heroicon name: solid/check -->
                                     <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                     </svg>
-                                    Publish
+                                    Salvar
                                 </button>
                             </span>
 
                             <!-- Dropdown -->
                             <span class="ml-3 relative sm:hidden">
-                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="mobile-menu-button" aria-expanded="false" aria-haspopup="true">
+                                <button id="btn_dropdown" onclick=dropdownhead() type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="mobile-menu-button" aria-expanded="false" aria-haspopup="true">
                                     More
                                     <!-- Heroicon name: solid/chevron-down -->
                                     <svg class="-mr-1 ml-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
-                                <div class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="mobile-menu-button" tabindex="-1">
+                                <div id="divdropdown" style="display: none" class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="mobile-menu-button" tabindex="-1">
                                     <!-- Active: "bg-gray-100", Not Active: "" -->
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="mobile-menu-item-0">Edit</a>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="mobile-menu-item-1">View</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="mobile-menu-item-0">Editar</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="mobile-menu-item-1">Ver</a>
                                 </div>
                             </span>
                         </div>
                     </div>
 
-                  
                 </h2>
 
             </x-slot>
+
+
             @if ((empty ($char)) || (auth()->user()->id == $char->user_id))
             <!--STEPS DA CRIACAO-->
 
@@ -154,16 +181,17 @@
 
                                                     <div class="col-span-2 sm:col-span-1">
                                                         <label for="level" class="block text-sm font-medium text-gray-700">Nivel</label>
-                                                        <input type="number" onmouseup="calcAttrClasses()" name="level" value="{{$char->level ?? ''}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        <input type="number" onmouseup="calcAttrClasses(), calcularResistencia()" name="level" value="{{$char->level ?? ''}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
+
                                                     @if (isset($char))
-                                                    <div class="col-span-2 sm:col-span-1">
+                                                    <div class="col-span-2 sm:col-span-1" style="display: none;">
                                                         <label for="user_id" class="block text-sm font-medium text-gray-700">ID do Jogador</label>
                                                         <input type="user_id" name="user_id" value="{{$char->user_id}}" id="user_id" autocomplete="user_id" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-lg border-gray-300 rounded-md" readonly>
                                                     </div>
                                                     @else
-                                                    <div class="col-span-3 sm:col-span-2">
+                                                    <div class="col-span-3 sm:col-span-2" style="display: none;">
                                                         <label for="user_id" class="block text-sm font-medium text-gray-700">Jogador</label>
                                                         <select id="user_id" name="user_id" autocomplete="user_id" value="{{$char->relUsers->id ?? Auth::user()}}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                             <option readonly value="{{$char->relUsers->id ?? Auth::user()->id}}">{{$char->relUsers->name ?? Auth::user()->name}}</option>
@@ -172,7 +200,11 @@
                                                     @endif
 
 
-                                                    <div class="col-span-3 sm:col-span-3">
+                                                    <div class="col-span-3 sm:col-span-2">
+                                                        <input type="button" class="block text-lg font-medium text-purple-600">Biografia</input>
+                                                    </div>
+
+                                                    <div class="col-span-5 sm:col-span-4">
                                                         <label for="breed_id" class="block text-sm font-medium text-gray-700">Raça</label>
                                                         <select id="breed_id" name="breed_id" autocomplete="breed" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                             <option value="{{$char->relBreeds->id ?? ''}}">{{$char->relBreeds->name ?? 'Selecione'}}</option>
@@ -180,11 +212,15 @@
                                                             <option value="{{$breed->id}}">{{$breed->name}}</option>
                                                             @endforeach
                                                         </select>
-                                                    </div>
 
-                                                    <div class="col-span-3 sm:col-span-3">
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+
+                                                    <div class="col-span-5 sm:col-span-4">
                                                         <label for="class" class="block text-sm font-medium text-gray-700">Classe</label>
-                                                        <select onmouseup="calcAttrClasses()" id="class_id" name="class_id" autocomplete="class" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                        <select onmouseup="calcAttrClasses(), calcularResistencia()" id="class_id" name="class_id" autocomplete="class" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                             <option value="{{$char->relClasses->id ?? ''}}">{{$char->relClasses->name ?? 'Selecione'}}</option>
                                                             @foreach($classes as $class)
                                                             <option value="{{$class->id}}">{{$class->name}}</option>
@@ -197,7 +233,7 @@
                                                         <input type="text" value="{{$char->trend ?? ''}}" name="trend" id="trend" autocomplete="trend" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
-                                                    <div class="col-span-3 sm:col-span-6 lg:col-span-2">
+                                                    <div class="col-span-3 sm:col-span-6 lg:col-span-3">
                                                         <label for="religion" class="block text-sm font-medium text-gray-700">Divindade</label>
                                                         <input type="text" value="{{$char->religion ?? ''}}" name="religion" id="religion" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
@@ -292,7 +328,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="dex" class="block text-sm font-bold text-indigo-700">Destreza</label>
-                                                            <input type="number" value="{{$char->dex ?? ''}}" onkeyup="calcularCusto(this)" onblur="valida(this)" name="dex" id="dex" autocomplete="dex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->dex ?? ''}}" onkeyup="calcularCusto(this), calcularResistencia(this)" , onblur="valida(this), somaCA()" name="dex" id="dex" autocomplete="dex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
 
@@ -304,7 +340,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="con" class="block text-sm font-bold text-indigo-700">Constituição</label>
-                                                            <input type="number" value="{{$char->con ?? ''}}" name="con" id="con" autocomplete="con" onkeyup="calcularCusto( this );" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->con ?? ''}}" name="con" id="con" autocomplete="con" onkeyup="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
@@ -315,7 +351,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="int" class="block text-sm font-bold text-indigo-500">Inteligência</label>
-                                                            <input type="number" value="{{$char->int ?? ''}}" name="int" id="int" autocomplete="int" onkeyup="calcularCusto( this );" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->int ?? ''}}" name="int" id="int" autocomplete="int" onkeyup="calcularCusto( this )" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
@@ -326,7 +362,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="wiz" class="block text-sm font-bold text-indigo-500">Sabedoria</label>
-                                                            <input type="number" value="{{$char->wiz ?? ''}}" name="wiz" id="wiz" autocomplete="wiz" onkeyup="calcularCusto( this );" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->wiz ?? ''}}" name="wiz" id="wiz" autocomplete="wiz" onkeyup="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
@@ -390,62 +426,70 @@
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
 
-                                                        <div class="col-span-2 sm:col-span-1">
-                                                            <label for="pv" class="block text-sm font-bold text-gray-700">PV Total</label>
-                                                            <input type="number" value="{{$char->pv ?? ''}}" name="pv" id="pv" autocomplete="pv" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                        </div>
-
-                                                        <div class="col-span-2 sm:col-span-1">
-                                                            <label for="actpv" class="block text-sm font-medium text-gray-700">PV Atual</label>
+                                                        <div class="col-span-3 sm:col-span-1">
+                                                            <label for="actpv" class="block text-sm font-bold text-gray-700">PV Atual</label>
                                                             <input type="number" value="{{$char->actpv ?? ''}}" name="actpv" id="actpv" autocomplete="actpv" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
-                                                        <div class="col-span-2 sm:col-span-2">
+                                                        <div class="col-span-3 sm:col-span-1">
+                                                            <label for="pv" class="block text-sm font-medium text-gray-700">PV Total</label>
+                                                            <input type="number" value="{{$char->pv ?? ''}}" name="pv" id="pv" autocomplete="pv" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        </div>
+
+                                                        <div class="col-span-3 sm:col-span-2">
                                                             <label for="dv" class="block text-sm font-medium text-gray-700">Dado de Vida</label>
                                                             <input type="text" value="{{$char->dv ?? ''}}" name="dv" id="dv" autocomplete="dv" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
-                                                        <div class="col-span-2 sm:col-span-2">
+                                                        <div class="col-span-3 sm:col-span-2">
                                                             <label for="desloc" class="block text-sm font-medium text-gray-700">Deslocamento</label>
                                                             <input type="number" value="{{$char->desloc ?? ''}}" name="desloc" id="desloc" autocomplete="desloc" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
                                                         <!-- CLASSE DE ARMADURA -->
-                                                        <script>
-
-                                                        </script>
 
 
-                                                        <div class="col-span-2 sm:col-span-1">
+                                                        <div class="col-span-2 sm:col-span-2 inline-block">
                                                             <label for="ca" class="block text-sm font-bold text-gray-700">CA</label>
-                                                            <input type="number" value="{{$char->ca ?? ''}}" name="ca" id="ca" placeholder="10" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->ca ?? ''}}" name="ca" id="ca" placeholder="10" class="inline-block mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
-
-                                                        <div class="col-span-2 sm:col-span-1">
-                                                            <label for="bonusarmor" class="block text-sm font-medium text-gray-700">Armadura</label>
-                                                            <input type="number" value="{{$char->bonusarmor ?? ''}}" onkeyup="somaCA(this)" name="bonusarmor" id="bonusarmor" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        <div>
+                                                            <button type="button" id="btn_show_mod" onclick="showdivmods()">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                </svg>
+                                                            </button>
                                                         </div>
 
-                                                        <div class="col-span-2 sm:col-span-1">
-                                                            <label for="bonusshield" class="block text-sm font-medium text-gray-700">Escudo</label>
-                                                            <input type="number" value="{{$char->bonusshield ?? ''}}" onkeyup="somaCA(this)" name="bonusshield" id="bonusshield" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                        </div>
+                                                        <div id="div_mods" class="col-span-2 sm:col-span-2 inline-block" style="display: none;">
 
-                                                        <div class="col-span-2 sm:col-span-1">
-                                                            <label for="moddex2" class="block text-sm font-medium text-gray-700">Destreza</label>
-                                                            <input type="number" value="{{$char->moddex ?? ''}}" onkeyup="somaCA(this)" name="moddex2" id="moddex2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </label>
-                                                        </div>
+                                                            <div class="col-span-2 sm:col-span-1 ">
+                                                                <label for="bonusarmor" class="block text-sm font-medium text-gray-700">Armadura</label>
+                                                                <input type="number" value="{{$char->bonusarmor ?? '0'}}" onkeyup="somaCA(this)" name="bonusarmor" id="bonusarmor" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            </div>
 
-                                                        <div class="col-span-6 sm:col-span-3 lg:col-span-1">
-                                                            <label for="bonusweight" class="block text-sm font-medium text-gray-700">Outro</label>
-                                                            <input type="number" value="{{$char->bonusweight ?? ''}}" name="bonusweight" id="bonusweight" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                        </div>
+                                                            <div class="col-span-2 sm:col-span-1 ">
+                                                                <label for="bonusshield" class="block text-sm font-medium text-gray-700">Escudo</label>
+                                                                <input type="number" value="{{$char->bonusshield ?? '0'}}" onkeyup="somaCA(this)" name="bonusshield" id="bonusshield" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            </div>
 
-                                                        <div class="col-span-6 sm:col-span-3 lg:col-span-1">
-                                                            <label for="bonussize" class="block text-sm font-medium text-gray-700">Tamanho</label>
-                                                            <input type="number" value="{{$char->bonussize ?? ''}}" onkeyup="somaCA(this)" name="bonussize" id="bonussize" autocomplete="bonussize" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <div class="col-span-2 sm:col-span-1 ">
+                                                                <label for="moddex2" class="block text-sm font-medium text-gray-700">Mod. Destreza</label>
+                                                                <input type="number" value="{{$char->moddex ?? '0'}}" onkeyup="somaCA(this)" name="moddex2" id="moddex2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="col-span-2 sm:col-span-1 ">
+                                                                <label for="bonusweight" class="block text-sm font-medium text-gray-700">Outro</label>
+                                                                <input type="number" value="{{$char->bonusweight ?? '0'}}" name="bonusweight" id="bonusweight" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            </div>
+
+                                                            <div class="col-span-2 sm:col-span-1 ">
+                                                                <label for="bonussize" class="block text-sm font-medium text-gray-700">Mod. Tamanho</label>
+                                                                <input type="number" value="{{$char->bonussize ?? '0'}}" onkeyup="somaCA(this)" name="bonussize" id="bonussize" autocomplete="bonussize" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -490,109 +534,112 @@
                                             <!--FORM-->
                                             <div class="shadow overflow-hidden sm:rounded-md">
                                                 <div class="px-4 py-5 bg-white sm:p-6">
-                                                    <div class="grid grid-cols-6 gap-3">
+                                                    <div class="grid grid-cols-6 gap-4">
 
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="for" class="block text-sm font-bold text-red-700">Fortitude</label>
-                                                            <input type="number" value="{{$char->for ?? ''}}" name="for" id="for" autocomplete="for" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-red-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->for ?? '0'}}" name="for" id="for" autocomplete="for" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-red-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="basefor" class="block text-sm font-medium text-red-700">Base</label>
-                                                            <input type="number" value="{{$char->basefor ?? ''}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->basefor ?? '0'}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="habfor" class="block text-sm font-medium text-red-700">Habilidade</label>
-                                                            <input type="number" value="{{$char->habfor ?? ''}}" name="habfor" id="habfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->habfor ?? '0'}}" name="habfor" id="habfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
+
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="magicfor" class="block text-sm font-medium text-red-700">Magico</label>
-                                                            <input type="number" value="{{$char->magicfor ?? ''}}" name="magicfor" id="magicfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->magicfor ?? '0'}}" name="magicfor" id="magicfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="otherfor" class="block text-sm font-medium text-red-700">Outro</label>
-                                                            <input type="number" value="{{$char->otherfor ?? ''}}" name="otherfor" id="otherfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                            <input type="number" value="{{$char->otherfor ?? '0'}}" name="otherfor" id="otherfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                         </div>
-                                                        </br>
 
 
+
+
+                                                        <p>
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="ref" class="block text-sm font-bold text-gray-700">Reflexos</label>
-                                                            <input type="number" value="{{$char->ref ?? ''}}" name="ref" id="ref" autocomplete="ref" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->ref ?? '0'}}" name="ref" id="ref" autocomplete="ref" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="baseref" class="block text-sm font-medium text-gray-700">Base</label>
-                                                            <input type="number" value="{{$char->baseref ?? ''}}" name="baseref" id="baseref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->baseref ?? '0'}}" name="baseref" id="baseref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="habref" class="block text-sm font-medium text-gray-700">Habilidade</label>
-                                                            <input type="number" value="{{$char->habref ?? ''}}" name="habref" id="habref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->habref ?? '0'}}" name="habref" id="habref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="magicref" class="block text-sm font-medium text-gray-700">Magico</label>
-                                                            <input type="number" value="{{$char->magicref ?? ''}}" name="magicref" id="magicref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->magicref ?? '0'}}" name="magicref" id="magicref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="otherref" class="block text-sm font-medium text-gray-700">Outro</label>
-                                                            <input type="number" value="{{$char->otherref ?? ''}}" name="otherref" id="otherref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->otherref ?? '0'}}" name="otherref" id="otherref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
-                                                        </br>
+                                                        </p>
+
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="will" class="block text-sm font-bold text-blue-700">Vontade</label>
-                                                            <input type="number" value="{{$char->will ?? ''}}" name="will" id="will" autocomplete="will" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-blue-300 rounded-md">
+                                                            <input type="number" value="{{$char->will ?? '0'}}" name="will" id="will" autocomplete="will" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-blue-300 rounded-md">
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="basewill" class="block text-sm font-medium text-blue-700">Base</label>
-                                                            <input type="number" value="{{$char->basewill ?? ''}}" name="basewill" id="basewill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                            <input type="number" value="{{$char->basewill ?? '0'}}" name="basewill" id="basewill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="habwill" class="block text-sm font-medium text-blue-700">Habilidade</label>
-                                                            <input type="number" value="{{$char->habwill ?? ''}}" name="habwill" id="habwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->habwill ?? '0'}}" name="habwill" id="habwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="magicwill" class="block text-sm font-medium text-blue-700">Magico</label>
-                                                            <input type="number" value="{{$char->magicwill ?? ''}}" name="magicwill" id="magicwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->magicwill ?? '0'}}" name="magicwill" id="magicwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="otherwill" class="block text-sm font-medium text-blue-700">Outro</label>
-                                                            <input type="number" value="{{$char->otherwill ?? ''}}" name="otherwill" id="otherwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->otherwill ?? '0'}}" name="otherwill" id="otherwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
-                                                        </br>
 
                                                     </div>
-
-
                                                 </div>
 
 
                                             </div>
+
+
                                         </div>
                                     </div>
-                                    <div class="mt-8 p-4">
-                                        <div class="flex p-2 mt-4">
-                                            <a href="{{url('/chars')}}">
-                                                <button class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                                    Cancelar
-                                                </button>
-                                            </a>
-                                            <div class="flex-auto flex flex-row-reverse">
-                                                <button onclick="mostrarDivPericias()" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                                    Continuar
-                                                </button>
-                                            </div>
+                                </div>
+                                <div class="mt-8 p-4">
+                                    <div class="flex p-2 mt-4">
+                                        <a href="{{url('/chars')}}">
+                                            <button class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                                Cancelar
+                                            </button>
+                                        </a>
+                                        <div class="flex-auto flex flex-row-reverse">
+                                            <button onclick="mostrarDivEquipamentos()" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                                Continuar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -602,1041 +649,8 @@
                 </div>
             </div>
 
-            <!--PERICIAS-->
-            <div id="pericias" class="pericias" style="display: none;">
-                <div class="py-12" id="info">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 bg-white border-b border-gray-200">
-
-                                <div class="hidden sm:block" aria-hidden="true">
-                                    <div class="py-5">
-                                        <div class="border-t border-gray-200"></div>
-                                    </div>
-                                </div>
-
-                                <div class="flex flex-col">
-                                    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                                            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                                                <table class="min-w-full divide-y divide-gray-200">
-                                                    <thead class="bg-gray-50">
-                                                        <tr>
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ">
-                                                                Pericia
-                                                            </th>
-                                                            <th scope="col" class=" px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Hab. Chave
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Total
-                                                            </th>
-                                                            <th scope="col" class=" px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Mod Habilidade
-                                                            </th>
-                                                            <th scope="col" class=" px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Graduacao
-                                                            </th>
-                                                            <th scope="col" class=" px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Outros
-                                                            </th>
-                                                            <th scope="col" class="relative px-6 py-3">
-                                                                <span class="sr-only">Edit</span>
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Acrobacia
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES*`
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Adestrar Animais
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
 
 
-                                                        <tr>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="flex items-center">
-                                                                    <div class="ml-4">
-                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                            Abrir Fechaduras
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    DES
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                <div class="text-sm text-gray-500">
-                                                                    <input type="number" value="" name="totalhab" id="totalhab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                                </div>
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                <input type="number" value="" name="modhability" onkeyup="somaPericia(this)" id="modhability" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="graduation" onkeyup="somaPericia(this)" id="graduation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                <input type="number" value="" name="otherexpertise" onkeyup="somaPericia(this)" id="otherexpertise" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </td>
-                                                        </tr>
-
-
-
-
-                                                    </tbody>
-                                                </table>
-
-
-                                                <div class="mt-8 p-4">
-                                                    <div class="flex p-2 mt-4">
-                                                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                                            Voltar
-                                                        </button>
-                                                        <div class="flex-auto flex flex-row-reverse">
-                                                            <button onclick="mostrarDivEquipamentos()" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                                                Continuar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!--EQUIPAMENTOS-->
 
@@ -1947,70 +961,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <!-- Teste com description list -->
-                                                <div id="dl_weapons" class="bg-white shadow overflow-hidden sm:rounded-lg" style="display: none">
-                                                    <div class="px-4 py-5 sm:px-6">
-                                                        <h3 class="text-lg leading-6 font-medium text-gray-900">Applicant Information</h3>
-                                                        <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
-                                                    </div>
-                                                    <div class="border-t border-gray-200">
-                                                        <dl>
-                                                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                <dt class="text-sm font-medium text-gray-500">Full name</dt>
-                                                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Margot Foster</dd>
-                                                            </div>
-                                                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                <dt class="text-sm font-medium text-gray-500">Application for</dt>
-                                                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Backend Developer</dd>
-                                                            </div>
-                                                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                <dt class="text-sm font-medium text-gray-500">Email address</dt>
-                                                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">margotfoster@example.com</dd>
-                                                            </div>
-                                                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                <dt class="text-sm font-medium text-gray-500">Salary expectation</dt>
-                                                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">$120,000</dd>
-                                                            </div>
-                                                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                <dt class="text-sm font-medium text-gray-500">About</dt>
-                                                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.</dd>
-                                                            </div>
-                                                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                                <dt class="text-sm font-medium text-gray-500">Attachments</dt>
-                                                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                                    <ul role="list" class="border border-gray-200 rounded-md divide-y divide-gray-200">
-                                                                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                                                            <div class="w-0 flex-1 flex items-center">
-                                                                                <!-- Heroicon name: solid/paper-clip -->
-                                                                                <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                                                    <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
-                                                                                </svg>
-                                                                                <span class="ml-2 flex-1 w-0 truncate"> resume_back_end_developer.pdf </span>
-                                                                            </div>
-                                                                            <div class="ml-4 flex-shrink-0">
-                                                                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> Download </a>
-                                                                            </div>
-                                                                        </li>
-                                                                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                                                            <div class="w-0 flex-1 flex items-center">
-                                                                                <!-- Heroicon name: solid/paper-clip -->
-                                                                                <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                                                    <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
-                                                                                </svg>
-                                                                                <span class="ml-2 flex-1 w-0 truncate"> coverletter_back_end_developer.pdf </span>
-                                                                            </div>
-                                                                            <div class="ml-4 flex-shrink-0">
-                                                                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> Download </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </dd>
-                                                            </div>
-                                                        </dl>
-                                                    </div>
-                                                </div>
-
                                                 <!-- Fim Modal -->
 
                                                 <!-- INICIO MODAL TODAS ARMAS -->
@@ -2299,42 +1249,36 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="mt-5 md:mt-0 md:col-span-2">
-
-                                            <div class="shadow overflow-hidden sm:rounded-md">
-                                                <div class="px-4 py-5 bg-white sm:p-6">
-                                                    <div class="grid grid-cols-6 gap-6">
-                                                        <textarea value="{{$char->bag ?? ''}} widht=" 100%" cols="20" rows="5" class="resize border rounded-md" style="background-image: url(' http://i.stack.imgur.com/yWNH7.png'); font-size:18px;"></textarea>
-
-
-                                                    </div>
-                                                </div>
-
+                                        <div class="flex justify-center">
+                                            <div class="mb-3 xl:w-96">
+                                                <label for="exampleFormControlTextarea1" class="form-label inline-block mb-2 text-gray-700">Mochila</label>
+                                                <textarea class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlTextarea1" rows="3" placeholder=""></textarea>
                                             </div>
-
                                         </div>
+
                                     </div>
-                                    <div class="mt-8 p-4">
-                                        <div class="flex p-2 mt-4">
-                                            <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                                Voltar
-                                            </button>
+                                </div>
+                                <div class="mt-8 p-4">
+                                    <div class="flex p-2 mt-4">
+                                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                            Voltar
+                                        </button>
 
-                                            <div class="flex-auto flex flex-row-reverse">
-                                                <input type="submit" cursor="pointer" value="Salvar" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                        <div class="flex-auto flex flex-row-reverse">
+                                            <input type="submit" cursor="pointer" value="Salvar" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
 
-                                                </input>
-                                            </div>
-                                            @else
-
-                                            <div class="flex-auto flex flex-row-reverse">
-                                                <h4 class="font-semibold text-lg text-gray-800 leading-tight">
-                                                    Somente Visualizacao.
-                                                </h4>
-                                            </div>
-                                            @endif
+                                            </input>
                                         </div>
+                                        @else
+
+                                        <div class="flex-auto flex flex-row-reverse">
+                                            <h4 class="font-semibold text-lg text-gray-800 leading-tight">
+                                                Somente Visualizacao.
+                                            </h4>
+                                        </div>
+                                        @endif
                                     </div>
+                                </div>
         </form>
         </div>
         </div>
