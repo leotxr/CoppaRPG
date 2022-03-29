@@ -654,7 +654,7 @@
 
             <!--EQUIPAMENTOS-->
 
-            <div id="equipamentos" class="equipamentos" style="display: none;">
+            <div id="equipamentos" class="equipamentos" style="display: none">
                 <!--ARMADURAS-->
                 <div class="py-12" id="armadura">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -824,22 +824,59 @@
                                         </div>
                                         <div class="mt-5 md:mt-0 md:col-span-2">
                                             <!-- SELECT ARMA -->
+
                                             <div class="shadow overflow-hidden sm:rounded-md">
+
+                                                @if (isset($char))
+                                                @foreach ($char->weapons as $weapon)
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
                                                         <div class="col-span-6 sm:col-span-3">
-
                                                             <label for="weapons" class="block text-sm font-medium text-gray-700">Armas</label>
+                                                            <select  id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                <option value="{{$weapon->id ?? ''}}">{{$weapon->name ?? 'Selecione'}}</option>
+                                                                @foreach($weapons as $weapon)
+                                                                <option value="{{$weapon->id}}">{{$weapon->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+
+
+
+                                                @endforeach
+                                                @else
+                                                <div class="px-4 py-5 bg-white sm:p-6">
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-6 sm:col-span-3">
+                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Arma</label>
                                                             <select onkeyup="mostrarArmaSelect()" id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                                 <option>Selecione</option>
                                                                 @foreach($weapons as $weapon)
                                                                 <option value="{{$weapon->id}}">{{$weapon->name}}</option>
                                                                 @endforeach
                                                             </select>
-
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div id="charweapons2" class="px-4 py-5 bg-white sm:p-6" style="display: none;">
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-6 sm:col-span-3">
+                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Arma 2</label>
+                                                            <select disabled onkeyup="mostrarArmaSelect()" id="secweapon_id" name="secweapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                <option>Selecione</option>
+                                                                @foreach($weapons as $weapon)
+                                                                <option value="{{$weapon->id}}">{{$weapon->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+
 
 
 
@@ -855,107 +892,88 @@
                                                     </button>
                                                 </div>
 
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
+                                                    <button id="btn-adcweapon" type="button" onclick="mostrarAdcArma()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Adicionar
+                                                    </button>
+                                                </div>
+
                                                 <!-- INICIO MODAL MINHAS ARMAS -->
-                                                <div id="modal_weapons" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
-                                                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-
-                                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-
-                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                                                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-xl">
-                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                                <div class="sm:flex sm:items-start">
-                                                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10">
-                                                                        <!-- Icone -->
-                                                                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 121.66" style="enable-background:new 0 0 122.88 121.66" xml:space="preserve">
-                                                                            <style type="text/css">
-                                                                                .st0 {
-                                                                                    fill-rule: evenodd;
-                                                                                    clip-rule: evenodd;
-                                                                                }
-                                                                            </style>
-                                                                            <path class="st0" d="M7.21,96.55l2.84,2.84l23.32-23.32l-4-4c-3.38-3.38-4.05-8.48-2.01-12.54l7.9,7.9l66.52-66.52 c0.3-0.3,0.71-0.45,1.11-0.42L121.4,0c0.8-0.02,1.46,0.61,1.48,1.41c0,0.03,0,0.06,0,0.09h0l-0.7,18.41 c-0.01,0.38-0.17,0.72-0.42,0.97l0,0L55.24,87.41l7.05,7.05c-4.06,2.04-9.16,1.37-12.54-2.01l-4-4l-23.32,23.32l2.68,2.68 c1.64,1.64,1.64,4.33,0,5.98l0,0c-1.64,1.64-4.33,1.64-5.98,0L1.23,102.52c-1.64-1.64-1.64-4.33,0-5.98h0 C2.88,94.9,5.57,94.9,7.21,96.55L7.21,96.55z M45.22,75.4l60.91-60.91l0,0c0.56-0.56,1.48-0.57,2.05,0 c0.57,0.56,0.57,1.48,0.01,2.05l0,0l0,0L47.27,77.45l6.91,6.91l65.13-65.13l0.62-16.29l-16.49,0.43L38.31,68.49L45.22,75.4 L45.22,75.4z" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                                                            Minhas armas
-                                                                        </h3>
-                                                                        <div class="flex flex-col">
-                                                                            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                                                                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                                                                                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                                                                                        @if (isset($char))
-                                                                                        <!--tabela com as armas -->
-                                                                                        <table class="min-w-full divide-y divide-gray-200">
-                                                                                            <thead class="bg-gray-50">
-                                                                                                <tr>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Nome
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Dano
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Decisivo
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Bonus
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="relative px-6 py-3">
-                                                                                                        <span class="sr-only">Ver mais</span>
-                                                                                                    </th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody class="bg-white divide-y divide-gray-200">
-                                                                                                @foreach($char->weapons as $weapon)
-                                                                                                <tr>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                        <div class="flex items-center">
-                                                                                                            <div class="ml-4">
-                                                                                                                <div class="text-sm font-medium text-gray-900">
-                                                                                                                    {{$weapon->name}}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                        <div class="text-sm text-gray-500">
-                                                                                                            {{$weapon->damage}}
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                        <div class="text-sm text-gray-500">
-                                                                                                            {{$weapon->decisive}}
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                                                        {{$weapon->total_bba}}
-                                                                                                    </td>
-                                                                                                    <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                @endforeach
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                        @else
-                                                                                        <label>Voce ainda nao tem armas... Va a um ferreiro comprar uma!</label>
-                                                                                        @endif
-
+                                                <div id="modal_weapons" class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
+                                                    <div class="modal-dialog modal-fullscreen relative w-auto pointer-events-none">
+                                                        <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                                            <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b rounded-t-md">
+                                                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalFullscreenLabel">
+                                                                    Minhas armas
+                                                                </h5>
+                                                                <button type="button" class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body relative p-4">
+                                                                @if (isset($char))
+                                                                <!--tabela com as armas -->
+                                                                <table class="min-w-full divide-y divide-gray-200">
+                                                                    <thead class="bg-gray-50">
+                                                                        <tr>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Nome
+                                                                            </th>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Dano
+                                                                            </th>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Decisivo
+                                                                            </th>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Bonus
+                                                                            </th>
+                                                                            <th scope="col" class="relative px-6 py-3">
+                                                                                <span class="sr-only">Ver mais</span>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                                        @foreach($char->weapons as $weapon)
+                                                                        <tr>
+                                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                                <div class="flex items-center">
+                                                                                    <div class="ml-4">
+                                                                                        <div class="text-sm font-medium text-gray-900">
+                                                                                            {{$weapon->name}}
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
+                                                                            </td>
+                                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                                <div class="text-sm text-gray-500">
+                                                                                    {{$weapon->damage}}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                                <div class="text-sm text-gray-500">
+                                                                                    {{$weapon->decisive}}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                                                {{$weapon->total_bba}}
+                                                                            </td>
+                                                                            <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                                                <button type="button" onclick="mostrarModalExtArmas(this)" class="text-indigo-600 hover:text-indigo-900">Mais</button>
+                                                                            </td>
 
-                                                                    </div>
-                                                                </div>
+                                                                        </tr>
+
+
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                                @else
+                                                                <label>Voce ainda nao tem armas... Va a um ferreiro comprar uma!</label>
+                                                                @endif
+
                                                             </div>
-                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                                <button onclick="mostrarModalArmas()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                                                    Fechar
+                                                            <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                                                <button onclick="mostrarModalArmas()" type="button" class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-dismiss="modal">
+                                                                    Close
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -964,103 +982,73 @@
                                                 <!-- Fim Modal -->
 
                                                 <!-- INICIO MODAL TODAS ARMAS -->
-                                                <div id="modal_AllWeapons" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
-                                                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-
-                                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-
-                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                                                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-xl">
-                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                                <div class="sm:flex sm:items-start">
-                                                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-200 sm:mx-0 sm:h-10 sm:w-10">
-                                                                        <!-- Icone -->
-                                                                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 121.66" style="enable-background:new 0 0 122.88 121.66" xml:space="preserve">
-                                                                            <style type="text/css">
-                                                                                .st0 {
-                                                                                    fill-rule: evenodd;
-                                                                                    clip-rule: evenodd;
-                                                                                }
-                                                                            </style>
-                                                                            <path class="st0" d="M7.21,96.55l2.84,2.84l23.32-23.32l-4-4c-3.38-3.38-4.05-8.48-2.01-12.54l7.9,7.9l66.52-66.52 c0.3-0.3,0.71-0.45,1.11-0.42L121.4,0c0.8-0.02,1.46,0.61,1.48,1.41c0,0.03,0,0.06,0,0.09h0l-0.7,18.41 c-0.01,0.38-0.17,0.72-0.42,0.97l0,0L55.24,87.41l7.05,7.05c-4.06,2.04-9.16,1.37-12.54-2.01l-4-4l-23.32,23.32l2.68,2.68 c1.64,1.64,1.64,4.33,0,5.98l0,0c-1.64,1.64-4.33,1.64-5.98,0L1.23,102.52c-1.64-1.64-1.64-4.33,0-5.98h0 C2.88,94.9,5.57,94.9,7.21,96.55L7.21,96.55z M45.22,75.4l60.91-60.91l0,0c0.56-0.56,1.48-0.57,2.05,0 c0.57,0.56,0.57,1.48,0.01,2.05l0,0l0,0L47.27,77.45l6.91,6.91l65.13-65.13l0.62-16.29l-16.49,0.43L38.31,68.49L45.22,75.4 L45.22,75.4z" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                                                            Arsenal
-                                                                        </h3>
-                                                                        <div class="flex flex-col">
-                                                                            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                                                                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                                                                                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-
-                                                                                        <!--tabela com as armas -->
-                                                                                        <table class="min-w-full divide-y divide-gray-200">
-                                                                                            <thead class="bg-gray-50">
-                                                                                                <tr>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Nome
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Dano
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Decisivo
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                                        Bonus
-                                                                                                    </th>
-                                                                                                    <th scope="col" class="relative px-6 py-3">
-                                                                                                        <span class="sr-only">Ver mais</span>
-                                                                                                    </th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody class="bg-white divide-y divide-gray-200">
-                                                                                                @foreach($weapons as $weapon)
-                                                                                                <tr>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                        <div class="flex items-center">
-                                                                                                            <div class="ml-4">
-                                                                                                                <div class="text-sm font-medium text-gray-900">
-                                                                                                                    {{$weapon->name}}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                        <div class="text-sm text-gray-500">
-                                                                                                            {{$weapon->damage}}
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                                                        <div class="text-sm text-gray-500">
-                                                                                                            {{$weapon->decisive}}
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                                                        {{$weapon->total_bba}}
-                                                                                                    </td>
-                                                                                                    <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Mais</a>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                @endforeach
-                                                                                            </tbody>
-                                                                                        </table>
-
+                                                <div id="modal_AllWeapons" style="display: none" class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-modal="true" role="dialog">
+                                                    <div class="modal-dialog modal-xl relative w-auto pointer-events-none">
+                                                        <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                                            <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalXlLabel">
+                                                                    Todas as armas
+                                                                </h5>
+                                                                <button type="button" class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body relative p-4">
+                                                                <!--tabela com as armas -->
+                                                                <table class="min-w-full divide-y divide-gray-200">
+                                                                    <thead class="bg-gray-50">
+                                                                        <tr>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Nome
+                                                                            </th>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Dano
+                                                                            </th>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Decisivo
+                                                                            </th>
+                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                                Bonus
+                                                                            </th>
+                                                                            <th scope="col" class="relative px-6 py-3">
+                                                                                <span class="sr-only">Ver mais</span>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                                        @foreach($weapons as $weapon)
+                                                                        <tr>
+                                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                                <div class="flex items-center">
+                                                                                    <div class="ml-4">
+                                                                                        <div class="text-sm font-medium text-gray-900">
+                                                                                            {{$weapon->name}}
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
+                                                                            </td>
+                                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                                <div class="text-sm text-gray-500">
+                                                                                    {{$weapon->damage}}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                                                <div class="text-sm text-gray-500">
+                                                                                    {{$weapon->decisive}}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                                                {{$weapon->total_bba}}
+                                                                            </td>
+                                                                            <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Mais</a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
-                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                                <button onclick="mostrarModalTodasArmas()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                                                    Fechar
+                                                            <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                                                <button onclick="mostrarModalTodasArmas()" type="button" class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-dismiss="modal">
+                                                                    Close
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -1260,14 +1248,20 @@
                                 </div>
                                 <div class="mt-8 p-4">
                                     <div class="flex p-2 mt-4">
-                                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                        <button onclick="alternardivs()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                                             Voltar
                                         </button>
 
                                         <div class="flex-auto flex flex-row-reverse">
-                                            <input type="submit" cursor="pointer" value="Salvar" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
-
-                                            </input>
+                                            <span class="sm:ml-3">
+                                                <button type="button" id="btn_save" onclick=openconfirmcreate() class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    <!-- Heroicon name: solid/check -->
+                                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    Salvar
+                                                </button>
+                                            </span>
                                         </div>
                                         @else
 

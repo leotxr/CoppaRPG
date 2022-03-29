@@ -1,4 +1,24 @@
+$(document).ready(function() {
+  var maximo = 2;   //maximo de 5 campos
+  var i = 1;
+  $('#add_div').click (function(e) {
+    e.preventDefault();  //previne novos cliques
+    if (i < maximo) {
+      $('#idDiv').append('<div>\
+         Cód. Produto: <input type="text" name="codProduto[]"/> Quantidade: <input type="text" name="qtdProduto[]"/>\
+         <a href="#" class="remove">Remover</a>\
+          </div>');
+          i++;
+    }
+ });
 
+   // Remove o div anterior
+   $('#idDiv').on("click",".remove",function(e) {
+     e.preventDefault();
+     $(this).parent('div').remove();
+     i--;
+   });
+});
 
 
 //realiza o calculo dos valores 
@@ -57,7 +77,7 @@ function somaCA() {
   //document.getElementById("ca").innerHTML = ca;
 }
 
-//esconde a div de informacoes e mostra a proxima
+//mostra a div informacoes e esconde as demais
 function mostrarDivInfo() {
   var info = document.getElementById("info");
   var pericias = document.getElementById("pericias");
@@ -73,6 +93,21 @@ function mostrarDivInfo() {
 
   }
 
+}
+
+//teste pra ficar correto
+function alternardivs(){
+  var info = document.getElementById("info");
+  var equip = document.getElementById("equipamentos");
+
+  if (info.style.display == "none"){
+    info.style.display == "block";
+    equip.style.display == "none";
+
+  }else if(equip.style.display == "none"){
+    info.style.display == "none";
+    equip.style.display == "block";
+  }
 }
 
 //esconde a div pericias e mostra a anterior
@@ -155,6 +190,8 @@ function mostrarArmaSelect() {
   var dl = document.getElementById("dl_weapons");
   if (dl.style.display === "none") {
     dl.style.display = "block";
+  } else if (dl.style.display === "block"){
+    dl.style.display = "none";
   }
 
 }
@@ -166,6 +203,20 @@ function mostrarModalArmas() {
     modal.style.display = "block";
   } else if (modal.style.display === "block") {
     modal.style.display = "none";
+  }
+
+}
+
+//mostrar select arma secundaria
+function mostrarAdcArma(event) {
+  var div = document.getElementById("charweapons2");
+  var sel = document.getElementById("secweapon_id");
+  if (div.style.display === "none") {
+    div.style.display = "block";
+    $("#secweapon_id").prop("disabled", false);
+  } else if (div.style.display === "block") {
+    div.style.display = "none";
+    $("#secweapon_id").prop("disabled", true);
   }
 
 }

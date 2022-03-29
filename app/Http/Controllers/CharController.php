@@ -143,11 +143,15 @@ class CharController extends Controller
         ]);
 
         $cad->weapons()->attach([
-            'weapon_id' => $request->weapon_id]);
+            ['weapon_id' => $request->secweapon_id],    
+            ['weapon_id' => $request->weapon_id],
+        ]);
 
         if ($cad) {
             return redirect('chars');
         }
+
+
     }
 
     /**
@@ -254,8 +258,10 @@ class CharController extends Controller
 
         ]);
         $edit = Char::find($id);
-        $edit->weapons()->attach([
-            'weapon_id' => $request->weapon_id]);
+        $edit->weapons()->sync([
+            ['weapon_id' => $request->secweapon_id],
+            ['weapon_id' => $request->weapon_id],
+        ]);
        if ($edit)
         return redirect('chars');
     }
@@ -268,7 +274,7 @@ class CharController extends Controller
 
     public function insert(Request $request)
     {
-        
+        /*
         $dataForm = [1,2,3
            
         ];
@@ -283,6 +289,9 @@ class CharController extends Controller
         foreach ($weapons as $weapon) {
             echo " " . $weapon->name;
         }
+        */
+
+        return view('forge');
     }
     
 }
