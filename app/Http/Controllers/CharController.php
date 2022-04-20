@@ -12,6 +12,7 @@ use App\Models\Char_weapon;
 use App\Models\Classes;
 use App\Models\Weapon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CharController extends Controller
 {
@@ -77,10 +78,10 @@ class CharController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $cad = Char::create([
             //bd                html
-            
+
             'name' => $request->name,
             'age' => $request->age,
             'breed_id' => $request->breed_id,
@@ -142,16 +143,14 @@ class CharController extends Controller
 
         ]);
 
-        $cad->weapons()->attach([
-            ['weapon_id' => $request->secweapon_id],    
+        $cad->weapons()->sync([
+            ['weapon_id' => $request->secweapon_id],
             ['weapon_id' => $request->weapon_id],
         ]);
 
         if ($cad) {
             return redirect('chars');
         }
-
-
     }
 
     /**
@@ -193,7 +192,7 @@ class CharController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $edit = Char::where(['id'=> $id])->update([
+        $edit = Char::where(['id' => $id])->update([
             'name' => $request->name,
             'age' => $request->age,
             'breed_id' => $request->breed_id,
@@ -253,45 +252,25 @@ class CharController extends Controller
             'xp' => $request->xp,
             'bag' => $request->bag
 
-            
+
 
 
         ]);
         $edit = Char::find($id);
-        $edit->weapons()->sync([
-            ['weapon_id' => $request->secweapon_id],
-            ['weapon_id' => $request->weapon_id],
+        $edit->weapons()->syncWithoutDetaching([
+            'weapon_id' => $request->secweapon_id,
+            'weapon_id' => $request->weapon_id,
         ]);
-       if ($edit)
-        return redirect('chars');
+        if ($edit)
+            return redirect('chars');
     }
 
     public function destroy($id)
     {
-        $del=$this->objChar->destroy($id);
-        return($del)?"sim":"não";
+        $del = $this->objChar->destroy($id);
+        return ($del) ? "sim" : "não";
     }
 
-    public function insert(Request $request)
-    {
-        /*
-        $dataForm = [1,2,3
-           
-        ];
-            
-        
-        $char = Char::find(2);
-        echo "<b>" . $char->name . ":</br> </br>";
-
-        $char->weapons()->sync($dataForm);
-
-        $weapons = $char->weapons;
-        foreach ($weapons as $weapon) {
-            echo " " . $weapon->name;
-        }
-        */
-
-        return view('forge');
-    }
+    
     
 }

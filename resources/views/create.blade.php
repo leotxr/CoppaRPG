@@ -806,6 +806,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- ARMAS -->
                 <div class="py-12" id="armas">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -833,14 +834,14 @@
                                                     <div class="grid grid-cols-6 gap-6">
                                                         <div class="col-span-6 sm:col-span-3">
                                                             <label for="weapons" class="block text-sm font-medium text-gray-700">Armas</label>
-                                                            <select  id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <select id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                                 <option value="{{$weapon->id ?? ''}}">{{$weapon->name ?? 'Selecione'}}</option>
                                                                 @foreach($weapons as $weapon)
                                                                 <option value="{{$weapon->id}}">{{$weapon->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                       
+
                                                     </div>
                                                 </div>
 
@@ -1067,7 +1068,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <!--ESCUDO -->
                 <div class="py-12" id="armadura">

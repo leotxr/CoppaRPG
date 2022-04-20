@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "daisyui": "^1.14.3",
+        "jquery": "^3.6.0",
         "tw-elements": "^1.0.0-alpha11"
     }
 }

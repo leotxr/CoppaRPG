@@ -25,7 +25,11 @@ require __DIR__.'/auth.php';
 
 Route::resource('chars', CharController::class);
 
-Route::get('teste', [CharController::class, 'insert']);
+//Route::get('teste', [CharController::class, 'insert']);
+Route::get('teste', 'App\Http\Controllers\WeaponController@index')->name('teste');
+Route::get('load_weapons', 'App\Http\Controllers\WeaponController@loadWeapons')->name('load_weapons');
+
+
 
 
 
