@@ -16,7 +16,9 @@ class Char extends Model
         'breed_id',
         'class_id',
         'weapon_id',
+        'expertise_id',
         'armor_id',
+        'shield_id',
         'level',
         'trend',
         'religion',
@@ -95,7 +97,7 @@ class Char extends Model
 
     public function relArmors()
     {
-        return $this->hasMany('App\Models\Armor', 'id', 'armor_id');
+        return $this->hasOne('App\Models\Armor', 'id', 'armor_id');
     }
 
     public function relBreeds()
@@ -106,9 +108,20 @@ class Char extends Model
     public function relClasses()
     {
         return $this->hasOne('App\Models\Classes', 'id', 'class_id');
+        
     }
 
+    public function relShields()
+    {
+        return $this->hasOne('App\Models\Shield', 'id', 'shield_id');
 
+    }
+
+    public function relExpertises()
+    {
+        return $this->hasOne('App\Models\Expertise', 'id', 'expertise_id');
+
+    }
 
     /**
      * @param  \App\Models\Char  $query

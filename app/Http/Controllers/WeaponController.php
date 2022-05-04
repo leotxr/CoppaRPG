@@ -114,7 +114,7 @@ class WeaponController extends Controller
     {
         $dataForm = $request->all();
         $char_id = $dataForm['char_id'];
-        $sql = "Select weapons.id, weapons.name from char_weapons, weapons ";
+        $sql = "Select weapons.id, weapons.name, weapons.damage, weapons.desc from char_weapons, weapons ";
         $sql = $sql . " WHERE char_weapons.weapon_id = weapons.id ";
         $sql = $sql . " and char_weapons.char_id = '$char_id' ";
         $sql = $sql . " order by weapons.name ";

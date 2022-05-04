@@ -16,10 +16,12 @@ class CreateCharsTable extends Migration
         Schema::create('chars', function (Blueprint $table) {
             $table->bigIncrements('id')->unique();
             $table->integer('user_id')->unsigned();
+            $table->unsignedBigInteger('expertise_id')->unsigned();
             $table->string('name');
             $table->integer('breed_id')->unsigned();
             $table->integer('class_id')->unsigned();
             $table->integer('armor_id')->unsigned();
+            $table->integer('shield_id')->unsigned();
             $table->integer('level');
             $table->string('trend')->nullable();
             $table->string('religion')->nullable();
@@ -93,6 +95,11 @@ class CreateCharsTable extends Migration
             $table->foreign('class_id')->references('id')
             ->on('classes')
             ->onUpdate('cascade');
+
+            $table->foreign('expertise_id')->references('id')
+            ->on('expertises')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
                         
             $table->timestamps();
         });

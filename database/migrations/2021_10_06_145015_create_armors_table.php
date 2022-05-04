@@ -19,12 +19,14 @@ class CreateArmorsTable extends Migration
             $table->string('desc')->nullable();
             $table->string('type')->nullable();
             $table->integer('ca_bonus')->nullable();
-            $table->integer('max_dex')->nullable();
-            $table->integer('penal')->nullable();
+            $table->integer('penal_dex')->nullable();
+            $table->integer('max_bonus')->nullable();
             $table->integer('desloc')->nullable();
             $table->double('weight')->nullable();
             $table->double('value')->nullable();
             $table->string('special')->nullable();
+            $table->string('arcane_fail')->nullable();
+            $table->string('arcane_magic')->nullable();
             $table->timestamps();
         });
     }

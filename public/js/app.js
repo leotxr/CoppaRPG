@@ -81,16 +81,12 @@ function somaCA() {
 function mostrarDivInfo() {
   var info = document.getElementById("info");
   var pericias = document.getElementById("pericias");
-  var equipamentos = document.getElementById("equipamentos");
+  var equip = document.getElementById("equipamentos");
   var talentos = document.getElementById("talentos");
   var magias = document.getElementById("magias");
   if (info.style.display === "none") {
     info.style.display = "block";
-    pericias.style.display = "none";
-    equipamentos.style.display = "none";
-    talentos.style.display = "none";
-    magias.style.display = "none";
-
+    equip.style.display = "none";
   }
 
 }

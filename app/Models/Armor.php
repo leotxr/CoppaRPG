@@ -12,12 +12,14 @@ class Armor extends Model
     'desc',
     'type',
     'ca_bonus', 
-    'max_dex', 
-    'penal', 
+    'penal_dex', 
+    'max_bonus', 
     'desloc', 
     'weight', 
     'value',
-    'special' 
+    'special',
+    'arcane_fail',
+    'arcane_magic'
 ];
     use HasFactory;
 

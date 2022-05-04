@@ -14,7 +14,19 @@ class CreateShieldsTable extends Migration
     public function up()
     {
         Schema::create('shields', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unique();
+            $table->string('name')->nullable();
+            $table->string('desc')->nullable();
+            $table->string('type')->nullable();
+            $table->integer('ca_bonus')->nullable();
+            $table->integer('penal_dex')->nullable();
+            $table->integer('max_bonus')->nullable();
+            $table->integer('desloc')->nullable();
+            $table->double('weight')->nullable();
+            $table->double('value')->nullable();
+            $table->string('special')->nullable();
+            $table->string('arcane_fail')->nullable();
+            $table->string('arcane_magic')->nullable();
             $table->timestamps();
         });
     }

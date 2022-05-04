@@ -7,13 +7,12 @@
 <x-app-layout>
 
     @if (isset ($char))
-    <form name="formEdit" id="formEdit" method="post" action="/chars/{{$char->id}}">
+    <form name="formEdit" id="formEdit" method="post" action="/chars/{{$char->id}}" data-weapons-url="{{ route('load_weapons')}}">
         @method('PUT')
         @else
-        <form name="formCad" id="formCad" method="post" action="{{url('chars')}}">
+        <form name="formCad" id="formCad" method="post" action="{{url('chars')}}" data-weapons-url="{{ route('load_weapons')}}">
             @endif
             @csrf
-
 
             <!-- Modal confirmacao de criacao -->
             <div id="confirmcreate" style="display: none;" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -49,6 +48,7 @@
 
             <!--HEADER COM NOME DA PAGINA -->
             <x-slot name="header" style="position: absolute;">
+                @if ((empty ($char)) || (auth()->user()->id == $char->user_id))
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
 
                     <div class="lg:flex lg:items-center lg:justify-between">
@@ -98,14 +98,33 @@
                             </span>
 
                             <span class="hidden sm:block ml-3">
-                                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button id="delchar" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <!-- Heroicon name: solid/link -->
                                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
                                     </svg>
-                                    Ver
+                                    Apagar
                                 </button>
                             </span>
+                            <script>
+                                $(document).ready(function() {
+                                    $("#delchar").click(function() {
+                                        const url = "{{ route('delete_char')}}";
+                                        charId = $char_id;
+                                        $.ajax({
+                                            url: url,
+                                            data: {
+                                                'charId': charId,
+                                            },
+                                            success: function(data) {
+                                                alert("Personagem removido com sucesso!");
+
+                                            }
+
+                                        });
+                                    });
+                                });
+                            </script>
 
                             <span class="sm:ml-3">
                                 <button type="submit" id="btn_save" onclick=openconfirmcreate() class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -140,7 +159,7 @@
             </x-slot>
 
 
-            @if ((empty ($char)) || (auth()->user()->id == $char->user_id))
+
             <!--STEPS DA CRIACAO-->
 
             <!-- INFORMACOES INICIAIS DO PERSONAGEM-->
@@ -220,7 +239,7 @@
 
                                                     <div class="col-span-5 sm:col-span-4">
                                                         <label for="class" class="block text-sm font-medium text-gray-700">Classe</label>
-                                                        <select onmouseup="calcAttrClasses(), calcularResistencia()" id="class_id" name="class_id" autocomplete="class" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                        <select onmouseup="calcAttrClasses(), calcularResistencia()" name="class_id" id="class_id" autocomplete="class" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                             <option value="{{$char->relClasses->id ?? ''}}">{{$char->relClasses->name ?? 'Selecione'}}</option>
                                                             @foreach($classes as $class)
                                                             <option value="{{$class->id}}">{{$class->name}}</option>
@@ -649,6 +668,14 @@
                 </div>
             </div>
 
+            <div id="tela_pericias">
+                                <input type="number" name="expertise_id" id="expertise_id" value=""></input>
+                <div id="table_pericias">
+
+                </div>
+            </div>
+            <
+
 
 
 
@@ -679,22 +706,53 @@
                                                         <div class="col-span-6 sm:col-span-3">
                                                             <label for="armor" class="block text-sm font-medium text-gray-700">Armadura</label>
                                                             <select id="armor_id" name="armor_id" autocomplete="armor" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-
+                                                                <option value="{{$char->relArmors->id ?? ''}}">{{$char->relArmors->name ?? 'Selecione'}}</option>
                                                                 @foreach($armors as $armor)
                                                                 <option value="{{$armor->id}}">{{$armor->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
 
+                                                        <button type="button" id="showinfoarmor">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
+
+                                                    </div>
+                                                    <script>
+                                                        $(document).ready(function() {
+                                                            $("#showinfoarmor").click(function() {
+                                                                const url = "{{ route('load_armors')}}";
+                                                                armorId = $("#armor_id").val();
+                                                                $.ajax({
+                                                                    url: url,
+                                                                    data: {
+                                                                        'armor_id': armorId,
+                                                                    },
+                                                                    success: function(data) {
+                                                                        $("#armorinfo").html(data);
+                                                                    }
+
+                                                                });
+
+                                                            });
+                                                        });
+                                                    </script>
+
+                                                    <div id="armorinfo">
+
                                                     </div>
                                                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                        <button type="button" onclick="mostrarModalTodasArmaduras()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        <button type="button" id="vertodas" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
                                                             Ver Todas
                                                         </button>
                                                     </div>
                                                 </div>
 
                                             </div>
+
 
                                         </div>
                                     </div>
@@ -827,234 +885,182 @@
                                             <!-- SELECT ARMA -->
 
                                             <div class="shadow overflow-hidden sm:rounded-md">
-
-                                                @if (isset($char))
-                                                @foreach ($char->weapons as $weapon)
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
                                                         <div class="col-span-6 sm:col-span-3">
-                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Armas</label>
-                                                            <select id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                                <option value="{{$weapon->id ?? ''}}">{{$weapon->name ?? 'Selecione'}}</option>
-                                                                @foreach($weapons as $weapon)
-                                                                <option value="{{$weapon->id}}">{{$weapon->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-
-
-                                                @endforeach
-                                                @else
-                                                <div class="px-4 py-5 bg-white sm:p-6">
-                                                    <div class="grid grid-cols-6 gap-6">
-                                                        <div class="col-span-6 sm:col-span-3">
-                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Arma</label>
-                                                            <select onkeyup="mostrarArmaSelect()" id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Adicionar Arma</label>
+                                                            <select enabled id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                                 <option>Selecione</option>
                                                                 @foreach($weapons as $weapon)
                                                                 <option value="{{$weapon->id}}">{{$weapon->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <button type="button" id="showinfoweapon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </div>
 
-                                                <div id="charweapons2" class="px-4 py-5 bg-white sm:p-6" style="display: none;">
-                                                    <div class="grid grid-cols-6 gap-6">
-                                                        <div class="col-span-6 sm:col-span-3">
-                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Arma 2</label>
-                                                            <select disabled onkeyup="mostrarArmaSelect()" id="secweapon_id" name="secweapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                                <option>Selecione</option>
-                                                                @foreach($weapons as $weapon)
-                                                                <option value="{{$weapon->id}}">{{$weapon->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                <!-- AJAX PARA MOSTRAR O SELECT COM AS INFORMACOES DA ARMA SELECIONADA -->
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showinfoweapon").click(function() {
+                                                            const url = "{{ route('load_weapons')}}";
+                                                            weaponId = $("#weapon_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'weapon_id': weaponId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#charinfo").html(data);
+
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                        $("#addweapon").click(function() {
+                                                            const url = "{{ route('add_weapon')}}";
+                                                            weaponId = $("#weapon_id").val();
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'weapon_id': weaponId,
+
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Arma adicionada!");
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                    });
+                                                </script>
+
+                                                <!-- INFORMAÇÕES SAO MOSTRADAS NESTA DIV -->
+                                                <div id="charinfo">
+
                                                 </div>
-                                                @endif
 
-
-
-
+                                                <!-- BOTAO MOSTRAR MINHAS ARMAS -->
                                                 <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
                                                     <button type="button" onclick="mostrarModalArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                                         Minhas Armas
                                                     </button>
                                                 </div>
 
-                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
-                                                    <button type="button" onclick="mostrarModalTodasArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
-                                                        Ver Todas
+                                                <!-- BOTAO MOSTRAR TODAS ARMAS EM TABELA -->
+                                                <div class="inline-flex px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
+                                                    <button type="button" onclick="mostrarModalTodasArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="purple" stroke-width="1">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                        </svg>
                                                     </button>
                                                 </div>
 
+
                                                 <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
-                                                    <button id="btn-adcweapon" type="button" onclick="mostrarAdcArma()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                    <button id="addweapon" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
                                                         Adicionar
                                                     </button>
                                                 </div>
 
                                                 <!-- INICIO MODAL MINHAS ARMAS -->
-                                                <div id="modal_weapons" class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
-                                                    <div class="modal-dialog modal-fullscreen relative w-auto pointer-events-none">
-                                                        <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-                                                            <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b rounded-t-md">
-                                                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalFullscreenLabel">
-                                                                    Minhas armas
-                                                                </h5>
-                                                                <button type="button" class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body relative p-4">
-                                                                @if (isset($char))
-                                                                <!--tabela com as armas -->
-                                                                <table class="min-w-full divide-y divide-gray-200">
-                                                                    <thead class="bg-gray-50">
-                                                                        <tr>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Nome
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Dano
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Decisivo
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Bonus
-                                                                            </th>
-                                                                            <th scope="col" class="relative px-6 py-3">
-                                                                                <span class="sr-only">Ver mais</span>
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                                        @foreach($char->weapons as $weapon)
-                                                                        <tr>
-                                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                                <div class="flex items-center">
-                                                                                    <div class="ml-4">
-                                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                                            {{$weapon->name}}
-                                                                                        </div>
+                                                <div id="modal_weapons" class="fixed z-10 inset-0 overflow-y-auto bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+                                                    <div class="flex items-end justify-center min-h-screen pt-10 px-10 pb-20 text-center sm:block sm:p-0">
+
+                                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                                        <!-- This element is to trick the browser into centering the modal contents. -->
+                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                                                        <div class="relative inline-block align-bottom bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <div class="sm:flex sm:items-start">
+                                                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                                        <!-- Heroicon name: outline/exclamation -->
+                                                                        <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
+                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Suas armas</h3>
+                                                                        <div class="mt-2">
+                                                                            @if (isset($char))
+                                                                            <div class="px-4 py-5 bg-white sm:p-6">
+                                                                                <div class="grid grid-cols-6 gap-6">
+                                                                                    <div class="col-span-6 sm:col-span-6">
+                                                                                        <select id="myweapon_id" name="myweapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-50 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-x">
+                                                                                            <option>Selecione</option>
+                                                                                            @foreach ($char->weapons as $weapon)
+                                                                                            <option value="{{$weapon->id}}">{{$weapon->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
                                                                                     </div>
                                                                                 </div>
-                                                                            </td>
-                                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                                <div class="text-sm text-gray-500">
-                                                                                    {{$weapon->damage}}
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                                <div class="text-sm text-gray-500">
-                                                                                    {{$weapon->decisive}}
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                                {{$weapon->total_bba}}
-                                                                            </td>
-                                                                            <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                                <button type="button" onclick="mostrarModalExtArmas(this)" class="text-indigo-600 hover:text-indigo-900">Mais</button>
-                                                                            </td>
+                                                                            </div>
+                                                                            @else
+                                                                            <label>Voce ainda nao tem armas... Va a um ferreiro comprar uma!</label>
+                                                                            @endif
+                                                                            <div id="myweaponinfo">
 
-                                                                        </tr>
-
-
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                                @else
-                                                                <label>Voce ainda nao tem armas... Va a um ferreiro comprar uma!</label>
-                                                                @endif
-
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
-                                                                <button onclick="mostrarModalArmas()" type="button" class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-dismiss="modal">
-                                                                    Close
-                                                                </button>
+                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                                <button type="button" id="deletemyweapon" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Excluir</button>
+                                                                <button type="button" id="showmyweapon" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-indigo-400 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Visualizar</button>
+                                                                <button type="button" onclick="mostrarModalArmas()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- Fim Modal -->
 
-                                                <!-- INICIO MODAL TODAS ARMAS -->
-                                                <div id="modal_AllWeapons" style="display: none" class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" tabindex="-1" aria-labelledby="exampleModalXlLabel" aria-modal="true" role="dialog">
-                                                    <div class="modal-dialog modal-xl relative w-auto pointer-events-none">
-                                                        <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-                                                            <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
-                                                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalXlLabel">
-                                                                    Todas as armas
-                                                                </h5>
-                                                                <button type="button" class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body relative p-4">
-                                                                <!--tabela com as armas -->
-                                                                <table class="min-w-full divide-y divide-gray-200">
-                                                                    <thead class="bg-gray-50">
-                                                                        <tr>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Nome
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Dano
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Decisivo
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                                Bonus
-                                                                            </th>
-                                                                            <th scope="col" class="relative px-6 py-3">
-                                                                                <span class="sr-only">Ver mais</span>
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody class="bg-white divide-y divide-gray-200">
-                                                                        @foreach($weapons as $weapon)
-                                                                        <tr>
-                                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                                <div class="flex items-center">
-                                                                                    <div class="ml-4">
-                                                                                        <div class="text-sm font-medium text-gray-900">
-                                                                                            {{$weapon->name}}
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                                <div class="text-sm text-gray-500">
-                                                                                    {{$weapon->damage}}
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                                                <div class="text-sm text-gray-500">
-                                                                                    {{$weapon->decisive}}
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                                {{$weapon->total_bba}}
-                                                                            </td>
-                                                                            <td class=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Mais</a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <div class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
-                                                                <button onclick="mostrarModalTodasArmas()" type="button" class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-dismiss="modal">
-                                                                    Close
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showmyweapon").click(function() {
+                                                            const url = "{{ route('load_myweapon')}}";
+                                                            myWeaponId = $("#myweapon_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'myweapon_id': myWeaponId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#myweaponinfo").html(data);
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+
+                                                    $(document).ready(function() {
+                                                        $("#deletemyweapon").click(function() {
+                                                            const url = "{{ route('delete_myweapon')}}";
+                                                            myWeaponId = $("#myweapon_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'myweapon_id': myWeaponId,
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Arma removida com sucesso!");
+                                                                    location.reload();
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+                                                </script>
                                                 <!-- Fim Modal -->
 
                                             </div>
@@ -1091,16 +1097,46 @@
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
                                                         <div class="col-span-6 sm:col-span-3">
-                                                            <label for="armor" class="block text-sm font-medium text-gray-700">Escudo</label>
-                                                            <select id="armor_id" name="armor_id" autocomplete="armor" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-
-                                                                @foreach($armors as $armor)
-                                                                <option value="{{$armor->id}}">{{$armor->name}}</option>
+                                                            <label for="shield" class="block text-sm font-medium text-gray-700">Escudo</label>
+                                                            <select id="shield_id" name="shield_id" autocomplete="armor" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                <option value="{{$char->relShields->id ?? ''}}">{{$char->relShields->name ?? 'Selecione'}}</option>
+                                                                @foreach($shields as $shield)
+                                                                <option value="{{$shield->id}}">{{$shield->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <button type="button" id="showinfoshield">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
 
                                                     </div>
+                                                    <script>
+                                                        $(document).ready(function() {
+                                                            $("#showinfoshield").click(function() {
+                                                                const url = "{{ route('load_shields')}}";
+                                                                shieldId = $("#shield_id").val();
+                                                                $.ajax({
+                                                                    url: url,
+                                                                    data: {
+                                                                        'shield_id': shieldId,
+                                                                    },
+                                                                    success: function(data) {
+                                                                        $("#shieldinfo").html(data);
+                                                                    }
+
+                                                                });
+
+                                                            });
+                                                        });
+                                                    </script>
+
+                                                    <div id="shieldinfo">
+
+                                                    </div>
+
                                                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                                         <button type="button" onclick="mostrarModalTodasArmaduras()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
                                                             Ver Todas
@@ -1239,8 +1275,8 @@
                                         </div>
                                         <div class="flex justify-center">
                                             <div class="mb-3 xl:w-96">
-                                                <label for="exampleFormControlTextarea1" class="form-label inline-block mb-2 text-gray-700">Mochila</label>
-                                                <textarea class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlTextarea1" rows="3" placeholder=""></textarea>
+                                                <label for="bag" class="form-label inline-block mb-2 text-gray-700">Mochila</label>
+                                                <textarea name="bag" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="bag" rows="3">{{$char->bag ?? 'Nada'}}</textarea>
                                             </div>
                                         </div>
 
@@ -1248,7 +1284,7 @@
                                 </div>
                                 <div class="mt-8 p-4">
                                     <div class="flex p-2 mt-4">
-                                        <button onclick="alternardivs()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                                             Voltar
                                         </button>
 
@@ -1265,20 +1301,20 @@
                                         </div>
                                         @else
 
-                                        <div class="flex-auto flex flex-row-reverse">
-                                            <h4 class="font-semibold text-lg text-gray-800 leading-tight">
-                                                Somente Visualizacao.
-                                            </h4>
-                                        </div>
+                                        <script>
+                                            window.location.href = "{{ url('dashboard')}}"
+                                        </script>
                                         @endif
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </form>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
+
         </div>
 
 

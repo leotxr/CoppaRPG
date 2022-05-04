@@ -7,5 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shield extends Model
 {
-    use HasFactory;
+    
+
+    protected $table='shields';
+    protected $fillable=['name',
+    'desc',
+    'type',
+    'ca_bonus', 
+    'penal_dex', 
+    'max_bonus', 
+    'desloc', 
+    'weight', 
+    'value',
+    'special',
+    'arcane_fail',
+    'arcane_magic' 
+];
+
+use HasFactory;
+
+public function relChars()
+{
+    return $this->hasMany(Char::class, 'shield_id');
+}
 }

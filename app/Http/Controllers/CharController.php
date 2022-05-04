@@ -11,6 +11,7 @@ use App\Models\Breed;
 use App\Models\Char_weapon;
 use App\Models\Classes;
 use App\Models\Weapon;
+use App\Models\Shield;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -33,7 +34,8 @@ class CharController extends Controller
         $this->objArmor = new Armor();
         $this->objBreed = new Breed();
         $this->objClass = new Classes();
-        $this->objClass = new Expertise();
+        $this->objShield = new Shield();
+        $this->objExpertise = new Expertise();
         $this->middleware('auth');
     }
 
@@ -65,9 +67,10 @@ class CharController extends Controller
         $classes = Classes::all();
         $weapons = Weapon::all();
         $armors = Armor::all();
+        $shields = Shield::all();
         $expertises = Expertise::all();
 
-        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'expertises'));
+        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'expertises'));
     }
 
     /**
@@ -78,6 +81,7 @@ class CharController extends Controller
      */
     public function store(Request $request)
     {
+        $lastExpertise = DB::table('expertises')->orderBy('id')->first();
 
         $cad = Char::create([
             //bd                html
@@ -87,7 +91,9 @@ class CharController extends Controller
             'breed_id' => $request->breed_id,
             'class_id' => $request->class_id,
             'user_id' => auth()->user()->id,
+            'expertise_id' => $request->expertise_id,
             'armor_id' => $request->armor_id,
+            'shield_id' => $request->shield_id,
             'level' => $request->level,
             'trend' => $request->trend,
             'sex' => $request->sex,
@@ -139,14 +145,15 @@ class CharController extends Controller
             'touch_ca' => $request->touch_ca,
             'surprise_ca' => $request->surprise_ca,
             'xp' => $request->xp,
-            'bag' => $request->bag
+            'bag' => $request->bag,
 
         ]);
 
-        $cad->weapons()->sync([
-            ['weapon_id' => $request->secweapon_id],
-            ['weapon_id' => $request->weapon_id],
-        ]);
+        $cad->weapons()->attach(
+            [
+                'weapon_id' => $request->weapon_id
+            ]
+        );
 
         if ($cad) {
             return redirect('chars');
@@ -179,8 +186,8 @@ class CharController extends Controller
         $classes = Classes::all();
         $weapons = Weapon::all();
         $armors = Armor::all();
-        $expertises = Expertise::all();
-        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'expertises'));
+        $shields = Shield::all();
+        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields'));
     }
 
     /**
@@ -199,6 +206,7 @@ class CharController extends Controller
             'class_id' => $request->class_id,
             'user_id' => $request->user_id,
             'armor_id' => $request->armor_id,
+            'shield_id' => $request->shield_id,
             'level' => $request->level,
             'trend' => $request->trend,
             'sex' => $request->sex,
@@ -250,27 +258,93 @@ class CharController extends Controller
             'touch_ca' => $request->touch_ca,
             'surprise_ca' => $request->surprise_ca,
             'xp' => $request->xp,
-            'bag' => $request->bag
-
-
-
+            'bag' => $request->bag,
 
         ]);
-        $edit = Char::find($id);
-        $edit->weapons()->syncWithoutDetaching([
-            'weapon_id' => $request->secweapon_id,
-            'weapon_id' => $request->weapon_id,
-        ]);
-        if ($edit)
-            return redirect('chars');
+
+        $sql = DB::table('char_weapons')->count('char_id');
+        if ($sql > 5) {
+            return Redirect()->back()->withErrors(['msg', 'The Message']);
+        } else {
+            $edit = Char::find($id);
+            $edit->weapons()->attach([
+                'weapon_id' => $request->weapon_id
+            ]);
+            if ($edit)
+                return redirect('chars');
+        }
     }
 
     public function destroy($id)
     {
-        $del = $this->objChar->destroy($id);
-        return ($del) ? "sim" : "não";
+        $char_id = $this->objChar->destroy($id);
+        $sql = "Delete from chars ";
+        $sql = $sql . " WHERE id = '$char_id'  ";
+        $delete = DB::delete($sql);
+
+        return redirect('chars');
     }
 
-    
-    
+    public function infoweapon(Request $request)
+    {
+        $dataForm = $request->all();
+        $weapon_id = $dataForm['weapon_id'];
+        $sql = "Select * from weapons ";
+        $sql = $sql . " WHERE id = '$weapon_id'  ";
+        $weapons = DB::select($sql);
+        return view('funcao_ajax', ['weapons' => $weapons]);
+    }
+
+    public function infomyweapon(Request $request)
+    {
+        $dataForm = $request->all();
+        $myweapon_id = $dataForm['myweapon_id'];
+        $sql = "Select * from weapons ";
+        $sql = $sql . " WHERE id = '$myweapon_id'  ";
+        $weapons = DB::select($sql);
+        return view('funcao_ajax', ['weapons' => $weapons]);
+    }
+
+    public function delmyweapon(Request $request)
+    {
+        $dataForm = $request->all();
+        $myweapon_id = $dataForm['myweapon_id'];
+        $sql = "Delete from char_weapons ";
+        $sql = $sql . " WHERE weapon_id = '$myweapon_id'  ";
+        $weapons = DB::delete($sql);
+        return redirect()->back();
+    }
+
+    public function addweapon(Request $request, $id)
+    {
+        $edit = Char::find($id);
+        $dataForm = $request->all();
+        $weapon_id = $dataForm['weapon_id'];
+        $sql = "Insert into char_weapons (char_id, weapon_id) ";
+        $sql = $sql . " VALUES char_id = '$edit', ";
+        $sql = $sql . " weapon_id = '$weapon_id' ";
+        $weapons = DB::insert($sql);
+        return view('funcao_ajax', ['weapons' => $weapons]);
+    }
+
+
+    public function infoarmor(Request $request)
+    {
+        $dataForm = $request->all();
+        $armor_id = $dataForm['armor_id'];
+        $sql = "Select * from armors ";
+        $sql = $sql . " WHERE id = '$armor_id'  ";
+        $armors = DB::select($sql);
+        return view('armors', ['armors' => $armors]);
+    }
+
+    public function infoshield(Request $request)
+    {
+        $dataForm = $request->all();
+        $shield_id = $dataForm['shield_id'];
+        $sql = "Select * from shields ";
+        $sql = $sql . " WHERE id = '$shield_id'  ";
+        $shields = DB::select($sql);
+        return view('shields', ['shields' => $shields]);
+    }
 }
