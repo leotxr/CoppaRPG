@@ -14,9 +14,18 @@ class CreateMagicsTable extends Migration
     public function up()
     {
         Schema::create('magics', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unique();
+            $table->string('name')->nullable();
+            $table->string('desc')->nullable();
+            $table->string('class_name')->nullable();
+            $table->string('type')->nullable();
+            $table->string('level')->nullable();
+            $table->string('component')->nullable();
+            $table->string('reach')->nullable();
+            $table->double('duration')->nullable();
+            $table->string('target')->nullable();
             $table->timestamps();
-        });
+    });
     }
 
     /**

@@ -95,6 +95,21 @@ class Char extends Model
         return $this->belongsToMany(Weapon::class, 'char_weapons');
     }
 
+    public function magics()
+    {
+        return $this->belongsToMany(Magic::class, 'char_magics');
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'char_skills');
+    }
+
+    public function talents()
+    {
+        return $this->belongsToMany(Talent::class, 'char_talents');
+    }
+
     public function relArmors()
     {
         return $this->hasOne('App\Models\Armor', 'id', 'armor_id');

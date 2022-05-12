@@ -10,6 +10,9 @@ use App\Models\Expertise;
 use App\Models\Breed;
 use App\Models\Char_weapon;
 use App\Models\Classes;
+use App\Models\Talent;
+use App\Models\Skill;
+use App\Models\Magic;
 use App\Models\Weapon;
 use App\Models\Shield;
 use Illuminate\Support\Facades\Auth;
@@ -69,8 +72,11 @@ class CharController extends Controller
         $armors = Armor::all();
         $shields = Shield::all();
         $expertises = Expertise::all();
+        $talents = Talent::all();
+        $skills = Skill::all();
+        $magics = Magic::all();
 
-        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'expertises'));
+        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'expertises', 'talents', 'skills', 'magics'));
     }
 
     /**
@@ -81,7 +87,6 @@ class CharController extends Controller
      */
     public function store(Request $request)
     {
-        $lastExpertise = DB::table('expertises')->orderBy('id')->first();
 
         $cad = Char::create([
             //bd                html
@@ -91,7 +96,6 @@ class CharController extends Controller
             'breed_id' => $request->breed_id,
             'class_id' => $request->class_id,
             'user_id' => auth()->user()->id,
-            'expertise_id' => $request->expertise_id,
             'armor_id' => $request->armor_id,
             'shield_id' => $request->shield_id,
             'level' => $request->level,
@@ -149,13 +153,16 @@ class CharController extends Controller
 
         ]);
 
+
         $cad->weapons()->attach(
             [
                 'weapon_id' => $request->weapon_id
             ]
         );
 
+
         if ($cad) {
+
             return redirect('chars');
         }
     }
@@ -187,7 +194,11 @@ class CharController extends Controller
         $weapons = Weapon::all();
         $armors = Armor::all();
         $shields = Shield::all();
-        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields'));
+        $talents = Talent::all();
+        $skills = Skill::all();
+        $magics = Magic::all();
+
+        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'talents', 'skills', 'magics'));
     }
 
     /**
@@ -262,29 +273,21 @@ class CharController extends Controller
 
         ]);
 
-        $sql = DB::table('char_weapons')->count('char_id');
-        if ($sql > 5) {
-            return Redirect()->back()->withErrors(['msg', 'The Message']);
-        } else {
-            $edit = Char::find($id);
-            $edit->weapons()->attach([
-                'weapon_id' => $request->weapon_id
-            ]);
-            if ($edit)
-                return redirect('chars');
-        }
+
+        if ($edit)
+            return redirect()->back();
     }
 
-    public function destroy($id)
+    public function destroy(Char $id)
     {
-        $char_id = $this->objChar->destroy($id);
-        $sql = "Delete from chars ";
-        $sql = $sql . " WHERE id = '$char_id'  ";
-        $delete = DB::delete($sql);
 
-        return redirect('chars');
+        $deleted = DB::table('chars')->delete();
+        echo 'alert($char_id)';
+        if ($deleted)
+            return redirect('chars');
     }
 
+    // FUNCOES UTILIZADAS PELO AJAX PARA MOSTRAR, INSERIR E DELETAR ARMAS DO PERSONAGEM
     public function infoweapon(Request $request)
     {
         $dataForm = $request->all();
@@ -315,18 +318,72 @@ class CharController extends Controller
         return redirect()->back();
     }
 
-    public function addweapon(Request $request, $id)
+    public function addweapon(Request $request)
     {
-        $edit = Char::find($id);
+        $char_id = $request->input('char_id');
         $dataForm = $request->all();
         $weapon_id = $dataForm['weapon_id'];
-        $sql = "Insert into char_weapons (char_id, weapon_id) ";
-        $sql = $sql . " VALUES char_id = '$edit', ";
-        $sql = $sql . " weapon_id = '$weapon_id' ";
-        $weapons = DB::insert($sql);
-        return view('funcao_ajax', ['weapons' => $weapons]);
+        $sql = DB::table('char_weapons')->where('char_id', $char_id)->count('char_id');
+        if ($sql >= 5) {
+            return Redirect()->back()->withErrors(['msg', 'Erro']);
+        } else {
+            $weapons = DB::table('char_weapons')->insert([
+                'char_id' => $char_id,
+                'weapon_id' => $weapon_id
+            ]);
+        }
+        if ($weapons)
+            return redirect('chars');
+        else redirect('chars');
     }
+    // FIM DAS FUNCOES DA ARMA
 
+        // FUNCOES UTILIZADAS PELO AJAX PARA MOSTRAR, INSERIR E DELETAR TALENTOS DO PERSONAGEM
+        public function infotalent(Request $request)
+        {
+            $dataForm = $request->all();
+            $talent_id = $dataForm['talent_id'];
+            $sql = "Select * from talents ";
+            $sql = $sql . " WHERE id = '$talent_id'  ";
+            $talents = DB::select($sql);
+            return view('talent', ['talents' => $talents]);
+        }
+    
+        public function infomytalent(Request $request)
+        {
+            $dataForm = $request->all();
+            $mytalent_id = $dataForm['mytalent_id'];
+            $sql = "Select * from talents ";
+            $sql = $sql . " WHERE id = '$mytalent_id'  ";
+            $talents = DB::select($sql);
+            return view('talent', ['talents' => $talents]);
+        }
+    
+        public function delmytalent(Request $request)
+        {
+            $dataForm = $request->all();
+            $mytalent_id = $dataForm['mytalent_id'];
+            $sql = "Delete from char_weapons ";
+            $sql = $sql . " WHERE talent_id = '$mytalent_id'  ";
+            $talents = DB::delete($sql);
+            return redirect()->back();
+        }
+    
+        public function addtalent(Request $request)
+        {
+            $char_id = $request->input('char_id');
+            $dataForm = $request->all();
+            $talent_id = $dataForm['talent_id'];
+                $talents = DB::table('char_talents')->insert([
+                    'char_id' => $char_id,
+                    'talent_id' => $talent_id
+                ]);
+            
+            if ($talents)
+                return redirect('chars');
+            else redirect('chars');
+        }
+        // FIM DAS FUNCOES DO TALENTO
 
     public function infoarmor(Request $request)
     {

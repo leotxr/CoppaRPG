@@ -80,31 +80,16 @@ function somaCA() {
 //mostra a div informacoes e esconde as demais
 function mostrarDivInfo() {
   var info = document.getElementById("info");
-  var pericias = document.getElementById("pericias");
   var equip = document.getElementById("equipamentos");
-  var talentos = document.getElementById("talentos");
-  var magias = document.getElementById("magias");
+  var especiais = document.getElementById("especiais");
   if (info.style.display === "none") {
     info.style.display = "block";
     equip.style.display = "none";
+    especiais.style.display = "none";
   }
 
 }
 
-//teste pra ficar correto
-function alternardivs(){
-  var info = document.getElementById("info");
-  var equip = document.getElementById("equipamentos");
-
-  if (info.style.display == "none"){
-    info.style.display == "block";
-    equip.style.display == "none";
-
-  }else if(equip.style.display == "none"){
-    info.style.display == "none";
-    equip.style.display == "block";
-  }
-}
 
 //esconde a div pericias e mostra a anterior
 function mostrarDivPericias() {
@@ -127,16 +112,12 @@ function mostrarDivPericias() {
 //esconde a div equipamentos e mostra a anterior
 function mostrarDivEquipamentos() {
   var info = document.getElementById("info");
-
   var equipamentos = document.getElementById("equipamentos");
-  var talentos = document.getElementById("talentos");
-  var magias = document.getElementById("magias");
+  var especiais = document.getElementById("especiais");
   if (equipamentos.style.display === "none") {
     info.style.display = "none";
-
     equipamentos.style.display = "block";
-    talentos.style.display = "none";
-    magias.style.display = "none";
+    especiais.style.display = "none";
 
 
   }
@@ -144,42 +125,20 @@ function mostrarDivEquipamentos() {
 }
 
 //esconde a div talentos e mostra a anterior
-function mostrarDivTalentos() {
+function mostrarDivEspeciais() {
   var info = document.getElementById("info");
-  var pericias = document.getElementById("pericias");
   var equipamentos = document.getElementById("equipamentos");
-  var talentos = document.getElementById("talentos");
-  var magias = document.getElementById("magias");
-  if (talentos.style.display === "none") {
+  var especiais = document.getElementById("especiais");
+  if (especiais.style.display === "none") {
+    especiais.style.display = "block";
     info.style.display = "none";
-    pericias.style.display = "none";
-    talentos.style.display = "block";
     equipamentos.style.display = "none";
-    magias.style.display = "none";
+
 
   }
 
 }
 
-//esconde a div magias e mostra a anterior
-function mostrarDivMagias() {
-  var info = document.getElementById("info");
-  var pericias = document.getElementById("pericias");
-  var equipamentos = document.getElementById("equipamentos");
-  var talentos = document.getElementById("talentos");
-  var magias = document.getElementById("magias");
-  var step = document.getElementById("step");
-  if (magias.style.display === "none") {
-    info.style.display = "none";
-    pericias.style.display = "none";
-    magias.style.display = "block";
-    equipamentos.style.display = "none";
-    step.style.width = "100%";
-
-
-  }
-
-}
 
 //mostrar informacao da arma selecionada
 function mostrarArmaSelect() {
@@ -203,19 +162,16 @@ function mostrarModalArmas() {
 
 }
 
-//mostrar select arma secundaria
-function mostrarAdcArma(event) {
-  var div = document.getElementById("charweapons2");
-  var sel = document.getElementById("secweapon_id");
-  if (div.style.display === "none") {
-    div.style.display = "block";
-    $("#secweapon_id").prop("disabled", false);
-  } else if (div.style.display === "block") {
-    div.style.display = "none";
-    $("#secweapon_id").prop("disabled", true);
+function mostrarModalTalentos() {
+  var modal = document.getElementById("modal_talents");
+  if (modal.style.display === "none") {
+    modal.style.display = "block";
+  } else if (modal.style.display === "block") {
+    modal.style.display = "none";
   }
 
 }
+
 
 //mostrar div modificadores
 function showdivmods() {

@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Char_weapon extends Model
 {
-
+    protected $table = 'char_weapons';
+    protected $fillable = [
+        'observation',
+        'total_bba',
+        'total_damage'
+    ];
     use HasFactory;
 }

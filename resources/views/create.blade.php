@@ -53,9 +53,10 @@
 
                     <div class="lg:flex lg:items-center lg:justify-between">
                         <div class="flex-1 min-w-0">
-                            <input id="nameHead" value="{{$char->name ?? ''}}" class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate" readonly></input>
-                            <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <input readonly id="char_id" type="number" value="{{$char->id ?? ''}}" class="hidden text-sm w-6 font-bold leading-1 text-gray-900 sm:text-sm sm:truncate"></input>
+                            <input id="nameHead" value="{{$char->name ?? ''}}" class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" readonly></input>
+                            <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6 ">
+                                <div class="mt-2 flex items-center text-sm text-gray-500 ">
                                     <!-- Heroicon name: solid/beaker -->
                                     <svg class="flex-shrink-0 mr-1.5 h-5 w-5" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
@@ -98,7 +99,7 @@
                             </span>
 
                             <span class="hidden sm:block ml-3">
-                                <button id="delchar" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button id="delchar" href="{{route('destroy')}}" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <!-- Heroicon name: solid/link -->
                                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
@@ -109,13 +110,10 @@
                             <script>
                                 $(document).ready(function() {
                                     $("#delchar").click(function() {
-                                        const url = "{{ route('delete_char')}}";
-                                        charId = $char_id;
+                                        const url = "{{ route('destroy')}}";
+
                                         $.ajax({
                                             url: url,
-                                            data: {
-                                                'charId': charId,
-                                            },
                                             success: function(data) {
                                                 alert("Personagem removido com sucesso!");
 
@@ -195,12 +193,17 @@
 
                                                     <div class="col-span-6 sm:col-span-3">
                                                         <label for="name" class="block text-sm font-medium text-gray-700" required>Nome</label>
-                                                        <input onkeyup="TxtOnHead()" type="text" name="name" value="{{$char->name ?? ''}}" id="name" autocomplete="name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        <input required onkeyup="TxtOnHead()" type="text" name="name" value="{{$char->name ?? ''}}" id="name" autocomplete="name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
-                                                    <div class="col-span-2 sm:col-span-1">
+                                                    <div class="col-span-3 sm:col-span-1">
                                                         <label for="level" class="block text-sm font-medium text-gray-700">Nivel</label>
-                                                        <input type="number" onmouseup="calcAttrClasses(), calcularResistencia()" name="level" value="{{$char->level ?? ''}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        <select onmouseup="calcAttrClasses(), calcularResistencia()" name="level" id="level" autocomplete="level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <option value="{{$char->level ?? ''}}">{{$char->level ?? 'Selecione'}}</option>
+                                                            @for($i=1; $i<=20; $i++) @php $value=$i; @endphp <option value="{{$i}}">{{$i}}</option>
+                                                                @endfor
+
+                                                        </select>
                                                     </div>
 
 
@@ -247,24 +250,39 @@
                                                         </select>
                                                     </div>
 
-                                                    <div class="col-span-3 sm:col-span-3">
-                                                        <label for="trend" disabled class="block text-sm font-medium text-gray-700">Tendência</label>
-                                                        <input type="text" value="{{$char->trend ?? ''}}" name="trend" id="trend" autocomplete="trend" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                    <div class="col-span-5 sm:col-span-3">
+                                                        <label for="class" class="block text-sm font-medium text-gray-700">Tendencia</label>
+                                                        <select name="trend" id="trend" autocomplete="trend" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <option value="{{$char->trend ?? ''}}">{{$char->trend ?? 'Selecione'}}</option>
+                                                            <option value="Leal/Bom">Leal/Bom</option>
+                                                            <option value="Leal/Mau">Leal/Mau</option>
+                                                            <option value="Leal/Neutro">Leal/Neutro</option>
+                                                            <option value="Neutro/Neutro">Neutro/Neutro</option>
+                                                            <option value="Caotico/Bom">Caotico/Bom</option>
+                                                            <option value="Caotico/Mau">Caotico/Mau</option>
+                                                            <option value="Caotico/Neutro">Caotico/Neutro</option>
+                                                        </select>
                                                     </div>
 
-                                                    <div class="col-span-3 sm:col-span-6 lg:col-span-3">
+                                                    <div class="col-span-5 sm:col-span-6 lg:col-span-3">
                                                         <label for="religion" class="block text-sm font-medium text-gray-700">Divindade</label>
                                                         <input type="text" value="{{$char->religion ?? ''}}" name="religion" id="religion" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                    </div>
+
+                                                    <div class="col-span-5 sm:col-span-3">
+                                                        <label for="class" class="block text-sm font-medium text-gray-700">Sexo</label>
+                                                        <select name="sex" id="sex" autocomplete="sex" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <option value="{{$char->sex ?? ''}}">{{$char->sex ?? 'Selecione'}}</option>
+                                                            <option value="Masculino">Masculino</option>
+                                                            <option value="Feminino">Feminino</option>
+                                                            <option value="Nenhum">Nenhum</option>
+                                                            <option value="Outro">Outro</option>
+                                                        </select>
                                                     </div>
 
                                                     <div class="col-span-2 sm:col-span-1">
                                                         <label for="age" class="block text-sm font-medium text-gray-700">Idade</label>
                                                         <input type="number" value="{{$char->age ?? ''}}" name="age" id="age" autocomplete="age" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                    </div>
-
-                                                    <div class="col-span-3 sm:col-span-6 lg:col-span-2">
-                                                        <label for="sex" class="block text-sm font-medium text-gray-700">Sexo</label>
-                                                        <input type="text" value="{{$char->sex ?? ''}}" name="sex" id="sex" autocomplete="sex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
                                                     <div class="col-span-2 sm:col-span-3 lg:col-span-1">
@@ -278,19 +296,25 @@
                                                         <input type="number" value="{{$char->height ?? ''}}" name="height" id="height" autocomplete="height" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
-                                                    <div class="col-span-2 sm:col-span-3 lg:col-span-2">
-                                                        <label for="size" class="block text-sm font-medium text-gray-700">Tamanho</label>
-                                                        <input type="text" value="{{$char->size ?? ''}}" name="size" id="size" autocomplete="size" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                    <div class="col-span-5 sm:col-span-3">
+                                                        <label for="class" class="block text-sm font-medium text-gray-700">Tamanho</label>
+                                                        <select name="size" id="size" autocomplete="size" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <option value="{{$char->size ?? ''}}">{{$char->size ?? 'Selecione'}}</option>
+                                                            <option value="Pequeno">Pequeno</option>
+                                                            <option value="Medio">Medio</option>
+                                                            <option value="Grande">Grande</option>
+                                                            <option value="Enorme">Enorme</option>
+                                                        </select>
                                                     </div>
 
 
                                                     <div class="col-span-3 sm:col-span-6 lg:col-span-2">
-                                                        <label for="eyes" class="block text-sm font-medium text-gray-700">Olhos</label>
+                                                        <label for="eyes" class="block text-sm font-medium text-gray-700">Cor dos Olhos</label>
                                                         <input type="text" value="{{$char->eyes ?? ''}}" name="eyes" id="eyes" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
                                                     <div class="col-span-3 sm:col-span-6 lg:col-span-2">
-                                                        <label for="hair" class="block text-sm font-medium text-gray-700">Cabelos</label>
+                                                        <label for="hair" class="block text-sm font-medium text-gray-700">Cor dos Cabelos</label>
                                                         <input type="text" value="{{$char->hair ?? ''}}" name="hair" id="hair" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
                                                 </div>
@@ -336,7 +360,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="str" class="block text-sm font-bold text-indigo-700">Força</label>
-                                                            <input type="number" value="{{$char->str ?? ''}}" onkeyup="calcularCusto(this)" onblur="valida(this)" name="str" id="str" autocomplete="str" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->str ?? ''}}" onchange="calcularCusto(this)" onblur="valida(this)" name="str" id="str" autocomplete="str" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
@@ -347,7 +371,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="dex" class="block text-sm font-bold text-indigo-700">Destreza</label>
-                                                            <input type="number" value="{{$char->dex ?? ''}}" onkeyup="calcularCusto(this), calcularResistencia(this)" , onblur="valida(this), somaCA()" name="dex" id="dex" autocomplete="dex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->dex ?? ''}}" onchange="calcularCusto(this), calcularResistencia(this)" , onblur="valida(this), somaCA()" name="dex" id="dex" autocomplete="dex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
 
@@ -359,7 +383,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="con" class="block text-sm font-bold text-indigo-700">Constituição</label>
-                                                            <input type="number" value="{{$char->con ?? ''}}" name="con" id="con" autocomplete="con" onkeyup="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->con ?? ''}}" name="con" id="con" autocomplete="con" onchange="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
@@ -668,17 +692,6 @@
                 </div>
             </div>
 
-            <div id="tela_pericias">
-                                <input type="number" name="expertise_id" id="expertise_id" value=""></input>
-                <div id="table_pericias">
-
-                </div>
-            </div>
-            <
-
-
-
-
             <!--EQUIPAMENTOS-->
 
             <div id="equipamentos" class="equipamentos" style="display: none">
@@ -888,7 +901,11 @@
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
                                                         <div class="col-span-6 sm:col-span-3">
-                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Adicionar Arma</label>
+                                                            @if (empty($char))
+                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Selecione uma arma inicial</label>
+                                                            @else
+                                                            <label for="weapons" class="block text-sm font-medium text-gray-700">Adicionar arma</label>
+                                                            @endif
                                                             <select enabled id="weapon_id" name="weapon_id" autocomplete="weapon" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                                 <option>Selecione</option>
                                                                 @foreach($weapons as $weapon)
@@ -927,15 +944,17 @@
                                                         $("#addweapon").click(function() {
                                                             const url = "{{ route('add_weapon')}}";
                                                             weaponId = $("#weapon_id").val();
+                                                            charId = $("#char_id").val();
 
                                                             $.ajax({
                                                                 url: url,
                                                                 data: {
                                                                     'weapon_id': weaponId,
-
+                                                                    'char_id': charId,
                                                                 },
                                                                 success: function(data) {
-                                                                    alert("Arma adicionada!");
+                                                                    alert("Arma so sera adicionada caso o personagem possua menos de 5 armas no arsenal.");
+                                                                    location.reload();
                                                                 }
 
                                                             });
@@ -952,25 +971,17 @@
                                                 <!-- BOTAO MOSTRAR MINHAS ARMAS -->
                                                 <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
                                                     <button type="button" onclick="mostrarModalArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                                        Minhas Armas
+                                                        Opções de ataque
                                                     </button>
                                                 </div>
 
-                                                <!-- BOTAO MOSTRAR TODAS ARMAS EM TABELA -->
-                                                <div class="inline-flex px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
-                                                    <button type="button" onclick="mostrarModalTodasArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-300 sm:ml-3 sm:w-auto sm:text-sm">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="purple" stroke-width="1">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-
-
+                                                @if (isset ($char))
                                                 <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
                                                     <button id="addweapon" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
                                                         Adicionar
                                                     </button>
                                                 </div>
+                                                @endif
 
                                                 <!-- INICIO MODAL MINHAS ARMAS -->
                                                 <div id="modal_weapons" class="fixed z-10 inset-0 overflow-y-auto bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
@@ -991,7 +1002,7 @@
                                                                         </svg>
                                                                     </div>
                                                                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
-                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Suas armas</h3>
+                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Opções de ataque</h3>
                                                                         <div class="mt-2">
                                                                             @if (isset($char))
                                                                             <div class="px-4 py-5 bg-white sm:p-6">
@@ -1067,6 +1078,8 @@
 
 
                                         </div>
+
+
 
                                     </div>
                                 </div>
@@ -1258,6 +1271,7 @@
                 </div>
                 <!-- FIM ESCUDO -->
 
+                <!--MOCHILA DO PERSONAGEM-->
                 <div class="py-12" id="mochila">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -1282,29 +1296,225 @@
 
                                     </div>
                                 </div>
-                                <div class="mt-8 p-4">
-                                    <div class="flex p-2 mt-4">
-                                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                            Voltar
-                                        </button>
 
-                                        <div class="flex-auto flex flex-row-reverse">
-                                            <span class="sm:ml-3">
-                                                <button type="button" id="btn_save" onclick=openconfirmcreate() class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    <!-- Heroicon name: solid/check -->
-                                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                                    </svg>
-                                                    Salvar
-                                                </button>
-                                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 p-4">
+                    <div class="flex p-2 mt-4">
+                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            Voltar
+                        </button>
+                        <div class="flex-auto flex flex-row-reverse">
+                            <button onclick="mostrarDivEspeciais()" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                Continuar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- FIM MOCHILA -->
+            </div>
+            <!-- FIM DIV EQUIPAMENTOS -->
+
+            <!-- INICIO HABILIDADES, TALENTOS E MAGIAS -->
+            <div id="especiais" style="display: none">
+                <!-- TALENTOS -->
+                <div class="py-12" id="talentos">
+                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 bg-white border-b border-gray-200">
+
+                                <div class="mt-10 sm:mt-0">
+                                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                                        <div class="md:col-span-1">
+                                            <div class="px-4 sm:px-0">
+                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Talentos</h3>
+                                                <p class="mt-1 text-sm text-gray-600">
+                                                    Talentos do personagem
+                                                </p>
+                                            </div>
                                         </div>
-                                        @else
+                                        <div class="mt-5 md:mt-0 md:col-span-2">
+                                            <!-- SELECT TALENTOS -->
 
-                                        <script>
-                                            window.location.href = "{{ url('dashboard')}}"
-                                        </script>
-                                        @endif
+                                            <div class="shadow overflow-hidden sm:rounded-md">
+                                                <div class="px-4 py-5 bg-white sm:p-6">
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-6 sm:col-span-3">
+                                                            <label for="talents" class="block text-sm font-medium text-gray-700">Talentos</label>
+                                                            <select enabled id="talent_id" name="talent_id" autocomplete="talent" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                <option>Selecione</option>
+                                                                @foreach($talents as $talent)
+                                                                <option value="{{$talent->id}}">{{$talent->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <button type="button" id="showinfotalent">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- AJAX PARA MOSTRAR O SELECT COM AS INFORMACOES DO TALENTO SELECIONADO -->
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showinfotalents").click(function() {
+                                                            const url = "{{ route('load_talents')}}";
+                                                            talentId = $("#talent_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'talent_id': talentId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#talentinfo").html(data);
+
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                        $("#addtalent").click(function() {
+                                                            const url = "{{ route('add_talent')}}";
+                                                            talentId = $("#talent_id").val();
+                                                            charId = $("#char_id").val();
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'talent_id': talentId,
+                                                                    'char_id': charId
+
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Talento aprendido!");
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                    });
+                                                </script>
+
+                                                <!-- INFORMAÇÕES SAO MOSTRADAS NESTA DIV -->
+                                                <div id="talentinfo">
+
+                                                </div>
+
+                                                <!-- BOTAO MOSTRAR MINHAS ARMAS -->
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
+                                                    <button type="button" onclick="mostrarModalTalentos()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Talentos aprendidos
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
+                                                    <button id="addtalent" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Adicionar
+                                                    </button>
+                                                </div>
+
+                                                <!-- INICIO MODAL MEUS TALENTOS -->
+                                                <div id="modal_talents" class="fixed z-10 inset-0 overflow-y-auto bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+                                                    <div class="flex items-end justify-center min-h-screen pt-10 px-10 pb-20 text-center sm:block sm:p-0">
+
+                                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                                        <!-- This element is to trick the browser into centering the modal contents. -->
+                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                                                        <div class="relative inline-block align-bottom bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <div class="sm:flex sm:items-start">
+                                                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                                        <!-- Heroicon name: outline/exclamation -->
+                                                                        <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
+                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Talentos</h3>
+                                                                        <div class="mt-2">
+                                                                            @if (isset($char))
+                                                                            <div class="px-4 py-5 bg-white sm:p-6">
+                                                                                <div class="grid grid-cols-6 gap-6">
+                                                                                    <div class="col-span-6 sm:col-span-6">
+                                                                                        <select id="mytalent_id" name="mytalent_id" autocomplete="talent" class="mt-1 block w-full py-2 px-50 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-x">
+                                                                                            <option>Selecione</option>
+                                                                                            @foreach ($char->talents as $talent)
+                                                                                            <option value="{{$talent->id}}">{{$talent->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            @else
+                                                                            <label>Voce ainda nao tem talentos...!</label>
+                                                                            @endif
+                                                                            <div id="mytalentinfo">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                                <button type="button" id="deletemytalent" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Excluir</button>
+                                                                <button type="button" id="showmytalent" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-indigo-400 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Visualizar</button>
+                                                                <button type="button" onclick="mostrarModalTalentos()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showmytalent").click(function() {
+                                                            const url = "{{ route('load_mytalent')}}";
+                                                            myTalentId = $("#mytalent_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'mytalent_id': myTalentId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#mytalentinfo").html(data);
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+
+                                                    $(document).ready(function() {
+                                                        $("#deletemytalent").click(function() {
+                                                            const url = "{{ route('delete_mytalent')}}";
+                                                            myTalentId = $("#mytalent_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'mytalent_id': myTalentId,
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Talento removido com sucesso!");
+                                                                    location.reload();
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+                                                </script>
+                                                <!-- Fim Modal -->
+
+                                            </div>
+
+
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -1314,7 +1524,12 @@
             </div>
 
         </form>
+        @else
 
+        <script>
+            window.location.href = "{{ url('dashboard')}}"
+        </script>
+        @endif
         </div>
 
 

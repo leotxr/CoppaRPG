@@ -14,9 +14,14 @@ class CreateTalentTable extends Migration
     public function up()
     {
         Schema::create('talents', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unique();
+            $table->string('name')->nullable();
+            $table->string('desc')->nullable();
+            $table->string('benefit')->nullable();
+            $table->string('prereq')->nullable();
+            $table->string('special')->nullable();
             $table->timestamps();
-        });
+    });
     }
 
     /**

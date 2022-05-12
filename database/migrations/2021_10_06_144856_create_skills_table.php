@@ -14,7 +14,10 @@ class CreateSkillsTable extends Migration
     public function up()
     {
         Schema::create('skills', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unique();
+            $table->string('name')->nullable();
+            $table->string('desc')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }
