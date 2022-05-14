@@ -241,9 +241,9 @@ class ExpertiseController extends Controller
      */
     public function edit($id)
     {
-        $expertise = Expertise::find($id);
+       
         
-        return view('teste', compact('expertise'));
+        
     }
 
     /**
@@ -455,5 +455,10 @@ class ExpertiseController extends Controller
         $teste = DB::insert('insert into expertises (name, value, habmod, graduation, other)
          values (?, ?, ?, ?, ?)', [$name, $value, $habmod, $graduation, $other]);
         return view("forge", ['teste' => $teste]);
+    }
+
+    public function teste()
+    {
+        return view('forge');
     }
 }

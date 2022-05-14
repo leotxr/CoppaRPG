@@ -10,7 +10,7 @@ class Char extends Model
 {
     protected $table = 'chars';
     protected $fillable = [
-        'name',
+        'name', 
         'age',
         'user_id',
         'breed_id',
@@ -70,7 +70,10 @@ class Char extends Model
         'touch_ca',
         'surprise_ca',
         'xp',
-        'bag'
+        'bag',
+        'gp',
+        'sp',
+        'cp'
     ];
     use HasFactory;
 

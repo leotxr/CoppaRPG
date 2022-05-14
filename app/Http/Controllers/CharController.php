@@ -69,6 +69,7 @@ class CharController extends Controller
         $breeds = Breed::all();
         $classes = Classes::all();
         $weapons = Weapon::all();
+        $char_weapons = Char_weapon::all();
         $armors = Armor::all();
         $shields = Shield::all();
         $expertises = Expertise::all();
@@ -76,7 +77,7 @@ class CharController extends Controller
         $skills = Skill::all();
         $magics = Magic::all();
 
-        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'expertises', 'talents', 'skills', 'magics'));
+        return view('create', compact('users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'expertises', 'talents', 'skills', 'magics', 'char_weapons'));
     }
 
     /**
@@ -154,16 +155,20 @@ class CharController extends Controller
         ]);
 
 
+        /*
         $cad->weapons()->attach(
             [
-                'weapon_id' => $request->weapon_id
+                'observation' => $request->observation,
+                'weapon_id' => $request->weapon_id,
             ]
         );
+        */
 
 
         if ($cad) {
-
-            return redirect('chars');
+            return redirect()->action(
+                'App\Http\Controllers\CharController@edit', [$cad]
+            );
         }
     }
 
@@ -192,13 +197,14 @@ class CharController extends Controller
         $breeds = Breed::all();
         $classes = Classes::all();
         $weapons = Weapon::all();
+        $char_weapons = Char_weapon::all();
         $armors = Armor::all();
         $shields = Shield::all();
         $talents = Talent::all();
         $skills = Skill::all();
         $magics = Magic::all();
 
-        return view('create', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'talents', 'skills', 'magics'));
+        return view('edit', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'talents', 'skills', 'magics', 'char_weapons'));
     }
 
     /**
@@ -295,9 +301,10 @@ class CharController extends Controller
         $sql = "Select * from weapons ";
         $sql = $sql . " WHERE id = '$weapon_id'  ";
         $weapons = DB::select($sql);
-        return view('funcao_ajax', ['weapons' => $weapons]);
+        return view('weapon', ['weapons' => $weapons]);
     }
 
+    /*
     public function infomyweapon(Request $request)
     {
         $dataForm = $request->all();
@@ -306,6 +313,20 @@ class CharController extends Controller
         $sql = $sql . " WHERE id = '$myweapon_id'  ";
         $weapons = DB::select($sql);
         return view('funcao_ajax', ['weapons' => $weapons]);
+    }
+    */
+
+    public function infomyweapon(Request $request)
+    {
+        $char_id = $request->input('char_id');
+        $dataForm = $request->all();
+        $myweapon_id = $dataForm['myweapon_id'];
+        $sql = "Select weapons.name, weapons.desc, weapons.damage, char_weapons.observation, chars.modstr FROM char_weapons ";
+        $sql = $sql . " INNER JOIN weapons ON char_weapons.weapon_id = weapons.id  ";
+        $sql = $sql . " INNER JOIN chars ON char_weapons.char_id = chars.id  ";
+        $sql = $sql . " WHERE chars.id = '$char_id' AND weapons.id = '$myweapon_id'";
+        $weapons = DB::select($sql);
+        return view('myweapon', ['weapons' => $weapons]);
     }
 
     public function delmyweapon(Request $request)
@@ -320,6 +341,7 @@ class CharController extends Controller
 
     public function addweapon(Request $request)
     {
+        $observation = $request->input('observation');
         $char_id = $request->input('char_id');
         $dataForm = $request->all();
         $weapon_id = $dataForm['weapon_id'];
@@ -329,13 +351,16 @@ class CharController extends Controller
         } else {
             $weapons = DB::table('char_weapons')->insert([
                 'char_id' => $char_id,
-                'weapon_id' => $weapon_id
+                'weapon_id' => $weapon_id,
+                'observation' => $observation
             ]);
         }
         if ($weapons)
             return redirect('chars');
         else redirect('chars');
     }
+
+
     // FIM DAS FUNCOES DA ARMA
 
         // FUNCOES UTILIZADAS PELO AJAX PARA MOSTRAR, INSERIR E DELETAR TALENTOS DO PERSONAGEM

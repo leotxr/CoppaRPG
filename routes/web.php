@@ -25,11 +25,10 @@ require __DIR__.'/auth.php';
 
 //ROTAS DO PERSONAGEM
 Route::resource('chars', CharController::class);
-Route::get('chars', 'App\Http\Controllers\CharController@index')->name('chars');
 Route::get('destroy', 'App\Http\Controllers\CharController@destroy')->name('destroy');
 
 //ROTAS TESTE
-Route::resource('teste', ExpertiseController::class);
+Route::get('teste', 'App\Http\Controllers\ExpertiseController@teste');
 Route::get('equips', 'App\Http\Controllers\ExpertiseController@show')->name('equips');
 Route::get('add_exp', 'App\Http\Controllers\ExpertiseController@insert')->name('add_exp');
 Route::get('delete_char', 'App\Http\Controllers\CharController@destroy')->name('delete_char');

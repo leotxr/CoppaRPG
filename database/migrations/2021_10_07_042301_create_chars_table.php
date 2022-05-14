@@ -75,6 +75,10 @@ class CreateCharsTable extends Migration
             $table->integer('surprise_ca')->nullable();
             $table->integer('xp')->nullable();
             $table->string('bag')->nullable();   
+            $table->double('gp')->nullable();
+            $table->double('sp')->nullable();
+            $table->double('cp')->nullable();
+            $table->string('observations')->nullable();
           
 
             

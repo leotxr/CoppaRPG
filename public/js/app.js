@@ -44,6 +44,7 @@ function calcularCusto() {
 
   //mostra o calculo nos inputs de modificadores
   document.getElementById('modstr').value = getMod(str);
+  document.getElementById('modstrwp').value = getMod(str);
   document.getElementById('moddex').value = getMod(dex);
   document.getElementById('habref').value = getMod(dex);
   document.getElementById('moddex2').value = getMod(dex);

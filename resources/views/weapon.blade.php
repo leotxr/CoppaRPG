@@ -1,5 +1,5 @@
 @foreach($weapons as $weapon)
-<tr id="modal_ext_weapons" >
+<tr id="modal_ext_weapons">
   <td class="relative px-2 py-6">
     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
       <div class="px-4 py-5 sm:px-6">
@@ -20,10 +20,23 @@
             <dt class="text-sm font-medium text-gray-500">Descricao</dt>
             <dd class=" mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{$weapon->desc}}</dd>
           </div>
-
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Modificador de Forca</dt>
+            <input type="number" name="modstrwp" id="modstrwp" autocomplete="modstrwp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
           </div>
-        </dl>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <div class="col-span-3 sm:col-span-1">
+              <label for="observation" class="block text-sm font-bold text-gray-700">Observacoes</label>
+              <input type="text" name="observation" id="observation" autocomplete="observation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+            </div>
+          </div>
+          
+
+
+
       </div>
+      </dl>
+    </div>
     </div>
   </td>
 </tr>

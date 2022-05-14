@@ -16,6 +16,9 @@ class CreateCharWeaponsTable extends Migration
         Schema::create('char_weapons', function (Blueprint $table) {
             $table->foreignId('char_id')->constrained();
             $table->foreignId('weapon_id')->constrained();
+            $table->string('observation')->nullable();
+            $table->integer('bba_total')->nullable();
+            $table->integer('bba_total')->nullable();
             $table->timestamps();
         });
     }
