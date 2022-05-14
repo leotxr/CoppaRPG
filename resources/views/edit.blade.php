@@ -961,8 +961,8 @@
                                                                     'observation': observation,
                                                                 },
                                                                 success: function(data) {
-                                                                    alert("Arma so sera adicionada caso o personagem possua menos de 5 armas no arsenal.");
-                                                                    location.reload();
+                                                                    alert("Arma adicionada. Salve as alterações e atualize a página para ver.");
+
                                                                 }
 
                                                             });
@@ -1511,6 +1511,210 @@
                                                                 },
                                                                 success: function(data) {
                                                                     alert("Talento removido com sucesso!");
+                                                                    location.reload();
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+                                                </script>
+                                                <!-- Fim Modal -->
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--FIM TALENTOS-->
+
+                <!-- MAGIAS -->
+                <div class="py-12" id="magias">
+                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 bg-white border-b border-gray-200">
+
+                                <div class="mt-10 sm:mt-0">
+                                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                                        <div class="md:col-span-1">
+                                            <div class="px-4 sm:px-0">
+                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Talentos</h3>
+                                                <p class="mt-1 text-sm text-gray-600">
+                                                    Magias do personagem
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-5 md:mt-0 md:col-span-2">
+                                            <!-- SELECT MAGIAS -->
+
+                                            <div class="shadow overflow-hidden sm:rounded-md">
+                                                <div class="px-4 py-5 bg-white sm:p-6">
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-6 sm:col-span-3">
+                                                            <label for="talents" class="block text-sm font-medium text-gray-700">Magias</label>
+                                                            <select enabled id="magic_id" name="magic_id" autocomplete="magic" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                <option>Selecione</option>
+                                                                @foreach($magics as $magic)
+                                                                <option value="{{$magic->id}}">{{$magic->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <button type="button" id="showinfomagic">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- AJAX PARA MOSTRAR O SELECT COM AS INFORMACOES DO TALENTO SELECIONADO -->
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showinfomagic").click(function() {
+                                                            const url = "{{ route('load_magics')}}";
+                                                            magicId = $("#magic_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'magic_id': magicId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#magicinfo").html(data);
+
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                        $("#addmagic").click(function() {
+                                                            const url = "{{ route('add_magic')}}";
+                                                            magicId = $("#magic_id").val();
+                                                            charId = $("#char_id").val();
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'magic_id': magicId,
+                                                                    'char_id': charId
+
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Magia aprendida!");
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                    });
+                                                </script>
+
+                                                <!-- INFORMAÇÕES SAO MOSTRADAS NESTA DIV -->
+                                                <div id="magicinfo">
+
+                                                </div>
+
+                                                <!-- BOTAO MOSTRAR MINHAS ARMAS -->
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
+                                                    <button type="button" onclick="mostrarModalMagias()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Magias aprendidas
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
+                                                    <button id="addmagic" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Adicionar
+                                                    </button>
+                                                </div>
+
+                                                <!-- INICIO MODAL MEUS TALENTOS -->
+                                                <div id="modal_magics" class="fixed z-10 inset-0 overflow-y-auto bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+                                                    <div class="flex items-end justify-center min-h-screen pt-10 px-10 pb-20 text-center sm:block sm:p-0">
+
+                                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                                        <!-- This element is to trick the browser into centering the modal contents. -->
+                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                                                        <div class="relative inline-block align-bottom bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <div class="sm:flex sm:items-start">
+                                                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                                        <!-- Heroicon name: outline/exclamation -->
+                                                                        <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
+                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Magias</h3>
+                                                                        <div class="mt-2">
+                                                                            @if (isset($char))
+                                                                            <div class="px-4 py-5 bg-white sm:p-6">
+                                                                                <div class="grid grid-cols-6 gap-6">
+                                                                                    <div class="col-span-6 sm:col-span-6">
+                                                                                        <select id="mymagic_id" name="mymagic_id" autocomplete="magic" class="mt-1 block w-full py-2 px-50 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-x">
+                                                                                            <option>Selecione</option>
+                                                                                            @foreach ($char->magics as $magic)
+                                                                                            <option value="{{$magic->id}}">{{$magic->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            @else
+                                                                            <label>Voce ainda nao tem magias...!</label>
+                                                                            @endif
+                                                                            <div id="mymagicinfo">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                                <button type="button" id="deletemymagic" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Excluir</button>
+                                                                <button type="button" id="showmymagic" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-indigo-400 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Visualizar</button>
+                                                                <button type="button" onclick="mostrarModalMagias()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showmymagic").click(function() {
+                                                            const url = "{{ route('load_mymagic')}}";
+                                                            myMagicId = $("#mymagic_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'mymagic_id': myMagicId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#mymagicinfo").html(data);
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+
+                                                    $(document).ready(function() {
+                                                        $("#deletemymagic").click(function() {
+                                                            const url = "{{ route('delete_mymagic')}}";
+                                                            myMagicId = $("#mymagic_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'mymagic_id': myMagicId,
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Magia removida com sucesso!");
                                                                     location.reload();
                                                                 }
 

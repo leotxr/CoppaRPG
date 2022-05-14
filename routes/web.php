@@ -45,6 +45,12 @@ Route::get('load_mytalent', 'App\Http\Controllers\CharController@infomytalent')-
 Route::get('add_talent', 'App\Http\Controllers\CharController@addtalent')->name('add_talent');
 Route::get('load_talents', 'App\Http\Controllers\CharController@infotalent')->name('load_talents');
 
+//ROTAS RELACIONADAS AS INSERCOES DE MAGIAS AO PERSONAGEM COM USO DE AJAX
+Route::get('delete_mymagic', 'App\Http\Controllers\CharController@delmymagic')->name('delete_mymagic');
+Route::get('load_mymagic', 'App\Http\Controllers\CharController@infomymagic')->name('load_mymagic');
+Route::get('add_magic', 'App\Http\Controllers\CharController@addmagic')->name('add_magic');
+Route::get('load_magics', 'App\Http\Controllers\CharController@infomagic')->name('load_magics');
+
 //ROTAS DE CARREGAMENTO DE INFORMACOES DE OBJETOS
 Route::get('load_armors', 'App\Http\Controllers\CharController@infoarmor')->name('load_armors');
 Route::get('load_shields', 'App\Http\Controllers\CharController@infoshield')->name('load_shields');

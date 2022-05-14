@@ -35,12 +35,12 @@ function getMod(valor) {
 }
 //pega os valores do input
 function calcularCusto() {
-  var str = document.formCad.str.value;
-  var dex = document.formCad.dex.value;
-  var con = document.formCad.con.value;
-  var int = document.formCad.int.value;
-  var wiz = document.formCad.wiz.value;
-  var cha = document.formCad.cha.value;
+  var str = document.formEdit.str.value;
+  var dex = document.formEdit.dex.value;
+  var con = document.formEdit.con.value;
+  var int = document.formEdit.int.value;
+  var wiz = document.formEdit.wiz.value;
+  var cha = document.formEdit.cha.value;
 
   //mostra o calculo nos inputs de modificadores
   document.getElementById('modstr').value = getMod(str);

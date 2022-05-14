@@ -388,7 +388,7 @@ class CharController extends Controller
         {
             $dataForm = $request->all();
             $mytalent_id = $dataForm['mytalent_id'];
-            $sql = "Delete from char_weapons ";
+            $sql = "Delete from char_talents ";
             $sql = $sql . " WHERE talent_id = '$mytalent_id'  ";
             $talents = DB::delete($sql);
             return redirect()->back();
@@ -409,6 +409,53 @@ class CharController extends Controller
             else redirect('chars');
         }
         // FIM DAS FUNCOES DO TALENTO
+
+                // FUNCOES UTILIZADAS PELO AJAX PARA MOSTRAR, INSERIR E DELETAR MAGIAS DO PERSONAGEM
+                public function infomagic(Request $request)
+                {
+                    $dataForm = $request->all();
+                    $magic_id = $dataForm['magic_id'];
+                    $sql = "Select * from magics ";
+                    $sql = $sql . " WHERE id = '$magic_id'  ";
+                    $magics = DB::select($sql);
+                    return view('magic', ['magics' => $magics]);
+                }
+            
+                public function infomymagic(Request $request)
+                {
+                    $dataForm = $request->all();
+                    $mymagic_id = $dataForm['mymagic_id'];
+                    $sql = "Select * from magics ";
+                    $sql = $sql . " WHERE id = '$mymagic_id'  ";
+                    $magics = DB::select($sql);
+                    return view('magic', ['magics' => $magics]);
+                }
+            
+                public function delmymagic(Request $request)
+                {
+                    $dataForm = $request->all();
+                    $mymagic_id = $dataForm['mymagic_id'];
+                    $sql = "Delete from char_magics ";
+                    $sql = $sql . " WHERE magic_id = '$mymagic_id'  ";
+                    $magics = DB::delete($sql);
+                    return redirect()->back();
+                }
+            
+                public function addmagic(Request $request)
+                {
+                    $char_id = $request->input('char_id');
+                    $dataForm = $request->all();
+                    $magic_id = $dataForm['magic_id'];
+                        $magics = DB::table('char_magics')->insert([
+                            'char_id' => $char_id,
+                            'magic_id' => $magic_id
+                        ]);
+                    
+                    if ($magics)
+                        return redirect('chars');
+                    else redirect('chars');
+                }
+                // FIM DAS FUNCOES DA MAGIA
 
     public function infoarmor(Request $request)
     {
