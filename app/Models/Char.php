@@ -40,6 +40,7 @@ class Char extends Model
         'modint',
         'modwiz',
         'modcha',
+        'grab',
         'pv',
         'actpv',
         'dv',

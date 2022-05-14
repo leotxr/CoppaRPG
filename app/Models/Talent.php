@@ -23,3 +23,4 @@ class Talent extends Model
         return $this->belongsToMany(Char::class, 'char_talents');
     }
 }
+

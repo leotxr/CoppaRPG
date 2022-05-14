@@ -13,7 +13,7 @@ class CreateTalentTable extends Migration
      */
     public function up()
     {
-        Schema::create('talents', function (Blueprint $table) {
+        Schema::create('talent', function (Blueprint $table) {
             $table->bigIncrements('id')->unique();
             $table->string('name')->nullable();
             $table->string('desc')->nullable();
@@ -31,6 +31,6 @@ class CreateTalentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('talents');
+        Schema::dropIfExists('talent');
     }
 }

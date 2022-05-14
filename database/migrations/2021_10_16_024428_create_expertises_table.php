@@ -16,6 +16,7 @@ class CreateExpertisesTable extends Migration
         Schema::create('expertises', function (Blueprint $table) {
 
             $table->bigIncrements('id')->unique();
+            $table->unsignedBigInteger('char_id')->unsigned();
             $table->integer('abrirT')->nullable();
             $table->integer('abrirG')->nullable();
             $table->integer('abrirO')->nullable();
@@ -186,6 +187,11 @@ class CreateExpertisesTable extends Migration
             $table->string('otherK2')->nullable();
 
             $table->timestamps();
+
+            $table->foreign('char_id')->references('id')
+            ->on('chars')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 
         });
     }

@@ -18,8 +18,9 @@ class CreateCharWeaponsTable extends Migration
             $table->foreignId('weapon_id')->constrained();
             $table->string('observation')->nullable();
             $table->integer('bba_total')->nullable();
-            $table->integer('bba_total')->nullable();
+            $table->integer('ammu')->nullable();
             $table->timestamps();
+
         });
     }
 

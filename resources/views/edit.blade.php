@@ -79,11 +79,11 @@
 
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                                    <!-- Heroicon name: solid/calendar -->
+                                    <!-- Heroicon name: solid/heart -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
-
+                                    {{$char->actpv ?? ''}}
                                 </div>
                             </div>
                         </div>
@@ -155,7 +155,6 @@
                 </h2>
 
             </x-slot>
-
 
 
             <!--STEPS DA CRIACAO-->
@@ -1291,7 +1290,7 @@
                                     <div class="md:grid md:grid-cols-3 md:gap-6">
                                         <div class="md:col-span-1">
                                             <div class="px-4 sm:px-0">
-                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Mochila</h3>
+                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Inventário</h3>
                                                 <p class="mt-1 text-sm text-gray-600">
                                                     Mochila do personagem
                                                 </p>

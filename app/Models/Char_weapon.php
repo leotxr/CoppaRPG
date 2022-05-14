@@ -9,7 +9,9 @@ class Char_weapon extends Model
 {
     protected $table = 'char_weapons';
     protected $fillable = [
-        'observation'
+        'observation',
+        'bba_total',
+        'ammu'
     ];
     use HasFactory;
 }

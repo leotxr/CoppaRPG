@@ -16,6 +16,8 @@ class CreateCharMagicsTable extends Migration
         Schema::create('char_magics', function (Blueprint $table) {
             $table->foreignId('char_id')->constrained();
             $table->foreignId('magic_id')->constrained();
+            $table->integer('slots')->nullable();
+            $table->integer('qpd')->nullable();
             $table->timestamps();
         });
     }

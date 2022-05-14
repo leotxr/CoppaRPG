@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ShieldController extends Controller
 {
@@ -80,5 +81,15 @@ class ShieldController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function infoshield(Request $request)
+    {
+        $dataForm = $request->all();
+        $shield_id = $dataForm['shield_id'];
+        $sql = "Select * from shields ";
+        $sql = $sql . " WHERE id = '$shield_id'  ";
+        $shields = DB::select($sql);
+        return view('shields', ['shields' => $shields]);
     }
 }

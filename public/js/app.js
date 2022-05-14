@@ -173,6 +173,16 @@ function mostrarModalTalentos() {
 
 }
 
+function mostrarModalMagias() {
+  var modal = document.getElementById("modal_magics");
+  if (modal.style.display === "none") {
+    modal.style.display = "block";
+  } else if (modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+
+}
+
 
 //mostrar div modificadores
 function showdivmods() {

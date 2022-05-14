@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ArmorController extends Controller
 {
@@ -80,5 +81,15 @@ class ArmorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function infoarmor(Request $request)
+    {
+        $dataForm = $request->all();
+        $armor_id = $dataForm['armor_id'];
+        $sql = "Select * from armors ";
+        $sql = $sql . " WHERE id = '$armor_id'  ";
+        $armors = DB::select($sql);
+        return view('armors', ['armors' => $armors]);
     }
 }
