@@ -181,8 +181,9 @@ class Expertise extends Model
     ];
     use HasFactory;
 
-    public function relChars()
+    public function relChar()
     {
-        return $this->hasOne(Char::class);
+        return $this->hasOne('App\Models\Char', 'id', 'char_id');
+
     }
 }

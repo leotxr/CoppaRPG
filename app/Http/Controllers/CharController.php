@@ -154,6 +154,10 @@ class CharController extends Controller
 
         ]);
 
+        $cadexp = Expertise::create([
+            'char_id' => $cad->id
+        ]);
+
 
         /*
         $cad->weapons()->attach(
@@ -202,9 +206,13 @@ class CharController extends Controller
         $shields = Shield::all();
         $talents = Talent::all();
         $skills = Skill::all();
-        $magics = Magic::all();
+        $magics = Magic::all();   
+        $sql = "Select id from expertises WHERE char_id = '$char->id' ";
+        $expertises = DB::select($sql);
+        
+        
 
-        return view('edit', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'talents', 'skills', 'magics', 'char_weapons'));
+        return view('edit', compact('char', 'users', 'breeds', 'classes', 'weapons', 'armors', 'shields', 'talents', 'skills', 'magics', 'char_weapons', 'expertises'));
     }
 
     /**

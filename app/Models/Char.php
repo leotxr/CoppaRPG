@@ -16,7 +16,6 @@ class Char extends Model
         'breed_id',
         'class_id',
         'weapon_id',
-        'expertise_id',
         'armor_id',
         'shield_id',
         'level',
@@ -136,11 +135,13 @@ class Char extends Model
 
     }
 
+    /*
     public function relExpertises()
     {
         return $this->hasOne('App\Models\Expertise', 'id', 'expertise_id');
 
     }
+    */
 
     /**
      * @param  \App\Models\Char  $query

@@ -92,19 +92,18 @@ function mostrarDivInfo() {
 }
 
 
-//esconde a div pericias e mostra a anterior
+//esconde a div equipamentos e mostra a anterior
 function mostrarDivPericias() {
   var info = document.getElementById("info");
-  var pericias = document.getElementById("pericias");
   var equipamentos = document.getElementById("equipamentos");
-  var talentos = document.getElementById("talentos");
-  var magias = document.getElementById("magias");
+  var especiais = document.getElementById("especiais");
+  var pericias = document.getElementById("pericias");
   if (pericias.style.display === "none") {
-    info.style.display = "none";
     pericias.style.display = "block";
+    info.style.display = "none";
     equipamentos.style.display = "none";
-    talentos.style.display = "none";
-    magias.style.display = "none";
+    especiais.style.display = "none";
+
 
   }
 
@@ -115,10 +114,13 @@ function mostrarDivEquipamentos() {
   var info = document.getElementById("info");
   var equipamentos = document.getElementById("equipamentos");
   var especiais = document.getElementById("especiais");
+  var pericias = document.getElementById("pericias");
   if (equipamentos.style.display === "none") {
-    info.style.display = "none";
+    pericias.style.display = "none";
     equipamentos.style.display = "block";
+    info.style.display = "none";
     especiais.style.display = "none";
+
 
 
   }
@@ -130,10 +132,12 @@ function mostrarDivEspeciais() {
   var info = document.getElementById("info");
   var equipamentos = document.getElementById("equipamentos");
   var especiais = document.getElementById("especiais");
+  var pericias = document.getElementById("pericias");
   if (especiais.style.display === "none") {
     especiais.style.display = "block";
     info.style.display = "none";
     equipamentos.style.display = "none";
+    pericias.style.display = "none";
 
 
   }

@@ -7,10 +7,10 @@
 <x-app-layout>
 
     @if (isset ($char))
-    <form name="formEdit" id="formEdit" method="post" action="/chars/{{$char->id}}" data-weapons-url="{{ route('load_weapons')}}">
+    <form name="formEdit" id="formEdit" method="post" action="/chars/{{$char->id}}">
         @method('PUT')
         @else
-        <form name="formCad" id="formCad" method="post" action="{{url('chars')}}" data-weapons-url="{{ route('load_weapons')}}">
+        <form name="formCad" id="formCad" method="post" action="{{url('chars')}}">
             @endif
             @csrf
 
@@ -679,7 +679,7 @@
                                             </button>
                                         </a>
                                         <div class="flex-auto flex flex-row-reverse">
-                                            <button onclick="mostrarDivEquipamentos()" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                            <button onclick="mostrarDivPericias()" class=" mx-3 bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                                                 Continuar
                                             </button>
                                         </div>
@@ -691,6 +691,32 @@
                 </div>
             </div>
 
+            <!-- PERICIAS -->
+            <div id="pericias" style="display: none;">
+                <button type="button" id="botaoteste">teste</button>
+                @foreach ($expertises as $expertise)
+                <p> {{$expertise->id}}</p>
+                @endforeach
+            </div>
+
+            <script>
+                $("#botaoteste").click(function() {
+                    const url = "{{ route('show_my_expertises')}}";
+                    charId = $("#char_id").val();
+
+                    $.ajax({
+                        url: url,
+                        data: {
+                            'char_id': charId
+
+                        },
+                        success: function(data) {
+                            $("#pericias").html(data);
+                        }
+
+                    });
+                });
+            </script>
             <!--EQUIPAMENTOS-->
 
             <div id="equipamentos" class="equipamentos" style="display: none">
@@ -1312,7 +1338,7 @@
                 </div>
                 <div class="mt-8 p-4">
                     <div class="flex p-2 mt-4">
-                        <button onclick="mostrarDivInfo()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                        <button onclick="mostrarDivPericias()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                             Voltar
                         </button>
                         <div class="flex-auto flex flex-row-reverse">
@@ -1728,11 +1754,20 @@
 
                                         </div>
 
+                                        <div class="mt-8 p-4">
+                                            <div class="flex p-2 mt-4">
+                                                <button onclick="mostrarDivEquipamentos()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                                    Voltar
+                                                </button>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 

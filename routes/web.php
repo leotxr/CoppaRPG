@@ -51,6 +51,11 @@ Route::get('load_mymagic', 'App\Http\Controllers\MagicController@infomymagic')->
 Route::get('add_magic', 'App\Http\Controllers\MagicController@addmagic')->name('add_magic');
 Route::get('load_magics', 'App\Http\Controllers\MagicController@infomagic')->name('load_magics');
 
+//ROTAS RELACIONADAS AS INSERCOES DE PERICIAS AO PERSONAGEM COM USO DE AJAX
+Route::get('show_expertises_table', 'App\Http\Controllers\ExpertiseController@infoexpertisestable')->name('show_expertises_table');
+Route::get('show_my_expertises', 'App\Http\Controllers\ExpertiseController@infomyexpertises')->name('show_my_expertises');
+Route::get('update_exp', 'App\Http\Controllers\ExpertiseController@update_exp')->name('update_exp');
+
 //ROTAS DE CARREGAMENTO DE INFORMACOES DE OBJETOS
 Route::get('load_armors', 'App\Http\Controllers\ArmorController@infoarmor')->name('load_armors');
 Route::get('load_shields', 'App\Http\Controllers\ShieldController@infoshield')->name('load_shields');
