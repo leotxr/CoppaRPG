@@ -83,10 +83,12 @@ function mostrarDivInfo() {
   var info = document.getElementById("info");
   var equip = document.getElementById("equipamentos");
   var especiais = document.getElementById("especiais");
+  var pericias = document.getElementById("pericias");
   if (info.style.display === "none") {
     info.style.display = "block";
     equip.style.display = "none";
     especiais.style.display = "none";
+    pericias.style.display = "none";
   }
 
 }
@@ -242,6 +244,19 @@ function somaPericia() {
   var totalhab = parseInt(modhability) + parseInt(graduation) + parseInt(otherexpertise);
 
   document.getElementById('totalhab').value = totalhab;
+}
+
+
+function somaBBA() {
+  var modstr = document.formEdit.modstr.value;
+  var bba = document.formEdit.bba.value;
+  var bonustalent = document.formEdit.bonustalent.value;
+  var otherbonus = document.formEdit.otherbonus.value;
+  var bba_wp = document.getElementById('bba_wp').value
+
+  var bbatotal = parseInt(modstr) + parseInt(bba) + parseInt(bonustalent) + parseInt(otherbonus) + parseInt(bba_wp);
+
+  document.getElementById('bbatotal').value = bbatotal;
 }
 
 function carregarTabela() {

@@ -155,6 +155,39 @@
                 </h2>
 
             </x-slot>
+            <!-- Menu deslizante para acessar as divs -->
+            <div class="flex flex-col">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="py-1 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="col-span-1 sm:col-span-1">
+                                            <label onclick="mostrarDivInfo()" class="block text-sm font-medium">Info</label>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label onclick="mostrarDivPericias()" class="block text-sm font-medium">Pericias</label>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label onclick="mostrarDivEquipamentos()" class="block text-sm font-medium">Equips</label>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label onclick="mostrarDivEspeciais()" class="block text-sm font-medium">Especiais</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <!--STEPS DA CRIACAO-->
@@ -182,10 +215,6 @@
                                         </div>
                                     </div>
                                     <div class="mt-5 md:mt-0 md:col-span-2">
-
-
-
-
                                         <div class="shadow overflow-hidden sm:rounded-md">
                                             <div class="px-4 py-5 bg-white sm:p-6">
                                                 <div class="grid grid-cols-6 gap-6">
@@ -359,7 +388,7 @@
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="str" class="block text-sm font-bold text-indigo-700">Força</label>
-                                                            <input type="number" value="{{$char->str ?? ''}}" onchange="calcularCusto(this)" onblur="valida(this)" name="str" id="str" autocomplete="str" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->str ?? ''}}" onchange="calcularCusto()" onblur="valida(this)" name="str" id="str" autocomplete="str" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
@@ -694,13 +723,10 @@
             <!-- PERICIAS -->
             <div id="pericias" style="display: none;">
                 <button type="button" id="botaoteste">teste</button>
-                @foreach ($expertises as $expertise)
-                <p> {{$expertise->id}}</p>
-                @endforeach
             </div>
 
             <script>
-                $("#botaoteste").click(function() {
+                $("#pericias").ready(function() {
                     const url = "{{ route('show_my_expertises')}}";
                     charId = $("#char_id").val();
 
@@ -938,12 +964,6 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                                            <div class="col-span-3 sm:col-span-3">
-                                                                <label for="modstrwp" class="block text-sm font-bold text-gray-700">Mod.Forca</label>
-                                                                <input type="number" value="{{$char->modstr ?? ''}}" name="modstrwp" id="modstrwp" autocomplete="modstrwp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                            </div>
-                                                        </div>
                                                         <button type="button" id="showinfoweapon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -952,6 +972,50 @@
                                                         </button>
                                                     </div>
                                                 </div>
+
+                                                <div class="flex flex-col">
+                                                    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                                        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                                                            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                                                                <table class="min-w-full divide-y divide-gray-200">
+                                                                    <tr>
+                                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                                            <div class="col-span-1 sm:col-span-1">
+                                                                                <label for="bbatotal" class="block text-sm font-medium">Bonus Total</label>
+                                                                                <input readonly type="number" value="" name="bbatotal" id="bbatotal" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                                            <div class="col-span-2 sm:col-span-1">
+                                                                                <label for="modstrwp" class="block text-sm font-medium">Mod. de Forca</label>
+                                                                                <input readonly type="number" value="{{$char->modstr ?? ''}}" onchange="somaBBA(this)" name="modstrwp" id="modstrwp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                                            <div class="col-span-2 sm:col-span-1">
+                                                                                <label for="bba" class="block text-sm font-medium">Bonus Base</label>
+                                                                                <input type="number" value="{{$char->bba ?? ''}}" onchange="somaBBA(this)" name="bba" id="bba" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                                            <div class="col-span-2 sm:col-span-1">
+                                                                                <label for="bonustalent" class="block text-sm font-medium">Bonus de Talento</label>
+                                                                                <input type="number" value="" name="bonustalent" onchange="somaBBA(this)" id="bonustalent" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                                            <div class="col-span-2 sm:col-span-1">
+                                                                                <label for="otherbonus" class="block text-sm font-medium">Outro</label>
+                                                                                <input type="number" value="" name="otherbonus" onchange="somaBBA(this)" id="otherbonus" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
 
                                                 <!-- AJAX PARA MOSTRAR O SELECT COM AS INFORMACOES DA ARMA SELECIONADA -->
                                                 <script>
@@ -965,7 +1029,7 @@
                                                                     'weapon_id': weaponId,
                                                                 },
                                                                 success: function(data) {
-                                                                    $("#charinfo").html(data);
+                                                                    $("#wpinfo").html(data);
 
                                                                 }
 
@@ -977,13 +1041,14 @@
                                                             weaponId = $("#weapon_id").val();
                                                             charId = $("#char_id").val();
                                                             observation = $("#observation").val();
-
+                                                            bbaTotal = $("#bbatotal").val();
                                                             $.ajax({
                                                                 url: url,
                                                                 data: {
                                                                     'weapon_id': weaponId,
                                                                     'char_id': charId,
                                                                     'observation': observation,
+                                                                    'bbatotal': bbaTotal,
                                                                 },
                                                                 success: function(data) {
                                                                     alert("Arma adicionada. Salve as alterações e atualize a página para ver.");
@@ -997,7 +1062,7 @@
                                                 </script>
 
                                                 <!-- INFORMAÇÕES SAO MOSTRADAS NESTA DIV -->
-                                                <div id="charinfo">
+                                                <div id="wpinfo">
 
                                                 </div>
 
@@ -1568,7 +1633,7 @@
                                     <div class="md:grid md:grid-cols-3 md:gap-6">
                                         <div class="md:col-span-1">
                                             <div class="px-4 sm:px-0">
-                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Talentos</h3>
+                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Magias</h3>
                                                 <p class="mt-1 text-sm text-gray-600">
                                                     Magias do personagem
                                                 </p>

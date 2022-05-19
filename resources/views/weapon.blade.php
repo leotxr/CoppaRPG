@@ -21,8 +21,8 @@
             <dd class=" mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{$weapon->desc}}</dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Modificador de Forca</dt>
-            <input type="number" name="modstrwp" id="modstrwp" autocomplete="modstrwp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+            <dt class="text-sm font-medium text-gray-500">Bonus da arma</dt>
+            <input readonly id="bba_wp" value="{{$weapon->total_bba}}" class=" mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"></input>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <div class="col-span-3 sm:col-span-1">

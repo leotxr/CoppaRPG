@@ -138,7 +138,7 @@ class WeaponController extends Controller
         $char_id = $request->input('char_id');
         $dataForm = $request->all();
         $myweapon_id = $dataForm['myweapon_id'];
-        $sql = "Select weapons.name, weapons.desc, weapons.damage, char_weapons.observation, chars.modstr FROM char_weapons ";
+        $sql = "Select weapons.*, char_weapons.* FROM char_weapons ";
         $sql = $sql . " INNER JOIN weapons ON char_weapons.weapon_id = weapons.id  ";
         $sql = $sql . " INNER JOIN chars ON char_weapons.char_id = chars.id  ";
         $sql = $sql . " WHERE chars.id = '$char_id' AND weapons.id = '$myweapon_id'";
@@ -158,6 +158,7 @@ class WeaponController extends Controller
 
     public function addweapon(Request $request)
     {
+        $bbaTotal = $request->input('bbatotal');
         $observation = $request->input('observation');
         $char_id = $request->input('char_id');
         $dataForm = $request->all();
@@ -169,7 +170,9 @@ class WeaponController extends Controller
             $weapons = DB::table('char_weapons')->insert([
                 'char_id' => $char_id,
                 'weapon_id' => $weapon_id,
-                'observation' => $observation
+                'observation' => $observation,
+                'bba_total' => $bbaTotal
+                
             ]);
         }
         if ($weapons)
