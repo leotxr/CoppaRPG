@@ -18,6 +18,8 @@ class CreateSkillsTable extends Migration
             $table->string('name')->nullable();
             $table->string('desc')->nullable();
             $table->string('type')->nullable();
+            $table->integer('class_id')->nullable();
+            $table->integer('level')->nullable();
             $table->timestamps();
         });
     }

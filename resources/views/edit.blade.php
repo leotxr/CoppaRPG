@@ -76,7 +76,7 @@
                                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
                                     </svg>
-
+                                    {{$char->gp ?? ''}} PO
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <!-- Heroicon name: solid/heart -->
@@ -226,12 +226,18 @@
 
                                                     <div class="col-span-3 sm:col-span-1">
                                                         <label for="level" class="block text-sm font-medium text-gray-700">Nivel</label>
-                                                        <select onmouseup="calcAttrClasses(), calcularResistencia()" name="level" id="level" autocomplete="level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                            <option value="{{$char->level ?? ''}}">{{$char->level ?? 'Selecione'}}</option>
-                                                            @for($i=1; $i<=20; $i++) @php $value=$i; @endphp <option value="{{$i}}">{{$i}}</option>
-                                                                @endfor
-
-                                                        </select>
+                                                        <button type="button" id="levelup">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                            </svg>
+                                                        </button>
+                                                        <input onmouseup="calcAttrClasses(), calcularResistencia()" type="number" name="level" value="{{$char->level ?? '1'}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        <button type="button" id="leveldown">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
                                                     </div>
 
 
@@ -615,7 +621,7 @@
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="basefor" class="block text-sm font-medium text-red-700">Base</label>
-                                                            <input type="number" value="{{$char->basefor ?? '0'}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input type="number" value="{{$char->basefor ?? ''}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
@@ -951,7 +957,7 @@
                                             <div class="shadow overflow-hidden sm:rounded-md">
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
-                                                        <div class="col-span-6 sm:col-span-3">
+                                                        <div class="col-span-5 sm:col-span-5">
                                                             @if (empty($char))
                                                             <label for="weapons" class="block text-sm font-medium text-gray-700">Selecione uma arma inicial</label>
                                                             @else
@@ -964,14 +970,22 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <button type="button" id="showinfoweapon">
+                                                        <button type="button" id="showinfoweapon" class="whitespace-nowrap">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                             </svg>
                                                         </button>
+
+                                                        <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                                                            <label for="grab" class="block text-sm font-medium">Agarrar</label>
+                                                            <input readonly type="number" onclick="somaGrab(this)" value="{{$char->grab ?? ''}}" name="grab" id="grab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                        </div>
                                                     </div>
+
+
                                                 </div>
+
 
                                                 <div class="flex flex-col">
                                                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -1020,6 +1034,7 @@
                                                 <!-- AJAX PARA MOSTRAR O SELECT COM AS INFORMACOES DA ARMA SELECIONADA -->
                                                 <script>
                                                     $(document).ready(function() {
+
                                                         $("#showinfoweapon").click(function() {
                                                             const url = "{{ route('load_weapons')}}";
                                                             weaponId = $("#weapon_id").val();
@@ -1372,28 +1387,63 @@
                 <!-- FIM ESCUDO -->
 
                 <!--MOCHILA DO PERSONAGEM-->
-                <div class="py-12" id="mochila">
+                <div class="py-12" id="armadura">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 bg-white border-b border-gray-200">
 
+                            <div class="p-6 bg-white border-b border-gray-200">
                                 <div class="mt-10 sm:mt-0">
                                     <div class="md:grid md:grid-cols-3 md:gap-6">
                                         <div class="md:col-span-1">
                                             <div class="px-4 sm:px-0">
                                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Inventário</h3>
                                                 <p class="mt-1 text-sm text-gray-600">
-                                                    Mochila do personagem
+                                                    Itens da mochila.
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="flex justify-center">
-                                            <div class="mb-3 xl:w-96">
-                                                <label for="bag" class="form-label inline-block mb-2 text-gray-700">Mochila</label>
-                                                <textarea name="bag" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="bag" rows="3">{{$char->bag ?? 'Nada'}}</textarea>
-                                            </div>
-                                        </div>
+                                        <div class="mt-5 md:mt-0 md:col-span-2">
 
+                                            <div class="shadow overflow-hidden sm:rounded-md">
+                                                <div class="px-4 py-5 bg-white sm:p-6">
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-6 sm:col-span-3">
+                                                            <div class="flex justify-center">
+                                                                <div class="mb-3 xl:w-96">
+                                                                    <label for="bag" class="form-label inline-block mb-2 text-gray-700">Mochila</label>
+                                                                    <textarea name="bag" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="bag" rows="3">{{$char->bag ?? 'Nada'}}</textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" id="showallitens">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                                            </svg>
+                                                        </button>
+
+                                                    </div>
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                                                            <label for="gp" class="block text-sm font-medium text-gray-700">Peças de Ouro</label>
+                                                            <input type="number" value="{{$char->gp ?? ''}}" name="gp" id="gp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        </div>
+
+                                                        <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                                                            <label for="sp" class="block text-sm font-medium text-gray-700">Peças de Prata</label>
+                                                            <input type="number" value="{{$char->sp ?? ''}}" name="sp" id="sp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        </div>
+
+                                                        <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                                                            <label for="cp" class="block text-sm font-medium text-gray-700">Peças de Cobre</label>
+                                                            <input type="number" value="{{$char->cp ?? ''}}" name="cp" id="cp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1701,6 +1751,25 @@
                                                             });
                                                         });
 
+                                                        $("#magias").ready(function() {
+                                                            const url = "{{ route('magicbyclass')}}";
+
+                                                            classId = $("#class_id").val();
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+
+                                                                    'class_id': classId
+
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#magic_id").html(data);
+                                                                }
+
+                                                            });
+                                                        });
+
                                                     });
                                                 </script>
 
@@ -1709,7 +1778,7 @@
 
                                                 </div>
 
-                                                <!-- BOTAO MOSTRAR MINHAS ARMAS -->
+                                                <!-- BOTAO MOSTRAR MINHAS MAGIAS -->
                                                 <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
                                                     <button type="button" onclick="mostrarModalMagias()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                                         Magias aprendidas
@@ -1723,7 +1792,7 @@
                                                     </button>
                                                 </div>
 
-                                                <!-- INICIO MODAL MEUS TALENTOS -->
+                                                <!-- INICIO MODAL MINHAS MAGIAS -->
                                                 <div id="modal_magics" class="fixed z-10 inset-0 overflow-y-auto bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
                                                     <div class="flex items-end justify-center min-h-screen pt-10 px-10 pb-20 text-center sm:block sm:p-0">
 
@@ -1819,6 +1888,234 @@
 
                                         </div>
 
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- HABILIDADES -->
+                <div class="py-12" id="skills">
+                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 bg-white border-b border-gray-200">
+
+                                <div class="mt-10 sm:mt-0">
+                                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                                        <div class="md:col-span-1">
+                                            <div class="px-4 sm:px-0">
+                                                <h3 class="text-lg font-medium leading-6 text-gray-900">Habilidades Herdadas</h3>
+                                                <p class="mt-1 text-sm text-gray-600">
+                                                    Habilidades herdadas da classe.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-5 md:mt-0 md:col-span-2">
+                                            <!-- SELECT HABILIDADES -->
+
+                                            <div class="shadow overflow-hidden sm:rounded-md">
+                                                <div class="px-4 py-5 bg-white sm:p-6">
+                                                    <div class="grid grid-cols-6 gap-6">
+                                                        <div class="col-span-6 sm:col-span-3">
+                                                            <label for="skills" class="block text-sm font-medium text-gray-700">Habilidades</label>
+                                                            <select enabled id="skill_id" name="skill_id" autocomplete="skill" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                                <option>Selecione</option>
+                                                                @foreach($skills as $skill)
+                                                                <option value="{{$skill->id}}">{{$skill->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <button type="button" id="showinfoskill">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- AJAX PARA MOSTRAR O SELECT COM AS INFORMACOES DO TALENTO SELECIONADO -->
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showinfoskill").click(function() {
+                                                            const url = "{{ route('load_skills')}}";
+                                                            skillId = $("#skill_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'skill_id': skillId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#skillinfo").html(data);
+
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                        $("#addskill").click(function() {
+                                                            const url = "{{ route('add_skill')}}";
+                                                            skillId = $("#skill_id").val();
+                                                            charId = $("#char_id").val();
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'skill_id': skillId,
+                                                                    'char_id': charId
+
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Habilidade aprendida!");
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                        $("#skills").ready(function() {
+                                                            const url = "{{ route('skillbylevel')}}";
+
+                                                            classId = $("#class_id").val();
+                                                            level = $("#level").val();
+
+
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+
+                                                                    'class_id': classId,
+                                                                    'level': level
+
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#skill_id").html(data);
+                                                                }
+
+                                                            });
+                                                        });
+
+                                                    });
+                                                </script>
+
+                                                <!-- INFORMAÇÕES SAO MOSTRADAS NESTA DIV -->
+                                                <div id="skillinfo">
+
+                                                </div>
+
+                                                <!-- BOTAO MOSTRAR MINHAS MAGIAS -->
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
+                                                    <button type="button" onclick="mostrarModalSkills()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Habilidades aprendidas
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
+                                                    <button id="addskill" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        Adicionar
+                                                    </button>
+                                                </div>
+
+                                                <!-- INICIO MODAL MINHAS HABILIDADES -->
+                                                <div id="modal_skills" class="fixed z-10 inset-0 overflow-y-auto bg-opacity-75" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+                                                    <div class="flex items-end justify-center min-h-screen pt-10 px-10 pb-20 text-center sm:block sm:p-0">
+
+                                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                                        <!-- This element is to trick the browser into centering the modal contents. -->
+                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                                                        <div class="relative inline-block align-bottom bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <div class="sm:flex sm:items-start">
+                                                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                                        <!-- Heroicon name: outline/exclamation -->
+                                                                        <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center">
+                                                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Habilidades</h3>
+                                                                        <div class="mt-2">
+                                                                            @if (isset($char))
+                                                                            <div class="px-4 py-5 bg-white sm:p-6">
+                                                                                <div class="grid grid-cols-6 gap-6">
+                                                                                    <div class="col-span-6 sm:col-span-6">
+                                                                                        <select id="myskill_id" name="myskill_id" autocomplete="skill" class="mt-1 block w-full py-2 px-50 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-x">
+                                                                                            <option>Selecione</option>
+                                                                                            @foreach ($char->skills as $skill)
+                                                                                            <option value="{{$skill->id}}">{{$skill->name}}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            @else
+                                                                            <label>Voce ainda nao tem habilidades...!</label>
+                                                                            @endif
+                                                                            <div id="myskillinfo">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                                <button type="button" id="deletemyskill" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Excluir</button>
+                                                                <button type="button" id="showmyskill" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-indigo-400 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Visualizar</button>
+                                                                <button type="button" onclick="mostrarModalSkills()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $("#showmyskill").click(function() {
+                                                            const url = "{{ route('load_myskill')}}";
+                                                            mySkillId = $("#myskill_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'myskill_id': mySkillId,
+                                                                },
+                                                                success: function(data) {
+                                                                    $("#myskillinfo").html(data);
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+
+                                                    $(document).ready(function() {
+                                                        $("#deletemyskill").click(function() {
+                                                            const url = "{{ route('delete_myskill')}}";
+                                                            mySkillId = $("#myskill_id").val();
+                                                            $.ajax({
+                                                                url: url,
+                                                                data: {
+                                                                    'myskill_id': mySkillId,
+                                                                },
+                                                                success: function(data) {
+                                                                    alert("Habilidade removida com sucesso!");
+                                                                    location.reload();
+                                                                }
+
+                                                            });
+                                                        });
+                                                    });
+                                                </script>
+                                                <!-- Fim Modal -->
+
+                                            </div>
+
+
+                                        </div>
+
                                         <div class="mt-8 p-4">
                                             <div class="flex p-2 mt-4">
                                                 <button onclick="mostrarDivEquipamentos()" class="bg-gray-200 text-gray-800 active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
@@ -1845,5 +2142,9 @@
         @endif
         </div>
 
+        <script>
 
+
+
+        </script>
 </x-app-layout>

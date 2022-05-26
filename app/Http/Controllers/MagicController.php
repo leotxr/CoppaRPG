@@ -97,6 +97,17 @@ class MagicController extends Controller
     }
 
     // FUNCOES UTILIZADAS PELO AJAX PARA MOSTRAR, INSERIR E DELETAR MAGIAS DO PERSONAGEM
+
+    public function magicbyclass(Request $request)
+    {
+        $dataForm = $request->all();
+        $class_id = $dataForm['class_id'];
+        $sql = "Select * from magics ";
+        $sql = $sql . " WHERE class_name = '$class_id'  ";
+        $magics = DB::select($sql);
+        return view('magicbyclass', ['magics' => $magics]);
+    }
+
     public function infomagic(Request $request)
     {
         $dataForm = $request->all();

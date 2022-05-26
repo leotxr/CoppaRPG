@@ -1,24 +1,61 @@
-$(document).ready(function() {
-  var maximo = 2;   //maximo de 5 campos
-  var i = 1;
-  $('#add_div').click (function(e) {
-    e.preventDefault();  //previne novos cliques
-    if (i < maximo) {
-      $('#idDiv').append('<div>\
-         Cód. Produto: <input type="text" name="codProduto[]"/> Quantidade: <input type="text" name="qtdProduto[]"/>\
-         <a href="#" class="remove">Remover</a>\
-          </div>');
-          i++;
+$(formEdit).ready(function () {
+  const oldlevel = $("#level").val();
+  var class_id = $("#class_id").val();
+  $("#levelup").click(function () {
+    $('#level').get(0).value++;
+    var newlevel = $("#level").val();
+    switch (newlevel) {
+      case '1': {
+        if (class_id = 1) {
+          $('#bba').get(0).value++;
+          $('#basefor').get(0).value = '2';
+          $('#baseref').get(0).value= '0';
+          $('#basewill').get(0).value= '0';
+          break;
+        }
+      }
+      case '2': {
+        if (class_id = 1) {
+          $('#bba').get(0).value++;
+          $('#basefor').get(0).value++;
+          break;
+        }
+      }
+      case '3': {
+        if (class_id = 1) {
+          $('#bba').get(0).value++;
+          $('#baseref').get(0).value++;
+          $('#basewill').get(0).value++;
+          break;
+        }
+      }
+      case '4': {
+        if (class_id = 1) {
+          $('#bba').get(0).value++;
+          $('#basefor').get(0).value++;
+          break;
+        }
+      }
+      case '5': {
+        if (class_id = 1) {
+          $('#bba').get(0).value++;
+          break;
+        }
+      }
+      case '6': {
+        if (class_id = 1) {
+          $('#bba').get(0).value++;
+          $('#basefor').get(0).value++;
+          $('#baseref').get(0).value++;
+          $('#basewill').get(0).value++;
+          break;
+        }
+      }
     }
- });
-
-   // Remove o div anterior
-   $('#idDiv').on("click",".remove",function(e) {
-     e.preventDefault();
-     $(this).parent('div').remove();
-     i--;
-   });
+  });
 });
+
+
 
 
 //realiza o calculo dos valores 
@@ -152,7 +189,7 @@ function mostrarArmaSelect() {
   var dl = document.getElementById("dl_weapons");
   if (dl.style.display === "none") {
     dl.style.display = "block";
-  } else if (dl.style.display === "block"){
+  } else if (dl.style.display === "block") {
     dl.style.display = "none";
   }
 
@@ -259,6 +296,15 @@ function somaBBA() {
   document.getElementById('bbatotal').value = bbatotal;
 }
 
+function somaGrab() {
+  var modstr = document.formEdit.modstr.value;
+  var bba = document.formEdit.bba.value;
+
+  var grabtotal = parseInt(modstr) + parseInt(bba);
+
+  document.getElementById('grab').value = grabtotal;
+}
+
 function carregarTabela() {
   $(document).ready(function () {
     $("btn-pericias").click(function () {
@@ -298,41 +344,7 @@ function calcularResistencia() {
   document.getElementById('will').value = totalwill
 }
 
-function calcAttrClasses() {
-  if ((document.getElementsByName('class_id').value = 'Guerreiro') || (document.getElementsByName('class_id').value = 'Paladino')) {
-    if (document.getElementById('level').value == '1') {
-      document.getElementById('basefor').value = '2';
-      document.getElementById('baseref').value = '0';
-      document.getElementById('basewill').value = '0';
-    } else if (document.getElementById('level').value == '2') {
-      document.getElementById('basefor').value = '3';
-      document.getElementById('baseref').value = '0';
-      document.getElementById('basewill').value = '0';
-    } else if (document.getElementById('level').value == '3') {
-      document.getElementById('baseref').value = '1';
-      document.getElementById('basewill').value = '1';
-    } else if (document.getElementById('level').value == '4') {
-      document.getElementById('basefor').value = '4';
-      document.getElementById('baseref').value = '1';
-      document.getElementById('basewill').value = '1';
-    } else if (document.getElementById('level').value == '6') {
-      document.getElementById('basefor').value = '5';
-      document.getElementById('baseref').value = '2';
-      document.getElementById('basewill').value = '2';
-    } else if (document.getElementById('level').value == '8') {
-      document.getElementById('basefor').value = '6';
-      document.getElementById('baseref').value = '2';
-      document.getElementById('basewill').value = '2';
-    } else if (document.getElementById('level').value == '9') {
-      document.getElementById('baseref').value = '3';
-      document.getElementById('basewill').value = '3';
-    }
-  }else {
-    document.getElementById('basefor').value = '0';
-    document.getElementById('baseref').value = '0';
-    document.getElementById('basewill').value = '0';
-  }
-}
+
 
 //Deletar personagem da tabela
 (function (win, doc) {
@@ -2348,7 +2360,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
@@ -2359,7 +2371,7 @@ function dropdownhead() {
         module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/lib/axios.js");
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/adapters/xhr.js":
 /*!************************************************!*\
@@ -2560,7 +2572,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/axios.js":
 /*!*****************************************!*\
@@ -2628,7 +2640,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/cancel/Cancel.js":
 /*!*************************************************!*\
@@ -2659,7 +2671,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/cancel/CancelToken.js":
 /*!******************************************************!*\
@@ -2728,7 +2740,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/cancel/isCancel.js":
 /*!***************************************************!*\
@@ -2745,7 +2757,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/Axios.js":
 /*!**********************************************!*\
@@ -2905,7 +2917,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/InterceptorManager.js":
 /*!***********************************************************!*\
@@ -2971,7 +2983,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/buildFullPath.js":
 /*!******************************************************!*\
@@ -3003,7 +3015,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/createError.js":
 /*!****************************************************!*\
@@ -3033,7 +3045,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/dispatchRequest.js":
 /*!********************************************************!*\
@@ -3127,7 +3139,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/enhanceError.js":
 /*!*****************************************************!*\
@@ -3181,7 +3193,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/mergeConfig.js":
 /*!****************************************************!*\
@@ -3280,7 +3292,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/settle.js":
 /*!***********************************************!*\
@@ -3317,7 +3329,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/core/transformData.js":
 /*!******************************************************!*\
@@ -3351,7 +3363,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/defaults.js":
 /*!********************************************!*\
@@ -3498,7 +3510,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/bind.js":
 /*!************************************************!*\
@@ -3521,7 +3533,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/buildURL.js":
 /*!****************************************************!*\
@@ -3603,7 +3615,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/combineURLs.js":
 /*!*******************************************************!*\
@@ -3629,7 +3641,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/cookies.js":
 /*!***************************************************!*\
@@ -3694,7 +3706,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/isAbsoluteURL.js":
 /*!*********************************************************!*\
@@ -3720,7 +3732,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/isAxiosError.js":
 /*!********************************************************!*\
@@ -3743,7 +3755,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/isURLSameOrigin.js":
 /*!***********************************************************!*\
@@ -3823,7 +3835,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/normalizeHeaderName.js":
 /*!***************************************************************!*\
@@ -3847,7 +3859,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/parseHeaders.js":
 /*!********************************************************!*\
@@ -3912,7 +3924,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/spread.js":
 /*!**************************************************!*\
@@ -3951,7 +3963,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/helpers/validator.js":
 /*!*****************************************************!*\
@@ -4068,7 +4080,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/lib/utils.js":
 /*!*****************************************!*\
@@ -4429,7 +4441,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
@@ -4442,7 +4454,7 @@ function dropdownhead() {
         __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
 
         /***/
-}),
+      }),
 
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
@@ -4474,7 +4486,7 @@ function dropdownhead() {
         // });
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/lodash/lodash.js":
 /*!***************************************!*\
@@ -21687,7 +21699,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./resources/css/app.css":
 /*!*******************************!*\
@@ -21701,7 +21713,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
@@ -21896,7 +21908,7 @@ function dropdownhead() {
 
 
         /***/
-}),
+      }),
 
 /***/ "./node_modules/axios/package.json":
 /*!*****************************************!*\
@@ -21908,10 +21920,10 @@ function dropdownhead() {
         module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"axios@^0.21","name":"axios","escapedName":"axios","rawSpec":"^0.21","saveSpec":null,"fetchSpec":"^0.21"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_shasum":"c67b90dc0568e5c1cf2b0b858c43ba28e2eda575","_spec":"axios@^0.21","_where":"C:\\\\wamp64\\\\www\\\\copparpg","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"deprecated":false,"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
         /***/
-})
+      })
 
     /******/
-});
+  });
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -21923,14 +21935,14 @@ function dropdownhead() {
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
       /******/
-}
+    }
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
 /******/ 			id: moduleId,
 /******/ 			loaded: false,
 /******/ 			exports: {}
       /******/
-};
+    };
 /******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
@@ -21941,7 +21953,7 @@ function dropdownhead() {
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
     /******/
-}
+  }
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
@@ -21957,7 +21969,7 @@ function dropdownhead() {
 /******/ 				deferred[i] = [chunkIds, fn, priority];
 /******/ 				return;
         /******/
-}
+      }
 /******/ 			var notFulfilled = Infinity;
 /******/ 			for (var i = 0; i < deferred.length; i++) {
 /******/ 				var [chunkIds, fn, priority] = deferred[i];
@@ -21966,26 +21978,26 @@ function dropdownhead() {
 /******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
 /******/ 						chunkIds.splice(j--, 1);
             /******/
-} else {
+          } else {
 /******/ 						fulfilled = false;
 /******/ 						if (priority < notFulfilled) notFulfilled = priority;
             /******/
-}
+          }
           /******/
-}
+        }
 /******/ 				if (fulfilled) {
 /******/ 					deferred.splice(i--, 1)
 /******/ 					var r = fn();
 /******/ 					if (r !== undefined) result = r;
           /******/
-}
+        }
         /******/
-}
+      }
 /******/ 			return result;
       /******/
-};
+    };
     /******/
-})();
+  })();
 /******/
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
@@ -21994,20 +22006,20 @@ function dropdownhead() {
 /******/ 			try {
 /******/ 				return this || new Function('return this')();
         /******/
-} catch (e) {
+      } catch (e) {
 /******/ 				if (typeof window === 'object') return window;
         /******/
-}
+      }
       /******/
-})();
+    })();
     /******/
-})();
+  })();
 /******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
     /******/
-})();
+  })();
 /******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
@@ -22016,12 +22028,12 @@ function dropdownhead() {
 /******/ 			if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
         /******/
-}
+      }
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
       /******/
-};
+    };
     /******/
-})();
+  })();
 /******/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
@@ -22030,9 +22042,9 @@ function dropdownhead() {
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
       /******/
-};
+    };
     /******/
-})();
+  })();
 /******/
 /******/ 	/* webpack/runtime/jsonp chunk loading */
 /******/ 	(() => {
@@ -22045,7 +22057,7 @@ function dropdownhead() {
 /******/ 			"/js/app": 0,
 /******/ 			"css/app": 0
       /******/
-};
+    };
 /******/
 /******/ 		// no chunk on demand loading
 /******/
@@ -22070,31 +22082,31 @@ function dropdownhead() {
 /******/ 					if (__webpack_require__.o(moreModules, moduleId)) {
 /******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
             /******/
-}
+          }
           /******/
-}
+        }
 /******/ 				if (runtime) var result = runtime(__webpack_require__);
         /******/
-}
+      }
 /******/ 			if (parentChunkLoadingFunction) parentChunkLoadingFunction(data);
 /******/ 			for (; i < chunkIds.length; i++) {
 /******/ 				chunkId = chunkIds[i];
 /******/ 				if (__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
 /******/ 					installedChunks[chunkId][0]();
           /******/
-}
+        }
 /******/ 				installedChunks[chunkIds[i]] = 0;
         /******/
-}
+      }
 /******/ 			return __webpack_require__.O(result);
       /******/
-}
+    }
 /******/
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
     /******/
-})();
+  })();
 /******/
 /************************************************************************/
 /******/

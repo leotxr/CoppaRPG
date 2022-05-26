@@ -10,7 +10,9 @@ class Skill extends Model
     protected $table='skills';
     protected $fillable=['name',
     'desc',
-    'type'
+    'type',
+    'level',
+    'class_id'
 ];
     use HasFactory;
 

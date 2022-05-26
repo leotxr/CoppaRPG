@@ -50,6 +50,14 @@ Route::get('delete_mymagic', 'App\Http\Controllers\MagicController@delmymagic')-
 Route::get('load_mymagic', 'App\Http\Controllers\MagicController@infomymagic')->name('load_mymagic');
 Route::get('add_magic', 'App\Http\Controllers\MagicController@addmagic')->name('add_magic');
 Route::get('load_magics', 'App\Http\Controllers\MagicController@infomagic')->name('load_magics');
+Route::get('magicbyclass', 'App\Http\Controllers\MagicController@magicbyclass')->name('magicbyclass');
+
+//ROTAS RELACIONADAS AS INSERCOES DE MAGIAS AO PERSONAGEM COM USO DE AJAX
+Route::get('delete_myskill', 'App\Http\Controllers\SkillController@delmyskill')->name('delete_myskill');
+Route::get('load_myskill', 'App\Http\Controllers\SkillController@infomyskill')->name('load_myskill');
+Route::get('add_skill', 'App\Http\Controllers\SkillController@addskill')->name('add_skill');
+Route::get('load_skills', 'App\Http\Controllers\SkillController@infoskill')->name('load_skills');
+Route::get('skillbylevel', 'App\Http\Controllers\SkillController@skillbylevel')->name('skillbylevel');
 
 //ROTAS RELACIONADAS AS INSERCOES DE PERICIAS AO PERSONAGEM COM USO DE AJAX
 Route::get('show_expertises_table', 'App\Http\Controllers\ExpertiseController@infoexpertisestable')->name('show_expertises_table');

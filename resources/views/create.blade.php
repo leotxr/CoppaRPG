@@ -171,12 +171,7 @@
 
                                                     <div class="col-span-3 sm:col-span-1">
                                                         <label for="level" class="block text-sm font-medium text-gray-700">Nivel</label>
-                                                        <select onload="calcAttrClasses(), calcularResistencia()" name="level" id="level" autocomplete="level" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                            <option value="{{$char->level ?? ''}}">{{$char->level ?? 'Selecione'}}</option>
-                                                            @for($i=1; $i<=20; $i++) @php $value=$i; @endphp <option value="{{$i}}">{{$i}}</option>
-                                                                @endfor
-
-                                                        </select>
+                                                        <input readonly type="text" name="level" value="{{$char->level ?? '0'}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                     </div>
 
 

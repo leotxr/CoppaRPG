@@ -284,6 +284,9 @@ class CharController extends Controller
             'surprise_ca' => $request->surprise_ca,
             'xp' => $request->xp,
             'bag' => $request->bag,
+            'gp' => $request->gp,
+            'sp' => $request->sp,
+            'cp' => $request->cp,
 
         ]);
 
