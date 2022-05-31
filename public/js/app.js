@@ -1,49 +1,80 @@
 $(formEdit).ready(function () {
   const oldlevel = $("#level").val();
   var class_id = $("#class_id").val();
-  $("#levelup").click(function () {
+  //BOTAO PRA SUBIR O NIVEL ESTA DENTRO DO MODAL
+  $("#confirm-level").click(function () {
+    $('#modal-alerts').get(0).classList.add("hidden");
     $('#level').get(0).value++;
     var newlevel = $("#level").val();
     switch (newlevel) {
       case '1': {
-        if (class_id = 1) {
+        if (class_id == 1) {
+          alert(class_id);
           $('#bba').get(0).value++;
           $('#basefor').get(0).value = '2';
-          $('#baseref').get(0).value= '0';
-          $('#basewill').get(0).value= '0';
+          $('#baseref').get(0).value = '0';
+          $('#basewill').get(0).value = '0';
+          break;
+        }else if (class_id == 2){
+          $('#bba').get(0).value = '0';
+          $('#basefor').get(0).value = '0';
+          $('#baseref').get(0).value = '0';
+          $('#basewill').get(0).value = '2';
           break;
         }
       }
       case '2': {
-        if (class_id = 1) {
+        if (class_id == 1) {
           $('#bba').get(0).value++;
           $('#basefor').get(0).value++;
           break;
-        }
-      }
-      case '3': {
-        if (class_id = 1) {
+        }else if (class_id == 2){
           $('#bba').get(0).value++;
-          $('#baseref').get(0).value++;
           $('#basewill').get(0).value++;
           break;
         }
       }
-      case '4': {
-        if (class_id = 1) {
+      case '3': {
+        if (class_id == 1) {
+          $('#bba').get(0).value++;
+          $('#baseref').get(0).value++;
+          $('#basewill').get(0).value++;
+          break;
+        }else if (class_id == 2){
           $('#bba').get(0).value++;
           $('#basefor').get(0).value++;
+          $('#baseref').get(0).value++;
+          break;
+        }
+      }
+      case '4': {
+        if (class_id == 1) {
+          $('#bba').get(0).value++;
+          $('#basefor').get(0).value++;
+          $('#lblstr').get(0).innerHTML = "Voce deve aumentar em 1 ponto uma de suas habilidades.";
+          break;
+        }else if (class_id == 2){
+          $('#bba').get(0).value++;
+          $('#basewill').get(0).value++;
           break;
         }
       }
       case '5': {
-        if (class_id = 1) {
+        if (class_id == 1) {
           $('#bba').get(0).value++;
+          break;
+        }else if (class_id == 2){
           break;
         }
       }
       case '6': {
-        if (class_id = 1) {
+        if (class_id == 1) {
+          $('#bba').get(0).value++;
+          $('#basefor').get(0).value++;
+          $('#baseref').get(0).value++;
+          $('#basewill').get(0).value++;
+          break;
+        }else if (class_id == 2){
           $('#bba').get(0).value++;
           $('#basefor').get(0).value++;
           $('#baseref').get(0).value++;
@@ -55,7 +86,17 @@ $(formEdit).ready(function () {
   });
 });
 
+//AO CLICAR NO BOTAO DE SUBIR O NIVEL EH ABERTO UM MODAL DE CONFIRMACAO
+$("#levelup").click(function(){
+  $('#modal-alerts').get(0).classList.remove("hidden");
+  $('#modal-title').get(0).innerHTML = "Tem certeza?";
+  $('#modal-body').get(0).innerHTML = "Tem certeza que deseja subir de nível?";
+  $('#confirm-level').get(0).classList.remove("hidden");
 
+  $('#close-modal-alerts').click(function(){
+    $('#modal-alerts').get(0).classList.add("hidden");
+  });
+});
 
 
 //realiza o calculo dos valores 
@@ -102,18 +143,61 @@ function valida(field) {
   }
 }
 
-function somaCA() {
-  var bonusshield = document.getElementById('bonusshield').value;
-  var bonusarmor = document.getElementById('bonusarmor').value;
-  var moddex2 = document.getElementById('moddex2').value;
-  //var height = document.getElementById('height').value;
 
+$(formEdit).ready(function(){
+  var class_id = $("#class_id").val();
+  if (class_id = 1){
+    $("#magias").get(0).classList.add("hidden");
+  };
+//Function de soma da CA do personagem.
+//Utiliza-se o document formEdit completo pois tem inputs fora da div que sera calculada
+$(formEdit).on('change load', function (e) {
+  var bonusarmor = parseInt($('#bonusarmor').val())
+  var bonusshield = parseInt($('#bonusshield').val())
+  var moddex2 = parseInt($('#moddex').val())
+  var bonusweight = parseInt($('#bonusweight').val())
+  var bonussize = parseInt($('#bonussize').val())
+  var ca_total = 10 + bonusarmor + bonusshield + moddex2 + bonusweight + bonussize;
+  $('#ca').val(ca_total);
+});
 
-  var ca = 10 + parseInt(bonusshield) + parseInt(bonusarmor) + parseInt(moddex2);
+//Function de soma de testes de resistencia.
+//Utiliza-se o document formEdit completo pois tem inputs fora da div que sera calculada.
+//testes de fortitude
+$(formEdit).on('change load', function (e) {
+  var basefor = parseInt($('#basefor').val())
+  var habfor = parseInt($('#habfor').val())
+  var magicfor = parseInt($('#magicfor').val())
+  var otherfor = parseInt($('#otherfor').val())
 
-  document.getElementById('ca').value = ca;
-  //document.getElementById("ca").innerHTML = ca;
-}
+  var for_total = basefor + habfor + magicfor + otherfor;
+  $('#for').val(for_total);
+});
+
+//testes de reflexo
+$(formEdit).on('change load', function (e) {
+  var baseref = parseInt($('#baseref').val())
+  var habref = parseInt($('#habref').val())
+  var magicref = parseInt($('#magicref').val())
+  var otherref = parseInt($('#otherref').val())
+
+  var ref_total = baseref + habref + magicref + otherref;
+  $('#ref').val(ref_total);
+});
+
+//testes de vontade
+$(formEdit).on('change load', function (e) {
+  var basewill = parseInt($('#basewill').val())
+  var habwill = parseInt($('#habwill').val())
+  var magicwill = parseInt($('#magicwill').val())
+  var otherwill = parseInt($('#otherwill').val())
+
+  var will_total = basewill + habwill + magicwill + otherwill;
+  $('#will').val(will_total);
+});
+
+});
+
 
 //mostra a div informacoes e esconde as demais
 function mostrarDivInfo() {
@@ -226,6 +310,16 @@ function mostrarModalMagias() {
 
 }
 
+function mostrarModalSkills() {
+  var modal = document.getElementById("modal_skills");
+  if (modal.style.display === "none") {
+    modal.style.display = "block";
+  } else if (modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+
+}
+
 
 //mostrar div modificadores
 function showdivmods() {
@@ -272,18 +366,6 @@ function mostrarModalTodasArmaduras() {
 }
 
 
-function somaPericia() {
-  var modhability = document.getElementById('modhability').value;
-  var graduation = document.getElementById('graduation').value;
-  var otherexpertise = document.getElementById('otherexpertise').value;
-
-
-  var totalhab = parseInt(modhability) + parseInt(graduation) + parseInt(otherexpertise);
-
-  document.getElementById('totalhab').value = totalhab;
-}
-
-
 function somaBBA() {
   var modstr = document.formEdit.modstr.value;
   var bba = document.formEdit.bba.value;
@@ -316,6 +398,7 @@ function carregarTabela() {
   });
 }
 
+/*
 function calcularResistencia() {
   var basefor = document.getElementById('basefor').value;
   var habfor = document.getElementById('habfor').value;
@@ -343,7 +426,7 @@ function calcularResistencia() {
   document.getElementById('ref').value = totalref;
   document.getElementById('will').value = totalwill
 }
-
+*/
 
 
 //Deletar personagem da tabela

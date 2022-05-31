@@ -46,6 +46,38 @@
             </div>
             <!--Fim-->
 
+            <!-- Modal de avisos -->
+            <div id="modal-alerts" class="hidden fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                    <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title"></h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-500" id="modal-body"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button type="button" id="confirm-level" class="hidden w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm">Sim</button>
+                            <button type="button" id="close-modal-alerts" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Fim-->
+
             <!--HEADER COM NOME DA PAGINA -->
             <x-slot name="header" style="position: absolute;">
                 @if ((empty ($char)) || (auth()->user()->id == $char->user_id))
@@ -226,18 +258,15 @@
 
                                                     <div class="col-span-3 sm:col-span-1">
                                                         <label for="level" class="block text-sm font-medium text-gray-700">Nivel</label>
-                                                        <button type="button" id="levelup">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <input readonly type="number" name="level" value="{{$char->level ?? '0'}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                        <button class="inline-flex " type="button" id="levelup">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                                             </svg>
                                                         </button>
-                                                        <input onmouseup="calcAttrClasses(), calcularResistencia()" type="number" name="level" value="{{$char->level ?? '1'}}" id="level" autocomplete="level" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                        <button type="button" id="leveldown">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="gray" stroke-width="2">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                            </svg>
-                                                        </button>
+
+
+
                                                     </div>
 
 
@@ -304,7 +333,7 @@
                                                     </div>
 
                                                     <div class="col-span-5 sm:col-span-3">
-                                                        <label for="class" class="block text-sm font-medium text-gray-700">Sexo</label>
+                                                        <label for="sex" class="block text-sm font-medium text-gray-700">Sexo</label>
                                                         <select name="sex" id="sex" autocomplete="sex" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                             <option value="{{$char->sex ?? ''}}">{{$char->sex ?? 'Selecione'}}</option>
                                                             <option value="Masculino">Masculino</option>
@@ -388,73 +417,80 @@
 
                                             <!--FORM-->
                                             <div class="shadow overflow-hidden sm:rounded-md">
+                                                <label for="str" id="lblstr" class="block text-sm font-light text-red-700"></label>
                                                 <div class="px-4 py-5 bg-white sm:p-6">
                                                     <div class="grid grid-cols-6 gap-6">
 
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="str" class="block text-sm font-bold text-indigo-700">Força</label>
-                                                            <input type="number" value="{{$char->str ?? ''}}" onchange="calcularCusto()" onblur="valida(this)" name="str" id="str" autocomplete="str" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->str ?? ''}}" onkeyup="calcularCusto()" onblur="valida(this)" name="str" id="str" autocomplete="str" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="str" id="lblstr" class="block text-sm font-light text-red-700"></label>
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="modstr" class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                            <input type="number" value="{{$char->modstr ?? ''}}" id="modstr" name="modstr" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->modstr ?? ''}}" id="modstr" name="modstr" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
                                                         </br>
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="dex" class="block text-sm font-bold text-indigo-700">Destreza</label>
-                                                            <input type="number" value="{{$char->dex ?? ''}}" onchange="calcularCusto(this), calcularResistencia(this)" , onblur="valida(this), somaCA()" name="dex" id="dex" autocomplete="dex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->dex ?? ''}}" onkeyup="calcularCusto(this), calcularResistencia(this)" , onblur="valida(this), somaCA()" name="dex" id="dex" autocomplete="dex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="dex" class="block text-sm font-light text-red-700"></label>
                                                         </div>
                                                         </br>
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="moddex" class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                            <input type="number" value="{{$char->moddex ?? ''}}" name="moddex" id="moddex" autocomplete="moddex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->moddex ?? ''}}" name="moddex" id="moddex" autocomplete="moddex" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="con" class="block text-sm font-bold text-indigo-700">Constituição</label>
-                                                            <input type="number" value="{{$char->con ?? ''}}" name="con" id="con" autocomplete="con" onchange="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="number" value="{{$char->con ?? ''}}" name="con" id="con" autocomplete="con" onkeyup="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="con" class="block text-sm font-light text-red-700"></label>
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="modcon" class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                            <input type="number" value="{{$char->modcon ?? ''}}" name="modcon" id="modcon" autocomplete="modcon" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->modcon ?? ''}}" name="modcon" id="modcon" autocomplete="modcon" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="int" class="block text-sm font-bold text-indigo-500">Inteligência</label>
                                                             <input type="number" value="{{$char->int ?? ''}}" name="int" id="int" autocomplete="int" onkeyup="calcularCusto( this )" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="int" class="block text-sm font-light text-red-700"></label>
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="modint" class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                            <input type="number" value="{{$char->modint ?? ''}}" name="modint" id="modint" autocomplete="modint" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->modint ?? ''}}" name="modint" id="modint" autocomplete="modint" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
 
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="wiz" class="block text-sm font-bold text-indigo-500">Sabedoria</label>
                                                             <input type="number" value="{{$char->wiz ?? ''}}" name="wiz" id="wiz" autocomplete="wiz" onkeyup="calcularCusto( this ), calcularResistencia(this)" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="wiz" class="block text-sm font-light text-red-700"></label>
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="modwiz" class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                            <input type="number" value="{{$char->modwiz ?? ''}}" name="modwiz" id="modwiz" autocomplete="modwiz" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->modwiz ?? ''}}" name="modwiz" id="modwiz" autocomplete="modwiz" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label for="cha" class="block text-sm font-bold text-indigo-500">Carisma</label>
                                                             <input type="number" value="{{$char->cha ?? ''}}" name="cha" id="cha" autocomplete="cha" onkeyup="calcularCusto( this );" onblur="valida( this );" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="cha" class="block text-sm font-light text-red-700"></label>
                                                         </div>
                                                         </br>
                                                         <div class="col-span-2 sm:col-span-2">
                                                             <label class="block text-sm font-medium text-gray-700">Modificador</label>
-                                                            <input type="number" value="{{$char->modcha ?? ''}}" name="modcha" id="modcha" autocomplete="modcha" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->modcha ?? ''}}" name="modcha" id="modcha" autocomplete="modcha" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
                                                         </br>
 
@@ -477,7 +513,7 @@
 
 
                 <!--HABILIDADES-->
-                <div class="py-12">
+                <div class="py-12" id="char_ca">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div class="p-6 bg-white border-b border-gray-200">
@@ -515,12 +551,12 @@
 
                                                         <div class="col-span-3 sm:col-span-2">
                                                             <label for="dv" class="block text-sm font-medium text-gray-700">Dado de Vida</label>
-                                                            <input type="text" value="{{$char->dv ?? ''}}" name="dv" id="dv" autocomplete="dv" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input type="text" value="{{$char->RelClasses->dv ?? ''}}" name="dv" id="dv" autocomplete="dv" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
                                                         <div class="col-span-3 sm:col-span-2">
-                                                            <label for="desloc" class="block text-sm font-medium text-gray-700">Deslocamento</label>
-                                                            <input type="number" value="{{$char->desloc ?? ''}}" name="desloc" id="desloc" autocomplete="desloc" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <label for="desloc" class="block text-sm font-medium text-gray-700">Deslocamento(m)</label>
+                                                            <input type="number" value="{{$char->RelBreeds->desloc ?? ''}}" name="desloc" id="desloc" autocomplete="desloc" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
                                                         <!-- CLASSE DE ARMADURA -->
@@ -544,17 +580,17 @@
 
                                                             <div class="col-span-2 sm:col-span-1 ">
                                                                 <label for="bonusarmor" class="block text-sm font-medium text-gray-700">Armadura</label>
-                                                                <input type="number" value="{{$char->bonusarmor ?? '0'}}" onkeyup="somaCA(this)" name="bonusarmor" id="bonusarmor" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                                <input type="number" value="{{$char->relArmors->ca_bonus ?? '0'}}" onchange="somaCA()" name="bonusarmor" id="bonusarmor" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                             </div>
 
                                                             <div class="col-span-2 sm:col-span-1 ">
                                                                 <label for="bonusshield" class="block text-sm font-medium text-gray-700">Escudo</label>
-                                                                <input type="number" value="{{$char->bonusshield ?? '0'}}" onkeyup="somaCA(this)" name="bonusshield" id="bonusshield" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                                <input type="number" value="{{$char->relShields->ca_bonus ?? '0'}}" onchange="somaCA()" name="bonusshield" id="bonusshield" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                             </div>
 
                                                             <div class="col-span-2 sm:col-span-1 ">
                                                                 <label for="moddex2" class="block text-sm font-medium text-gray-700">Mod. Destreza</label>
-                                                                <input type="number" value="{{$char->moddex ?? '0'}}" onkeyup="somaCA(this)" name="moddex2" id="moddex2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                                <input type="number" value="{{$char->moddex ?? '0'}}" onchange="somaCA()" name="moddex2" id="moddex2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                                 </label>
                                                             </div>
 
@@ -565,7 +601,7 @@
 
                                                             <div class="col-span-2 sm:col-span-1 ">
                                                                 <label for="bonussize" class="block text-sm font-medium text-gray-700">Mod. Tamanho</label>
-                                                                <input type="number" value="{{$char->bonussize ?? '0'}}" onkeyup="somaCA(this)" name="bonussize" id="bonussize" autocomplete="bonussize" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                                <input type="number" value="{{$char->RelBreeds->bonus_size ?? '0'}}" onchange="somaCA()" name="bonussize" id="bonussize" autocomplete="bonussize" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -616,17 +652,17 @@
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="for" class="block text-sm font-bold text-red-700">Fortitude</label>
-                                                            <input type="number" value="{{$char->for ?? '0'}}" name="for" id="for" autocomplete="for" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-red-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->for ?? '0'}}" name="for" id="for" autocomplete="for" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-red-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="basefor" class="block text-sm font-medium text-red-700">Base</label>
-                                                            <input type="number" value="{{$char->basefor ?? ''}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->basefor ?? ''}}" name="basefor" id="basefor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="habfor" class="block text-sm font-medium text-red-700">Habilidade</label>
-                                                            <input type="number" value="{{$char->habfor ?? '0'}}" name="habfor" id="habfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->habfor ?? '0'}}" name="habfor" id="habfor" onkeyup="calcularResistenciaFor(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
 
@@ -646,17 +682,17 @@
                                                         <p>
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="ref" class="block text-sm font-bold text-gray-700">Reflexos</label>
-                                                            <input type="number" value="{{$char->ref ?? '0'}}" name="ref" id="ref" autocomplete="ref" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->ref ?? '0'}}" name="ref" id="ref" autocomplete="ref" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="baseref" class="block text-sm font-medium text-gray-700">Base</label>
-                                                            <input type="number" value="{{$char->baseref ?? '0'}}" name="baseref" id="baseref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->baseref ?? '0'}}" name="baseref" id="baseref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="habref" class="block text-sm font-medium text-gray-700">Habilidade</label>
-                                                            <input type="number" value="{{$char->habref ?? '0'}}" name="habref" id="habref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->habref ?? '0'}}" name="habref" id="habref" onkeyup="calcularResistenciaRef(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
@@ -673,17 +709,17 @@
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="will" class="block text-sm font-bold text-blue-700">Vontade</label>
-                                                            <input type="number" value="{{$char->will ?? '0'}}" name="will" id="will" autocomplete="will" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-blue-300 rounded-md">
+                                                            <input readonly type="number" value="{{$char->will ?? '0'}}" name="will" id="will" autocomplete="will" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-blue-300 rounded-md">
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="basewill" class="block text-sm font-medium text-blue-700">Base</label>
-                                                            <input type="number" value="{{$char->basewill ?? '0'}}" name="basewill" id="basewill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                            <input readonly type="number" value="{{$char->basewill ?? '0'}}" name="basewill" id="basewill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
                                                             <label for="habwill" class="block text-sm font-medium text-blue-700">Habilidade</label>
-                                                            <input type="number" value="{{$char->habwill ?? '0'}}" name="habwill" id="habwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
+                                                            <input readonly type="number" value="{{$char->habwill ?? '0'}}" name="habwill" id="habwill" onkeyup="calcularResistenciaWill(this)" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></input>
                                                         </div>
 
                                                         <div class="col-span-2 sm:col-span-1">
@@ -814,8 +850,8 @@
                                                     <div id="armorinfo">
 
                                                     </div>
-                                                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                        <button type="button" id="vertodas" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                    <div class=" px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                        <button type="button" id="vertodas" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-400 text-base font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
                                                             Ver Todas
                                                         </button>
                                                     </div>
@@ -922,7 +958,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                            <div class=" px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                                 <button onclick="mostrarModalTodasArmaduras()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                                     Fechar
                                                 </button>
@@ -977,10 +1013,16 @@
                                                             </svg>
                                                         </button>
 
-                                                        <div class="col-span-2 sm:col-span-3 lg:col-span-1">
-                                                            <label for="grab" class="block text-sm font-medium">Agarrar</label>
-                                                            <input readonly type="number" onclick="somaGrab(this)" value="{{$char->grab ?? ''}}" name="grab" id="grab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
-                                                        </div>
+                                                        <tr>
+                                                            <td class="whitespace-nowrap">
+                                                                <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                                                                    <label for="grab" class="block text-sm font-medium">Agarrar</label>
+                                                                    <input readonly type="number" onclick="somaGrab(this)" value="{{$char->grab ?? ''}}" name="grab" id="grab" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                </div>
+                                                            </td>
+
+                                                        </tr>
+
                                                     </div>
 
 
@@ -1002,25 +1044,25 @@
                                                                         <td class="px-6 py-4 whitespace-nowrap">
                                                                             <div class="col-span-2 sm:col-span-1">
                                                                                 <label for="modstrwp" class="block text-sm font-medium">Mod. de Forca</label>
-                                                                                <input readonly type="number" value="{{$char->modstr ?? ''}}" onchange="somaBBA(this)" name="modstrwp" id="modstrwp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                                <input readonly type="number" value="{{$char->modstr ?? '0'}}" onchange="somaBBA(this)" name="modstrwp" id="modstrwp" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                                             </div>
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap">
                                                                             <div class="col-span-2 sm:col-span-1">
                                                                                 <label for="bba" class="block text-sm font-medium">Bonus Base</label>
-                                                                                <input type="number" value="{{$char->bba ?? ''}}" onchange="somaBBA(this)" name="bba" id="bba" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                                <input type="number" value="{{$char->bba ?? '0'}}" onchange="somaBBA(this)" name="bba" id="bba" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                                             </div>
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap">
                                                                             <div class="col-span-2 sm:col-span-1">
                                                                                 <label for="bonustalent" class="block text-sm font-medium">Bonus de Talento</label>
-                                                                                <input type="number" value="" name="bonustalent" onchange="somaBBA(this)" id="bonustalent" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                                <input type="number" value="0" name="bonustalent" onchange="somaBBA(this)" id="bonustalent" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                                             </div>
                                                                         </td>
                                                                         <td class="px-6 py-4 whitespace-nowrap">
                                                                             <div class="col-span-2 sm:col-span-1">
                                                                                 <label for="otherbonus" class="block text-sm font-medium">Outro</label>
-                                                                                <input type="number" value="" name="otherbonus" onchange="somaBBA(this)" id="otherbonus" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
+                                                                                <input type="number" value="0" name="otherbonus" onchange="somaBBA(this)" id="otherbonus" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></label>
                                                                             </div>
                                                                         </td>
                                                                     </tr>
@@ -1082,16 +1124,16 @@
                                                 </div>
 
                                                 <!-- BOTAO MOSTRAR MINHAS ARMAS -->
-                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
-                                                    <button type="button" onclick="mostrarModalArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                                <div class="inline-flex px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
+                                                    <button type="button" onclick="mostrarModalArmas()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-600 text-base font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 sm:ml-3 sm:w-auto sm:text-sm">
                                                         Opções de ataque
                                                     </button>
                                                 </div>
 
                                                 @if (isset ($char))
-                                                <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
-                                                    <button id="addweapon" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
-                                                        Adicionar
+                                                <div class="inline-flex px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse">
+                                                    <button id="addweapon" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-400 text-base font-medium text-white hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                        + Escolher
                                                     </button>
                                                 </div>
                                                 @endif
@@ -1141,8 +1183,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                                <button type="button" id="deletemyweapon" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Excluir</button>
                                                                 <button type="button" id="showmyweapon" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-indigo-400 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Visualizar</button>
+                                                                <button type="button" id="deletemyweapon" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Excluir</button>
                                                                 <button type="button" onclick="mostrarModalArmas()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
                                                             </div>
                                                         </div>
@@ -1265,9 +1307,9 @@
 
                                                     </div>
 
-                                                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                        <button type="button" onclick="mostrarModalTodasArmaduras()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 sm:ml-3 sm:w-auto sm:text-sm">
-                                                            Ver Todas
+                                                    <div class=" px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                        <button type="button" onclick="mostrarModalTodosEscudos()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-400 text-base font-medium text-white hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 sm:ml-3 sm:w-auto sm:text-sm">
+                                                            Ver Todos
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1674,7 +1716,7 @@
                 <!--FIM TALENTOS-->
 
                 <!-- MAGIAS -->
-                <div class="py-12" id="magias">
+                <div class="py-12 " id="magias">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div class="p-6 bg-white border-b border-gray-200">
@@ -2006,7 +2048,7 @@
 
                                                 </div>
 
-                                                <!-- BOTAO MOSTRAR MINHAS MAGIAS -->
+                                                <!-- BOTAO MOSTRAR MINHAS HABILIDADES -->
                                                 <div class="inline-flex bg-gray-50 px-4 py-3 sm:px-2 sm:flex-auto sm:flex-row-reverse ">
                                                     <button type="button" onclick="mostrarModalSkills()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                                         Habilidades aprendidas
@@ -2048,7 +2090,7 @@
                                                                                         <select id="myskill_id" name="myskill_id" autocomplete="skill" class="mt-1 block w-full py-2 px-50 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-x">
                                                                                             <option>Selecione</option>
                                                                                             @foreach ($char->skills as $skill)
-                                                                                            <option value="{{$skill->id}}">{{$skill->name}}</option>
+                                                                                            <option value="{{$skill->id}}">Nv. {{$skill->level}} - {{$skill->name}}</option>
                                                                                             @endforeach
                                                                                         </select>
                                                                                     </div>
